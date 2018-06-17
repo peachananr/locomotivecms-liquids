@@ -5,6 +5,10 @@ module LocomotiveCMS
         def handleize(input, divider = '-')
           input.to_str.gsub(%r{[ \_\-\/]}, divider).downcase
         end
+        def normalize(input)
+          require "i18n"
+          I18n.transliterate(input).downcase
+        end
       end
     end
   end
