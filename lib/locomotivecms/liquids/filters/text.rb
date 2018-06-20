@@ -11,7 +11,7 @@ module LocomotiveCMS
         end
 
         def squish(input)
-          input.squish
+          input.gsub("\n", ' ').squeeze(' ')
         end
       end
     end
