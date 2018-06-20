@@ -9,6 +9,10 @@ module LocomotiveCMS
           require "i18n"
           I18n.transliterate(input).downcase
         end
+
+        def squish(input)
+          input.squish
+        end
       end
     end
   end
