@@ -1,6 +1,7 @@
 module LocomotiveCMS
   module Liquids
     module Tags # :nodoc:
+
       # The class for the Title Tag, inherited from `Solid::Tag`.
       class TitleTag < Solid::Tag
         include Filters::Text
