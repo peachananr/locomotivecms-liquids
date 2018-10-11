@@ -27,6 +27,7 @@ module LocomotiveCMS
             return result = apiClient
                 .search_images()
                 .with_phrase(terms)
+                .with_graphical_styles(["photography"])
                 .with_fields(["referral_destinations", "thumb", "title", "id"])
                 .with_exclude_nudity("true")
                 .with_page(page)
