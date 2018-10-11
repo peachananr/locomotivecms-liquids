@@ -5,18 +5,18 @@ module LocomotiveCMS
       class GettyImages < Solid::Tag
         tag_name :getty_images
 
-        def display(terms = nil)
+        def display(terms = nil, page = 1, size = 5)
             if terms.blank?
               return ""
             else
               require 'json'
-              init_gi(terms).to_json
+              init_gi(terms, page, size).to_json
             end
           end
 
           private
 
-          def init_gi(terms)
+          def init_gi(terms, page, size)
             require 'gettyimages-api'
 
             api_key = ENV['GETTY_KEY']
@@ -29,8 +29,8 @@ module LocomotiveCMS
                 .with_phrase(terms)
                 .with_fields(["referral_destinations", "thumb", "title", "id"])
                 .with_exclude_nudity("true")
-                .with_page(1)
-                .with_page_size(5)
+                .with_page(page)
+                .with_page_size(size)
                 .execute()
 
           end
