@@ -28,7 +28,7 @@ module LocomotiveCMS
                 .search_images()
                 .with_phrase(terms)
                 .with_graphical_styles(["photography"])
-                .with_fields(["referral_destinations", "thumb", "title", "id"])
+                .with_fields(["referral_destinations", "preview", "title", "id"])
                 .with_exclude_nudity("true")
                 .with_page(page)
                 .with_page_size(size)
