@@ -12,7 +12,7 @@ module LocomotiveCMS
         end
 
         def amp_remove_lightbox_link(input)
-          require 'Nokogiri'
+          require 'nokogiri'
           html = Nokogiri.HTML(input)
           html.css('.lightbox-full').each do |i|
             i.replace i.inner_html
