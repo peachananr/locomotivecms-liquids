@@ -5,9 +5,19 @@ module LocomotiveCMS
         def handleize(input, divider = '-')
           input.to_str.gsub(%r{[ \_\-\/]}, divider).downcase
         end
+
         def normalize(input)
           require "i18n"
           I18n.transliterate(input).downcase
+        end
+
+        def amp_remove_lightbox_link(input)
+          require 'Nokogiri'
+          html = Nokogiri.HTML(input)
+          html.css('.lightbox-full').each do |i|
+            i.replace i.inner_html
+          end
+          html.css("body").inner_html
         end
 
         def squish(input)

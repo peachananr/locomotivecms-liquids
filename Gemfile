@@ -31,7 +31,7 @@ end
 
 group :misc do
 
-
+  gem "nokogiri"
   # --- Formatter ---
 
   gem 'nyan-cat-formatter', '~> 0.11', require: false
