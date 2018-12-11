@@ -6,6 +6,10 @@ module LocomotiveCMS
           input.to_str.gsub(%r{[ \_\-\/]}, divider).downcase
         end
 
+        def url_encode(input)
+          CGI.escape(input) rescue input
+        end
+
         def normalize(input)
           require "i18n"
           I18n.transliterate(input).downcase
