@@ -8,7 +8,7 @@ module LocomotiveCMS
 
         def url_encode(input)
           require "cgi"
-          CGI.escape(input) rescue input
+          ERB::Util.url_encode(input)
         end
 
         def normalize(input)
