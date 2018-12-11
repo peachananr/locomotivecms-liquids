@@ -7,6 +7,7 @@ module LocomotiveCMS
         end
 
         def url_encode(input)
+          require "cgi"
           CGI.escape(input) rescue input
         end
 
