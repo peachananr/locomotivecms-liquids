@@ -16,12 +16,22 @@ module LocomotiveCMS
           I18n.transliterate(input).downcase
         end
 
-        def amp_remove_lightbox_link(input)
+        def amp_optimize(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
           html.css('.lightbox-full').each do |i|
             i.replace i.inner_html.gsub('<amp-img', '<amp-img role="button" tabindex="0" on="tap:lightbox1" ')
           end
+
+          html.css('body p').each_with_index do |i, index|
+            if (index + 1) % 2 == 0
+              ads = '<div class="center"><amp-ad data-site="bucketlistly" height="250" type="mediavine" width="300"></amp-ad></div>'
+
+              i.replace i.to_s.gsub("</p>", "</p>#{ads}")
+            end
+
+          end
+
           html.css("body").inner_html
         end
 
