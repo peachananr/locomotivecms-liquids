@@ -20,7 +20,7 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
           html.css('.lightbox-full').each do |i|
-            i.replace i.inner_html.gsub('<amp-img', '<amp-img role="button" tabindex="0" on="tap:lightbox1" ')
+            i.replace i.inner_html.gsub('<amp-img', '<amp-img role="button" tabindex="0" lightbox="posts" on="tap:lightbox1" ')
           end
 
           html.css('body > p').each_with_index do |i, index|
