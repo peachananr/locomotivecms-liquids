@@ -35,6 +35,21 @@ module LocomotiveCMS
           html.css("body").inner_html
         end
 
+        def rss_optimize(input, freq = '2')
+          require 'nokogiri'
+          require 'htmlcompressor'
+          doc = Nokogiri.HTML(input)
+          doc.xpath('.//@data-placeholder').remove
+          doc.xpath('.//@src').remove
+          doc.xpath('.//@data-size').remove
+          doc.xpath('.//@sizes').remove
+          doc.xpath('.//@style').remove
+          doc.xpath('.//@class').remove
+          doc.xpath('.//@data-srcset').remove
+          compressor = HtmlCompressor::Compressor.new
+          compressor.compress(doc.css("body").inner_html)
+        end
+
         def squish(input)
           input.gsub("\n", ' ').squeeze(' ')
         end

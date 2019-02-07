@@ -32,6 +32,7 @@ end
 group :misc do
 
   gem "nokogiri"
+  gem "htmlcompressor"
   # --- Formatter ---
 
   gem 'nyan-cat-formatter', '~> 0.11', require: false
