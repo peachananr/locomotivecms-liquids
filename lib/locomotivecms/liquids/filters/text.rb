@@ -54,9 +54,12 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
           html.css('img.lazy').each do |i|
+            vertical = ""
             if i["src"].include? "placeholder"
-
-              i.replace "<span class='img-wrapper'><i class='img-sizer'></i>#{i.to_s.gsub(' src=', ' data-old-src=')}</span>"
+              if i["width"].to_i < i["height"].to_i
+                vertical = "vertical"
+              end
+              i.replace "<span class='img-wrapper'><i class='img-sizer #{vertical}'></i>#{i.to_s.gsub(' src=', ' data-old-src=')}</span>"
             end
           end
 
