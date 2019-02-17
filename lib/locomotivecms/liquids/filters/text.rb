@@ -50,6 +50,19 @@ module LocomotiveCMS
           compressor.compress(doc.css("body").inner_html)
         end
 
+        def remove_placeholder_img(input)
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+          html.css('img.lazy').each do |i|
+            if i["src"].include? "placeholder"
+
+              i.replace "<span class='img-wrapper'><i class='img-sizer'></i>#{i.to_s.gsub(' src=', ' data-old-src=')}</span>"
+            end
+          end
+
+          html.css("body").inner_html
+        end
+
         def squish(input)
           input.gsub("\n", ' ').squeeze(' ')
         end
