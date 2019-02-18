@@ -55,7 +55,7 @@ module LocomotiveCMS
           html = Nokogiri.HTML(input)
           html.css('img.lazy').each do |i|
             padding_top = 0
-            if i["src"].include? "placeholder"
+            if !i["src"].nil? and i["src"].include? "placeholder"
               unless i["width"].nil? or i["height"].nil? or i["height"] == 0 or i["width"] == 0
                 padding_top = (i["height"].to_f/i["width"].to_f) * 100
               end
