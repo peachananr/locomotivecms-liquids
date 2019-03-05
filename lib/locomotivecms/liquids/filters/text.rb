@@ -16,10 +16,6 @@ module LocomotiveCMS
           I18n.transliterate(input).downcase
         end
 
-        def to_i(input)
-          input.to_i
-        end
-
         def amp_optimize(input, freq = '2')
           require 'nokogiri'
           html = Nokogiri.HTML(input)
