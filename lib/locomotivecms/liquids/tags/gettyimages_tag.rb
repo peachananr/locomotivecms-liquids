@@ -27,18 +27,18 @@ module LocomotiveCMS
             begin
               return result = apiClient
                   .search_images()
-                  .with_phrase(terms)
+                  .with_phrase("#{terms}")
                   .with_graphical_styles(["photography"])
                   .with_fields(["referral_destinations", "preview", "title", "id"])
                   .with_exclude_nudity("true")
-                  .with_page(page)
-                  .with_page_size(size)
+                  .with_page(page.to_i)
+                  .with_page_size(size.to_i)
                   .execute()
 
             rescue => error
               return result = apiClient
                   .search_images()
-                  .with_phrase(terms)
+                  .with_phrase("#{terms}")
                   .with_graphical_styles(["photography"])
                   .with_fields(["referral_destinations", "preview", "title", "id"])
                   .with_exclude_nudity("true")
