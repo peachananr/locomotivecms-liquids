@@ -5,7 +5,7 @@ module LocomotiveCMS
       class GettyImages < Solid::Tag
         tag_name :getty_images
 
-        def display(terms = nil, page = 1, size = 5)
+        def display(terms = nil, page = 1, size = 5, sort_order = "best_match")
             if terms.blank?
               return ""
             else
@@ -33,6 +33,7 @@ module LocomotiveCMS
                   .with_exclude_nudity("true")
                   .with_page(page.to_i)
                   .with_page_size(size.to_i)
+                  .with_sort_order(sort_order)
                   .execute()
 
             rescue => error
@@ -44,6 +45,7 @@ module LocomotiveCMS
                   .with_exclude_nudity("true")
                   .with_page(1)
                   .with_page_size(6)
+                  .with_sort_order(sort_order)
                   .execute()
             end
           end
