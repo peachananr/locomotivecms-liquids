@@ -33,7 +33,7 @@ module LocomotiveCMS
                   .with_exclude_nudity("true")
                   .with_page(page.to_i)
                   .with_page_size(size.to_i)
-                  .with_sort_order(sort_order)
+                  .with_sort_order("#{sort_order}")
                   .execute()
 
             rescue => error
@@ -45,7 +45,7 @@ module LocomotiveCMS
                   .with_exclude_nudity("true")
                   .with_page(1)
                   .with_page_size(6)
-                  .with_sort_order(sort_order)
+                  .with_sort_order("#{sort_order}")
                   .execute()
             end
           end
