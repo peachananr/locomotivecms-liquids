@@ -5,7 +5,7 @@ module LocomotiveCMS
       class GettyImages < Solid::Tag
         tag_name :getty_images
 
-        def display(terms = nil, page = 1, size = 5, sort_order = "best_match")
+        def display(terms = nil, page = 1, size = 5, sort_order = "most_popular")
             if terms.blank?
               return ""
             else
