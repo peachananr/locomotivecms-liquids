@@ -10,13 +10,13 @@ module LocomotiveCMS
               return ""
             else
               require 'json'
-              init_gi(terms, page, size).to_json
+              init_gi(terms, page, size, sort_order).to_json
             end
           end
 
           private
 
-          def init_gi(terms, page, size)
+          def init_gi(terms, page, size, sort_order)
             require 'gettyimages-api'
 
             api_key = ENV['GETTY_KEY']
