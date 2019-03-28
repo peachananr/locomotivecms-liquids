@@ -18,15 +18,15 @@ module LocomotiveCMS
 
           def init_gi(terms, page, size, sort_order)
             require 'gettyimages-api'
-            require 'timeout'
 
             api_key = ENV['GETTY_KEY']
             api_secret = ENV['GETTY_SECRET']
 
             # create instance of the SDK
             apiClient = ApiClient.new(api_key, api_secret)
+            require 'timeout'
             begin
-              Timeout::timeout(5) {
+              complete_results = Timeout.timeout(5) do
                 return result = apiClient
                     .search_images()
                     .with_phrase("#{terms}")
@@ -37,11 +37,10 @@ module LocomotiveCMS
                     .with_page_size(size.to_i)
                     .with_sort_order("#{sort_order}")
                     .execute()
-              }
-
-
-            rescue => error
-              return ""
+              end
+            rescue Timeout::Error
+              puts 'Error, 3rd Party API took too long.'
+              return "Error Code 500, there might be something wrong with the third party plugin."
             end
           end
       end
