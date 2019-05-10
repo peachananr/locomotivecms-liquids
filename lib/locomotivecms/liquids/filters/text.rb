@@ -46,8 +46,14 @@ module LocomotiveCMS
           doc.xpath('.//@style').remove
           doc.xpath('.//@class').remove
           doc.xpath('.//@data-srcset').remove
+          doc.search('#table-of-contents').remove
+          text = ""
+          doc.css("body > p").take(5).each do |i|
+            text = "#{text}#{i.to_s}"
+          end
           compressor = HtmlCompressor::Compressor.new
-          compressor.compress(doc.css("body").inner_html)
+
+          compressor.compress(text)
         end
 
         def remove_placeholder_img(input)
