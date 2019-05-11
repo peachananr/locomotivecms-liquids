@@ -47,10 +47,16 @@ module LocomotiveCMS
           doc.xpath('.//@class').remove
           doc.xpath('.//@data-srcset').remove
           doc.search('#table-of-contents').remove
+          doc.search('a').each do |i|
+            if !i["href"].include? "http" and !i["href"].include? "data:"
+              i["href"] = "https://www.bucketlistly.blog#{i["href"]}"
+            end
+          end
           text = ""
           doc.css("body > p").take(5).each do |i|
             text = "#{text}#{i.to_s}"
           end
+
           compressor = HtmlCompressor::Compressor.new
 
           compressor.compress(text)
