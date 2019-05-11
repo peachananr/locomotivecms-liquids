@@ -48,7 +48,7 @@ module LocomotiveCMS
           doc.xpath('.//@data-srcset').remove
           doc.search('#table-of-contents').remove
           doc.search('a').each do |i|
-            if !i["href"].include? "http" and !i["href"].include? "data:"
+            if !i["src"].nil? and !i["href"].include? "http" and !i["href"].include? "data:"
               i["href"] = "https://www.bucketlistly.blog#{i["href"]}"
             end
           end
