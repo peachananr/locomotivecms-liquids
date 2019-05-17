@@ -72,6 +72,9 @@ module LocomotiveCMS
                 padding_top = (i["height"].to_f/i["width"].to_f) * 100
               end
 
+              i.remove_attribute('src')
+              i.remove_attribute('data-size') if !i["data-size"].nil?
+
               i.replace "<span class='img-wrapper'><i class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
             end
           end
