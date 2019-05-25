@@ -16,6 +16,19 @@ module LocomotiveCMS
           I18n.transliterate(input).downcase
         end
 
+        def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+
+          html.css('body > p').each_with_index do |i, index|
+            if (index + 1) % freq == 0
+              i.replace i.to_s.gsub("</p>", "</p>#{placeholder}")
+            end
+          end
+
+          html.css("body").inner_html
+        end
+
         def amp_optimize(input, freq = '2')
           require 'nokogiri'
           html = Nokogiri.HTML(input)
