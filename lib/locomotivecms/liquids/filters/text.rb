@@ -93,7 +93,18 @@ module LocomotiveCMS
               i.remove_attribute('src')
               i.remove_attribute('data-size') if !i["data-size"].nil?
 
-              i.replace "<span role='presentation' class='img-wrapper'><i role='presentation' class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
+              i.replace "<span class='img-wrapper'><i class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
+            end
+            if i.parent.name == "a"
+              if i.parent.attributes["class"].value.include? "lightbox"
+                i.parent.attributes["aria-label"] = "View larger image"
+              end
+              if i.parent.attributes["class"].value.include? "itinerary"
+                i.parent.attributes["aria-label"] = "View itinerary on Google Maps"
+              end
+              if i.parent.attributes["class"].value.include? "click-to-play"
+                i.parent.attributes["aria-label"] = "Play video"
+              end
             end
           end
 
