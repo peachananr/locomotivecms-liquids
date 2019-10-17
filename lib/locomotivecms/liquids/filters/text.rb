@@ -93,7 +93,7 @@ module LocomotiveCMS
               i.remove_attribute('src')
               i.remove_attribute('data-size') if !i["data-size"].nil?
 
-              i.replace "<span role='presentation' class='img-wrapper'><i class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
+              i.replace "<span role='presentation' class='img-wrapper'><i role='presentation' class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
             end
           end
 
