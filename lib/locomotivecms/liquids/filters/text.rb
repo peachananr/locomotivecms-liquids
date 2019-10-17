@@ -84,17 +84,19 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
           html.css('img.lazy').each do |i|
+
             if !i.parent.nil? and i.parent.name == "a"
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
-                i.parent.attributes["aria-label"] = "View larger image"
+                i.parent["aria-label"] = "View larger image"
               end
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "itinerary"
-                i.parent.attributes["aria-label"] = "View itinerary on Google Maps"
+                i.parent["aria-label"] = "View itinerary on Google Maps"
               end
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "click-to-play"
-                i.parent.attributes["aria-label"] = "Play video"
+                i.parent["aria-label"] = "Play video"
               end
             end
+
             padding_top = 0
             if !i["src"].nil? and i["src"].include? "placeholder"
               unless i["width"].nil? or i["height"].nil? or i["height"] == 0 or i["width"] == 0
