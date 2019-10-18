@@ -95,6 +95,9 @@ module LocomotiveCMS
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "click-to-play"
                 i.parent["aria-label"] = "Play video"
               end
+              if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "image-block"
+                i.parent["aria-label"] = "Navigate to external site"
+              end
             end
 
             padding_top = 0
