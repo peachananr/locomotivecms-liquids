@@ -14,7 +14,7 @@ Gem::Specification.new 'locomotivecms-liquids', LocomotiveCMS::Liquids::VERSION 
   spec.required_ruby_version     = '~> 2.1'
   spec.required_rubygems_version = '~> 3.0'
 
-  spec.add_runtime_dependency 'locomotivecms-solid', '>= 0.2.2.1'
+  #spec.add_runtime_dependency 'locomotivecms-solid', '>= 0.2.2.1'
 
   spec.add_development_dependency 'rake',  '~> 10.5', '>= 10.5.0'
   spec.add_development_dependency 'rspec', '~> 3.4',  '>= 3.4.0'
