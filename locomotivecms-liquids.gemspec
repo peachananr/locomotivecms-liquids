@@ -12,7 +12,7 @@ Gem::Specification.new 'locomotivecms-liquids', LocomotiveCMS::Liquids::VERSION 
   spec.extra_rdoc_files = ['LICENSE', 'README.md']
 
   spec.required_ruby_version     = '~> 2.1'
-  spec.required_rubygems_version = '~> 2.7'
+  spec.required_rubygems_version = '~> 3.0'
 
   #spec.add_runtime_dependency 'locomotivecms-solid', '>= 0.2.2.1'
 
