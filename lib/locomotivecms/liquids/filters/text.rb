@@ -108,8 +108,11 @@ module LocomotiveCMS
 
               i.remove_attribute('src')
               i.remove_attribute('data-size') if !i["data-size"].nil?
-
-              i.replace "<span class='img-wrapper'><i class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
+              extra_class = ""
+              if !i["class"].nil? and i["class"].value.include? "lightbox"]
+                extra_class = "dark"
+              end
+              i.replace "<span class='img-wrapper'><i class='img-sizer #{extra_class}' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
             end
 
           end
