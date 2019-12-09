@@ -112,7 +112,7 @@ module LocomotiveCMS
               if !i["class"].nil? and i["class"].include? "dark"
                 extra_class = "dark"
               end
-              i.replace "<span class='img-wrapper'><i class='img-sizer #{extra_class}' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
+              i.replace "<span class='img-wrapper #{extra_class}'><i class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
             end
 
           end
