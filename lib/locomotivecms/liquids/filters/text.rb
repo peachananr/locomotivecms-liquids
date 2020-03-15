@@ -11,6 +11,10 @@ module LocomotiveCMS
           ERB::Util.url_encode(input)
         end
 
+        def regex_escape(input)
+          Regexp.escape(input)
+        end
+
         def normalize(input)
           require "i18n"
           I18n.transliterate(input).downcase
