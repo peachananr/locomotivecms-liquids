@@ -87,6 +87,21 @@ module LocomotiveCMS
         def remove_placeholder_img(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
+
+          if html.css('#table-of-contents').size > 0
+            wrap = html.xpath('//div[@id="table-of-contents"]/preceding::*')
+            wrap = "<div>#{wrap}</div>"
+            html.xpath('//div[@id="table-of-contents"]/preceding::*').remove
+            html.css(".table-of-contents-wrapper").first.parent.inner_html = "#{wrap}#{html.css(".table-of-contents-wrapper").first.parent.inner_html}"
+          else
+            if html.css('body > h3').size > 0
+              wrap = html.xpath('(//h3)[1]/preceding::*')
+              wrap = "<div>#{wrap}</div>"
+              html.xpath('(//h3)[1]/preceding::*').remove
+              html.css("body > h3").first.parent.inner_html = "#{wrap}#{html.css("body > h3").first.parent.inner_html}"
+            end
+          end
+
           html.css('img.lazy').each do |i|
 
             if !i.parent.nil? and i.parent.name == "a"
