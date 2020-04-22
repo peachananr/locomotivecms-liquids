@@ -94,6 +94,15 @@ module LocomotiveCMS
             string.gsub!("</div>xxx", "</div></div>")
 
             html = Nokogiri.HTML(string)
+          else
+            if html.css('body > h3').size > 0
+              html.css('body > h3').first.inner_html = "#{html.css('body > h3').first.inner_html}xxx"
+              string = html.css('body').first.to_s
+              string.gsub!("<body>", "<body><div>")
+              string.gsub!("</h3>xxx", "</h3></div>")
+
+              html = Nokogiri.HTML(string)
+            end
           end
           #if html.css('.table-of-contents-wrapper').size > 0
             #html.css("body").first.inner_html = "<div>#{html.css("body").first.inner_html}"
