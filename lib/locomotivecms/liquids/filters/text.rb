@@ -96,10 +96,10 @@ module LocomotiveCMS
             html = Nokogiri.HTML(string)
           else
             if html.css('body > h3').size > 0
-              html.css('body > h3').first.inner_html = "#{html.css('body > h3').first.inner_html}-xxx"
+              html.css('body > h3').first.inner_html = "-xxx#{html.css('body > h3').first.inner_html}"
               string = html.css('body').first.to_s
               string.gsub!("<body>", "<body><div>")
-              string.gsub!("-xxx</h3>", "</h3></div>")
+              string.gsub!("<h3>-xxx", "</div><h3>")
 
               html = Nokogiri.HTML(string)
             end
