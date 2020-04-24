@@ -83,7 +83,11 @@ module LocomotiveCMS
 
           compressor.compress(text)
         end
-
+        def theme_image_url_no_timestamp(input)
+          if input.include? "?" and !input.include? "="
+            input.split('?')[0]
+          end
+        end
         def remove_placeholder_img(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
