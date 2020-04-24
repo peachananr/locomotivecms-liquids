@@ -83,7 +83,7 @@ module LocomotiveCMS
 
           compressor.compress(text)
         end
-        def theme_image_url_no_timestamp(input)
+        def no_timestamp(input)
           if input.include? "?" and !input.include? "="
             input.split('?')[0]
           end
