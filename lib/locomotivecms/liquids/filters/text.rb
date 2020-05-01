@@ -88,6 +88,7 @@ module LocomotiveCMS
             input.split('?')[0]
           end
         end
+
         def remove_placeholder_img(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)

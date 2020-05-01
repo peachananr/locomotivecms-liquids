@@ -13,6 +13,20 @@ module LocomotiveCMS
             return env
           end
         end
+
+
+        def post_img_in_sitemap(input)
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+          if html.css('img').size > 0
+            tags = ""
+            html.css('img').each do |i|
+              tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption>#{i['alt']}</image:caption>\n</image:image>"
+            end
+          end
+        end
+
+
         def getty_images (terms = nil, page = 1, size = 5, sort_order = "most_popular")
           if terms.blank?
             return ""
