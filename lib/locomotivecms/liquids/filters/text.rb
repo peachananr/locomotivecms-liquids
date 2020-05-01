@@ -89,6 +89,10 @@ module LocomotiveCMS
           end
         end
 
+        def post_img_in_sitemap(input)
+          return "xxxxxxx"
+        end
+
         def remove_placeholder_img(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
