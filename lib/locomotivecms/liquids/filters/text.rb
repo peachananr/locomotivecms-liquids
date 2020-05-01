@@ -84,7 +84,7 @@ module LocomotiveCMS
           compressor.compress(text)
         end
         def no_timestamp(input)
-          if input.include? "?" and !input.include? "="
+          if input and input.include? "?" and !input.include? "="
             input.split('?')[0]
           end
         end
