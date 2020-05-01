@@ -18,8 +18,8 @@ module LocomotiveCMS
         def post_img_in_sitemap(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
+          tags = ""
           if html.css('img').size > 0
-            tags = ""
             html.css('img').each do |i|
               tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption>#{i['alt']}</image:caption>\n</image:image>"
             end
