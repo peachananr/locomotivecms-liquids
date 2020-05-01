@@ -90,7 +90,15 @@ module LocomotiveCMS
         end
 
         def post_img_in_sitemap(input)
-          return "xxxxxxx"
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+          tags = ""
+          if html.css('img').size > 0
+            html.css('img').each do |i|
+              tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption>#{i['alt']}</image:caption>\n</image:image>"
+            end
+          end
+          return tags
         end
 
         def remove_placeholder_img(input)
