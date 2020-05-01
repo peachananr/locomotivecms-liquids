@@ -95,25 +95,19 @@ module LocomotiveCMS
           tags = ""
           if html.css('.itinerary img').size > 0
             html.css('.itinerary img').each do |i|
-              tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption>#{i['alt']}</image:caption>\n</image:image>"
+              tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption>#{i['alt'].gsub("&", "&amp;")}</image:caption>\n</image:image>"
             end
           end
+
           if html.css('h3').size > 0
             html.css('h3').each do |i|
               if i.next_element.css("img").size > 0
                 img = i.next_element.css("img").first
-                tags = "#{tags}\n<image:image>\n<image:loc>#{img['data-original']}</image:loc>\n<image:caption>#{i.text} - #{img['alt']}</image:caption>\n</image:image>"
+                tags = "#{tags}\n<image:image>\n<image:loc>#{img['data-original']}</image:loc>\n<image:caption>#{i.text.gsub("&", "&amp;")} - #{img['alt'].gsub("&", "&amp;")}</image:caption>\n</image:image>"
               end
             end
           end
-          if html.css('h4').size > 0
-            html.css('h4').each do |i|
-              if i.next_element.css("img").size > 0
-                img = i.next_element.css("img").first
-                tags = "#{tags}\n<image:image>\n<image:loc>#{img['data-original']}</image:loc>\n<image:caption>#{i.text} - #{img['alt']}</image:caption>\n</image:image>"
-              end
-            end
-          end
+
           return tags
         end
 
