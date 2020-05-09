@@ -108,7 +108,7 @@ module LocomotiveCMS
           #    end
           #  end
           #end
-          if html.css('img').size > 0
+          if html.css('.lightbox-full img, .itinerary img').size > 0
             html.css('img').each do |i|
 
               tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption><![CDATA[#{i['alt']}]]></image:caption>\n</image:image>"
