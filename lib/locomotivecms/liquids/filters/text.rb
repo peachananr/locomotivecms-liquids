@@ -93,6 +93,7 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
           tags = ""
+          =begin
           if html.css('.itinerary img').size > 0
             html.css('.itinerary img').each do |i|
               tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption>#{i['alt'].to_s.gsub("&", "&amp;")}</image:caption>\n</image:image>"
@@ -105,6 +106,13 @@ module LocomotiveCMS
                 img = i.next_element.css("img").first
                 tags = "#{tags}\n<image:image>\n<image:loc>#{img['data-original']}</image:loc>\n<image:caption>#{i.text.to_s.gsub("&", "&amp;")} - #{img['alt'].to_s.gsub("&", "&amp;")}</image:caption>\n</image:image>"
               end
+            end
+          end
+          =end
+          if html.css('img').size > 0
+            html.css('img').each do |i|
+
+              tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption>#{i['alt']}</image:caption>\n</image:image>"
             end
           end
 
