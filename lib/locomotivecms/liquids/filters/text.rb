@@ -124,8 +124,8 @@ module LocomotiveCMS
 
           if html.css('.video-block .mediavine-vid').size == 0
             video = '<div id="watch-this"></div>'
-            if html.css("#table-of-contents").size > 0
-              html.at_css("#table-of-contents").add_previous_sibling(video)
+            if html.css(".table-of-contents-wrapper").size > 0
+              html.at_css(".table-of-contents-wrapper").add_previous_sibling(video)
             elsif html.css("h3").size > 0
               html.at_css("h3").add_previous_sibling(video)
             end
