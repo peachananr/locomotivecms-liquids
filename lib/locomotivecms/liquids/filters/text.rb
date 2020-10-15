@@ -121,6 +121,16 @@ module LocomotiveCMS
         def remove_placeholder_img(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
+
+          if html.css('.video-block .mediavine-vid').size == 0
+            video = '<div id="watch-this"></div>'
+            if html.css("#table-of-contents").size > 0
+              html.at_css("#table-of-contents").add_previous_sibling(video)
+            elsif html.css("h3").size > 0
+              html.at_css("h3").add_previous_sibling(video)
+            end
+          end
+
           if html.css('.table-of-contents-wrapper').size > 0
             html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
             string = html.css('body').first.to_s
