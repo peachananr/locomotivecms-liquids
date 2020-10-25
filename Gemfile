@@ -30,7 +30,7 @@ end
 # === Misc ===
 
 group :misc do
-  gem "nokogiri"
+  gem "nokogiri", '~> 1.10.9'
   gem "htmlcompressor"
   # --- Formatter ---
 

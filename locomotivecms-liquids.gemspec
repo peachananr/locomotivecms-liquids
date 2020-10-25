@@ -18,4 +18,5 @@ Gem::Specification.new 'locomotivecms-liquids', LocomotiveCMS::Liquids::VERSION 
 
   spec.add_development_dependency 'rake',  '~> 10.5', '>= 10.5.0'
   spec.add_development_dependency 'rspec', '~> 3.4',  '>= 3.4.0'
+  spec.add_development_dependency 'nokogiri', '~> 1.10.9',  '>= 1.10.9'
 end
