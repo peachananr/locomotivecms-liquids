@@ -23,13 +23,13 @@ module LocomotiveCMS
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
           require 'nokogiri'
           html = Nokogiri.HTML(input)
-          if html.css('body > p').length > 150
+          if html.xpath("//p[text()]").length > 150
             spread = html.css('body > p').length.to_i/50
             spread = spread.floor
           else
             spread = freq
           end
-          html.css('body > p').each_with_index do |i, index|
+          html.xpath("//p[text()]").each_with_index do |i, index|
             if (index + 1) % spread == 0
               i.replace i.to_s.gsub("</p>", "</p>#{placeholder}")
             end
