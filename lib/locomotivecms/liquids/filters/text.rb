@@ -24,7 +24,7 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
           if html.xpath("//body/p[text()]").length > 150
-            spread = html.css('body > p').length.to_i/50
+            spread = html.xpath("//body/p[text()]").length.to_i/50
             spread = spread.floor
           else
             spread = freq
