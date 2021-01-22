@@ -132,7 +132,7 @@ module LocomotiveCMS
           end
 
           if html.css('#pinterest').size > 0
-            html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('#pinterest').first.inner_html}-xxx"
+            html.css('#pinterest').first.inner_html = "#{html.css('#pinterest').first.inner_html}-xxx"
             string = html.css('body').first.to_s
             string.gsub!("<body>", "<body><div>")
             string.gsub!("-xxx</div>", "</div></div>")
