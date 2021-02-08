@@ -171,7 +171,7 @@ module LocomotiveCMS
                 padding_top = (i["height"].to_f/i["width"].to_f) * 100
               end
 
-              no_script_image = "<noscript><img src='#{i["src"]}' alt='#{i["alt"]}'></noscript>"
+              no_script_image = "<noscript><img src='#{i["data-original"]}' alt='#{i["alt"]}'></noscript>"
               i.add_next_sibling(no_script_image)
 
               i.remove_attribute('src')
