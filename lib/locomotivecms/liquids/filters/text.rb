@@ -139,14 +139,6 @@ module LocomotiveCMS
 
             html = Nokogiri.HTML(string)
           end
-          #if html.css('.table-of-contents-wrapper').size > 0
-            #html.css("body").first.inner_html = "<div>#{html.css("body").first.inner_html}"
-            #html.css(".table-of-contents-wrapper").first.inner_html = "#{html.css(".table-of-contents-wrapper").first.inner_html}</div>"
-            #wrap = html.xpath('//div[@id="table-of-contents"]/preceding::p')
-            #wrap = "<div>#{wrap}</div>"
-            #html.xpath('//div[@id="table-of-contents"]/preceding::p').remove
-            #html.css(".table-of-contents-wrapper").first.parent.inner_html = "#{wrap}#{html.css(".table-of-contents-wrapper").first.parent.inner_html}"
-          #end
 
           html.css('img.lazy').each do |i|
 
@@ -182,6 +174,69 @@ module LocomotiveCMS
               end
               i.replace "<span class='img-wrapper #{extra_class}'><i class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
 
+            end
+
+          end
+
+          html.css("body").inner_html
+        end
+
+        def convert_to_article(input)
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+
+          if html.css('.video-block .mediavine-vid').size == 0
+            video = '<div id="watch-this"></div>'
+            if html.css(".table-of-contents-wrapper").size > 0
+              html.at_css(".table-of-contents-wrapper").add_previous_sibling(video)
+            elsif html.css("h3").size > 0
+              html.at_css("h3").add_previous_sibling(video)
+            end
+          end
+
+          if html.css('.table-of-contents-wrapper').size > 0
+            html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
+            string = html.css('body').first.to_s
+            string.gsub!("<body>", "<body><div>")
+            string.gsub!("-xxx</div>", "</div></div>")
+
+            html = Nokogiri.HTML(string)
+          end
+
+          html.css('img.lazy').each do |i|
+
+            if !i.parent.nil? and i.parent.name == "a"
+              if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
+                i.parent["aria-label"] = "View larger image"
+              end
+              if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "itinerary"
+                i.parent["aria-label"] = "View itinerary on Google Maps"
+              end
+              if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "click-to-play"
+                i.parent["aria-label"] = "Play video"
+              end
+              if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "image-block"
+                i.parent["aria-label"] = "Navigate to external site"
+              end
+            end
+
+            aspect_ratio = 'auto'
+
+            if !i["src"].nil? and i["src"].include? "assets.bucketlistly.blog"
+              unless i["width"].nil? or i["height"].nil? or i["height"] == 0 or i["width"] == 0
+                aspect_ratio = "#{i["width"]}/#{i["height"]}"
+              end
+
+              no_script_image = "<noscript><img src='#{i["data-original"]}' alt='#{i["alt"]}'></noscript>"
+              i.add_next_sibling(no_script_image)
+
+              i.remove_attribute('src')
+              i.remove_attribute('data-size') if !i["data-size"].nil?
+              extra_class = ""
+              if !i["class"].nil? and i["class"].include? "dark"
+                extra_class = "dark"
+              end
+              i["style"] = "aspect-ratio: #{aspect_ratio};"
             end
 
           end
