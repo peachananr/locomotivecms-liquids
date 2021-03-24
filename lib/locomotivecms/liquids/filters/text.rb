@@ -236,7 +236,7 @@ module LocomotiveCMS
               if !i["class"].nil? and i["class"].include? "dark"
                 extra_class = "dark"
               end
-              i["style"] = "aspect-ratio: #{aspect_ratio};"
+              i["style"] = "-webkit-aspect-ratio:#{aspect_ratio};aspect-ratio:#{aspect_ratio};"
             end
 
           end
