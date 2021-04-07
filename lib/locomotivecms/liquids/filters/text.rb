@@ -108,8 +108,8 @@ module LocomotiveCMS
           #    end
           #  end
           #end
-          if html.css('.lightbox-full img, .itinerary img').size > 0
-            html.css('.lightbox-full img, .itinerary img').each do |i|
+          if html.css('.lightbox-full img, .itinerary img, .image-block img').size > 0
+            html.css('.lightbox-full img, .itinerary img, .image-block img').each do |i|
 
               tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption><![CDATA[#{i['alt']}]]></image:caption>\n</image:image>"
             end
@@ -126,8 +126,8 @@ module LocomotiveCMS
             video = '<div id="watch-this"></div>'
             if html.css(".table-of-contents-wrapper").size > 0
               html.at_css(".table-of-contents-wrapper").add_previous_sibling(video)
-            elsif html.css("h3").size > 0
-              html.at_css("h3").add_previous_sibling(video)
+            elsif html.css("h2").size > 0
+              html.at_css("h2").add_previous_sibling(video)
             end
           end
 
@@ -189,8 +189,8 @@ module LocomotiveCMS
             video = '<div id="watch-this"></div>'
             if html.css(".table-of-contents-wrapper").size > 0
               html.at_css(".table-of-contents-wrapper").add_previous_sibling(video)
-            elsif html.css("h3").size > 0
-              html.at_css("h3").add_previous_sibling(video)
+            elsif html.css("h2").size > 0
+              html.at_css("h2").add_previous_sibling(video)
             end
           end
 
