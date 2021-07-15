@@ -11,6 +11,10 @@ module LocomotiveCMS
           ERB::Util.url_encode(input)
         end
 
+        def capitalize_all(input)
+          input.split(' ').map(&:capitalize).join(' ')
+        end
+
         def regex_escape(input)
           Regexp.escape(input)
         end
