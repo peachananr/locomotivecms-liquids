@@ -172,15 +172,14 @@ module LocomotiveCMS
               end
 
               no_script_image = "<noscript><img width='#{i["width"]}' height='#{i["height"]}' src='#{i["data-original"]}' alt='#{i["alt"]}'></noscript>"
-              i.add_next_sibling(no_script_image)
-
+              
               i.remove_attribute('src')
               i.remove_attribute('data-size') if !i["data-size"].nil?
               extra_class = ""
               if !i["class"].nil? and i["class"].include? "dark"
                 extra_class = "dark"
               end
-              i.replace "<span class='img-wrapper #{extra_class}'><i class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}</span>"
+              i.replace "<span class='img-wrapper #{extra_class}'><i class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}#{no_script_image}</span>"
 
             end
 
