@@ -178,7 +178,7 @@ module LocomotiveCMS
               if !i["class"].nil? and i["class"].include? "dark"
                 extra_class = "dark"
               end
-              if !i["height"].to_f > i["width"].to_f
+              if i["height"].to_f > i["width"].to_f
                 extra_class = "landscape #{extra_class}"
               end
               i.replace "<span class='img-wrapper #{extra_class}'><i class='img-sizer' style='padding-top: #{padding_top}%;'></i>#{i.to_s}#{no_script_image}</span>"
