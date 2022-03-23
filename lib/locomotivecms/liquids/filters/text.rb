@@ -139,13 +139,13 @@ module LocomotiveCMS
             end
           end
 
-          if html.css('.table-of-contents-wrapper').size > 0
-            html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
-            string = html.css('body').first.to_s
-            string.gsub!("<body>", "<body><div>")
-            string.gsub!("-xxx</div>", "</div></div>")
-            html = Nokogiri.HTML(string)
-          end
+          #if html.css('.table-of-contents-wrapper').size > 0
+          #  html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
+          #  string = html.css('body').first.to_s
+          #  string.gsub!("<body>", "<body><div>")
+          #  string.gsub!("-xxx</div>", "</div></div>")
+          #  html = Nokogiri.HTML(string)
+          #end
 
           html.css('img.lazy').each do |i|
 
@@ -203,13 +203,13 @@ module LocomotiveCMS
             end
           end
 
-          if html.css('.table-of-contents-wrapper').size > 0
-            html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
-            string = html.css('body').first.to_s
-            string.gsub!("<body>", "<body><div>")
-            string.gsub!("-xxx</div>", "</div></div>")
-            html = Nokogiri.HTML(string)
-          end
+          #if html.css('.table-of-contents-wrapper').size > 0
+          #  html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
+          #  string = html.css('body').first.to_s
+          #  string.gsub!("<body>", "<body><div>")
+          #  string.gsub!("-xxx</div>", "</div></div>")
+          #  html = Nokogiri.HTML(string)
+          #end
 
           html.css('img.lazy').each do |i|
 
