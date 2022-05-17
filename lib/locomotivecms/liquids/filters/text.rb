@@ -12,7 +12,7 @@ module LocomotiveCMS
         end
 
         def utf_encode(input)
-          input.force_encoding('iso-8859-1').encode("utf-8")
+          input.force_encoding(Encoding::BINARY)
         end
 
         def capitalize_all(input)
