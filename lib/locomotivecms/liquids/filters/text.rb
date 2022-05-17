@@ -12,7 +12,7 @@ module LocomotiveCMS
         end
 
         def utf_encode(input)
-          input.encode("cp1252").force_encoding("utf-8")
+          input.encode("utf-8")
         end
 
         def capitalize_all(input)
