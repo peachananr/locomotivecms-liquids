@@ -12,7 +12,7 @@ module LocomotiveCMS
         end
 
         def utf_encode(input)
-          input.force_encoding(Encoding::BINARY)
+          input.unicode_normalize(:nfkd).encode('ASCII', replace: '')
         end
 
         def capitalize_all(input)
