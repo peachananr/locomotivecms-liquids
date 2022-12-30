@@ -27,12 +27,14 @@ module LocomotiveCMS
           require "i18n"
           I18n.transliterate(input).downcase
         end
+        
         def get_html_attr(input, css = 'img', att = 'src')
           require 'nokogiri'
           html = Nokogiri.HTML(input)
           e = html.at_css(css)
           e[att]
         end
+
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
           require 'nokogiri'
           html = Nokogiri.HTML(input)
