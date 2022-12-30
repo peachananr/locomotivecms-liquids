@@ -22,9 +22,10 @@ module LocomotiveCMS
         def regex_escape(input)
           Regexp.escape(input)
         end
-        def sanitize(input, tags = "", att = "")
-          
-          sanitize(input, :tags=>tags.split(","), :attributes => att.split(","))
+        def sanitize(input, t = "", att = "")
+          ts = t.split(",")
+          atts = att.split(",")
+          sanitize(input, :tags=> t, :attributes => atts)
 
         end
         def normalize(input)
