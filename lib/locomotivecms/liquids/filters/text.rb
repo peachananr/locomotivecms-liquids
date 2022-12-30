@@ -23,7 +23,7 @@ module LocomotiveCMS
           Regexp.escape(input)
         end
         def sanitize_string(input, t = "", att = "")
-          include ActionView::Helpers::SanitizeHelper
+          
           ts = t.to_s.split(",")
           atts = att.to_s.split(",")
           sanitize(input, :tags=> ts, :attributes => atts)
