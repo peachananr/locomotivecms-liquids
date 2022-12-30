@@ -32,7 +32,7 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
           e = html.at_css(css)
-          e[att]
+          e[att].to_s
         end
 
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
