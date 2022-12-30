@@ -22,7 +22,11 @@ module LocomotiveCMS
         def regex_escape(input)
           Regexp.escape(input)
         end
+        def sanitize(input, tags = "", att = "")
+          
+          sanitize(input, :tags=>tags.split(","), :attributes => att.split(","))
 
+        end
         def normalize(input)
           require "i18n"
           I18n.transliterate(input).downcase
