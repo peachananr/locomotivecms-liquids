@@ -22,11 +22,13 @@ module LocomotiveCMS
         def regex_escape(input)
           Regexp.escape(input)
         end
-        def sanitize_string(input, t = "", att = "")
+
+        def sanitize_this(input, t = "", att = "")
           
           ts = t.to_s.split(",")
           atts = att.to_s.split(",")
-          sanitize(input, :tags=> ts, :attributes => atts)
+
+          ActionController::Base.helpers.sanitize(input, :tags=> ts, :attributes => atts).to_s
 
         end
         def normalize(input)
