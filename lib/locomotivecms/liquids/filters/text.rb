@@ -27,7 +27,12 @@ module LocomotiveCMS
           require "i18n"
           I18n.transliterate(input).downcase
         end
-
+        def get_html_attr(input, css = 'img', att = 'src')
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+          e = html.at_css(css)
+          e[att]
+        end
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
           require 'nokogiri'
           html = Nokogiri.HTML(input)
@@ -143,13 +148,13 @@ module LocomotiveCMS
             end
           end
 
-          #if html.css('.table-of-contents-wrapper').size > 0
-          #  html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
-          #  string = html.css('body').first.to_s
-          #  string.gsub!("<body>", "<body><div>")
-          #  string.gsub!("-xxx</div>", "</div></div>")
-          #  html = Nokogiri.HTML(string)
-          #end
+          if html.css('.table-of-contents-wrapper').size > 0
+            html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
+            string = html.css('body').first.to_s
+            string.gsub!("<body>", "<body><div>")
+            string.gsub!("-xxx</div>", "</div></div>")
+            html = Nokogiri.HTML(string)
+          end
 
           html.css('img.lazy').each do |i|
 
