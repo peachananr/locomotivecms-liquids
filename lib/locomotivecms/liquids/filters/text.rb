@@ -57,8 +57,9 @@ module LocomotiveCMS
               i.replace i.to_s.gsub("</p>", "</p>#{placeholder}")
             end
           end
+          
 
-          html.css("body").inner_html
+          html.css("body").inner_html.gsub("data-gyg-widget=","data-gyg-widget-bk=")
         end
 
         def amp_optimize(input, freq = '2')
