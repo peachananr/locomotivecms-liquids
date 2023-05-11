@@ -59,7 +59,7 @@ module LocomotiveCMS
           end
           
 
-          html.css("body").inner_html.gsub("data-gyg-widget=","data-gyg-widget-bk=")
+          html.css("body").inner_html
         end
 
         def amp_optimize(input, freq = '2')
@@ -207,7 +207,7 @@ module LocomotiveCMS
 
           end
 
-          html.css("body").inner_html
+          html.css("body").inner_html.gsub("data-gyg-widget=","data-gyg-widget-bk=")
         end
 
         def convert_to_article(input)
