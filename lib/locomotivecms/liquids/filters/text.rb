@@ -59,7 +59,7 @@ module LocomotiveCMS
           end
           
 
-          html.css("body").inner_html.gsub("data-gyg-widget=","data-gyg-widget-bk=").gsub("data-vi-partner-id=","data-vi-partner-id-bk=")
+          html.css("body").inner_html.gsub("data-gyg-widget=","data-gyg-widget-bk=")
         end
 
         def amp_optimize(input, freq = '2')
