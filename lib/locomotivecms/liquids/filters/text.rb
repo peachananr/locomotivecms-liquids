@@ -145,6 +145,17 @@ module LocomotiveCMS
         def remove_placeholder_img(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
+          if html.css('.insurance').size > 0
+            html.at_css("#insurance").remove()
+            insurance = '<div id="insurance"></div>'
+            nodes = html.at_css("h3:eq(0) ~ p:not(:empty):not(:has(img)):eq(1)")
+            if nodes.size > 0
+              html.at_css("h3:eq(0) ~ p:not(:empty):not(:has(img)):eq(1)").add_next_sibling(insurance)
+            else
+              html.at_css("h2:eq(0) ~ p:not(:empty):not(:has(img)):eq(1)").add_next_sibling(insurance)
+            end
+          end
+          
           if html.css('h2, h3').size > 4
             newsletter = '<div id="small-newsletter"></div>'
             html.at_css("h2:eq(4), h3:not(.adj-header):eq(4)").add_previous_sibling(newsletter)
