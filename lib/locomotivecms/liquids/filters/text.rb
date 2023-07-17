@@ -149,10 +149,10 @@ module LocomotiveCMS
             html.at_css("#insurance").remove()
             input = "<h3>xxxx</h3><p><img src=''></p><p>fffff</p><p><img src=''></p><p>vvvvv</p>"
             insurance = '<div id="insurance"></div>'
-            if html.css("h3:eq(0) ~ p:not(:empty):not(:has(img)):eq(1)").size > 0
-              html.at_css("h3:eq(0) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
+            if html.css("h3:eq(1) ~ p:not(:empty):not(:has(img))").size > 0
+              html.at_css("h3:eq(1) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
             else
-              html.at_css("h2:eq(0) ~ p:not(:empty):not(:has(img)):eq(1)")[1].add_next_sibling(insurance)
+              html.at_css("h2:eq(1) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
             end
           end
 
