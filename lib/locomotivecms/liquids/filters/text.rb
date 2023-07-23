@@ -155,10 +155,10 @@ module LocomotiveCMS
             end
           end
 
-          if html.css('h2, h3').size > 4
-            newsletter = '<div id="small-newsletter"></div>'
-            html.at_css("h2:eq(4), h3:not(.adj-header):eq(4)").add_previous_sibling(newsletter)
-          end
+          #if html.css('h2, h3').size > 4
+          #  newsletter = '<div id="small-newsletter"></div>'
+          #  html.at_css("h2:eq(4), h3:not(.adj-header):eq(4)").add_previous_sibling(newsletter)
+          #end
 
           if html.css('.video-block .mediavine-vid').size == 0
             video = '<div id="watch-this"></div>'
