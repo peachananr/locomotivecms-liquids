@@ -222,7 +222,10 @@ module LocomotiveCMS
             end
 
           end
-
+          html.css('source[data-srcset]').each do |i|
+            i["srcset"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
+            #i.remove_attribute('data-srcset') 
+          end
           html.css("body").inner_html
         end
 
