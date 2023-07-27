@@ -204,6 +204,9 @@ module LocomotiveCMS
               i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
               #i.remove_attribute('src')
               i.remove_attribute('data-size') if !i["data-size"].nil?
+              i["data-sizes"] = i["sizes"]
+              i.remove_attribute('sizes')
+
               extra_class = ""
               if !i["class"].nil? and i["class"].include? "dark"
                 extra_class = "dark"
