@@ -257,7 +257,7 @@ module LocomotiveCMS
                 a_tag['href'] = new_link["href"]  # Add the URL you want the <a> tag to point to
                 a_tag['target'] = new_link["target"]
                 a_tag['rel'] = new_link["rel"]
-                i.children.wrap(a_tag)
+                i.children.wrap_all(a_tag)
               end
               # Replace the .product-summary with the new <table>
               product_summary.replace(table)
