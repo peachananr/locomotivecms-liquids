@@ -177,7 +177,7 @@ module LocomotiveCMS
             html = Nokogiri.HTML(string)
           end
 
-          if html.css('h2').size == 0
+          if html.css('h2').size > 0
             # Adding numbering on h3
             h2_elements = html.css('h2')
 
