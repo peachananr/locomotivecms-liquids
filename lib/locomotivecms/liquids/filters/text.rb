@@ -231,6 +231,12 @@ module LocomotiveCMS
                 new_link["class"] = "btn btn-primary"
 
                 link.at_css(".btn.btn-primary").replace(new_link)
+                l = "<a href=\"#{new_link["href"]}\" target=\"#{new_link["target"]}\" rel=\"#{new_link["rel"]}\">"
+                link.css(".ps-image, .ps-names").each do |i|
+                  i.inner_html = "#{l}#{i.inner_html}</a>"
+                end
+
+
                 # Find all <div> elements with class="col-md" inside the <a> element
                 col_md_divs = link.css('div.col-md')
 
@@ -246,16 +252,13 @@ module LocomotiveCMS
                   # Append the <td> to the <tr>
                   tr.add_child(td)
                 end
-                l = "<a href=\"#{new_link["href"]}\" target=\"#{new_link["target"]}\" rel=\"#{new_link["rel"]}\">"
-                table.css(".ps-image, .ps-names").each do |i|
-                  i.inner_html = "#{l}#{i.inner_html}</a>"
-                end
+
                 # Append the <tr> to the <table>
                 table.add_child(tr)
 
                
               end
-             
+              
               # Replace the .product-summary with the new <table>
               product_summary.replace(table)
             end
