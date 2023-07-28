@@ -176,6 +176,7 @@ module LocomotiveCMS
             string.gsub!("-xxx</div>", "</div></div>")
             html = Nokogiri.HTML(string)
           end
+
           # Adding numbering on h3
           h2_elements = html.css('h2')
 
@@ -185,7 +186,7 @@ module LocomotiveCMS
           # Iterate through the h2 elements
           h2_elements.each do |h2|
             # Check if the h2 text starts with a number
-            if h2.text.strip.match?(/\A\d+\./)
+            if h2.text.strip.match?(/\A\d/)
               # Find adjacent h3 elements until the next h2 is encountered
               next_element = h2.next_element
               while next_element && next_element.name != 'h2'
