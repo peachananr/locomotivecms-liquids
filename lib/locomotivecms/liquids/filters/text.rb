@@ -221,13 +221,14 @@ module LocomotiveCMS
               links = product_summary.css('a')
               new_link = Nokogiri::XML::Node.new('a', html)
               new_link.inner_html = "Check Price"
-              new_link["class"] = "btn btn-primary"
 
               # Iterate through each <a> element
               links.each do |link|
                 # Create a new <tr> element and copy attributes
                 tr = Nokogiri::XML::Node.new('tr', html)
+                tr["class"] = "ps-row"
                 link.attributes.each { |name, value| new_link[name] = value.value }
+                new_link["class"] = "btn btn-primary"
 
                 link.at_css(".btn.btn-primary").replace(new_link)
                 # Find all <div> elements with class="col-md" inside the <a> element
