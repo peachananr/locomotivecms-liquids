@@ -255,7 +255,7 @@ module LocomotiveCMS
                   a_tag['href'] = new_link["href"]  # Add the URL you want the <a> tag to point to
                   a_tag['target'] = new_link["target"]
                   a_tag['rel'] = new_link["rel"]
-                  ps_name.wrap(a_tag)
+                  i.wrap(a_tag)
                 end
               end
               
