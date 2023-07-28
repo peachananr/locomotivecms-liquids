@@ -250,15 +250,15 @@ module LocomotiveCMS
                 # Append the <tr> to the <table>
                 table.add_child(tr)
 
-                table.css(".ps-image, .ps-names").each do |i|
-                  a_tag = Nokogiri::XML::Node.new('a', html)
-                  a_tag['href'] = new_link["href"]  # Add the URL you want the <a> tag to point to
-                  a_tag['target'] = new_link["target"]
-                  a_tag['rel'] = new_link["rel"]
-                  i.children.wrap(a_tag)
-                end
+               
               end
-              
+              table.css(".ps-image, .ps-names").each do |i|
+                a_tag = Nokogiri::XML::Node.new('a', html)
+                a_tag['href'] = new_link["href"]  # Add the URL you want the <a> tag to point to
+                a_tag['target'] = new_link["target"]
+                a_tag['rel'] = new_link["rel"]
+                i.children.wrap(a_tag)
+              end
               # Replace the .product-summary with the new <table>
               product_summary.replace(table)
             end
