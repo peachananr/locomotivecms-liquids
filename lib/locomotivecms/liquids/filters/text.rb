@@ -229,7 +229,7 @@ module LocomotiveCMS
                 tr = Nokogiri::XML::Node.new('tr', html)
                 new_link.attributes.each { |name, value| tr[name] = value.value }
 
-                links.at_css(".btn.btn-primary").replace(new_link)
+                #links.at_css(".btn.btn-primary").replace(new_link)
                 # Find all <div> elements with class="col-md" inside the <a> element
                 col_md_divs = link.css('div.col-md')
 
