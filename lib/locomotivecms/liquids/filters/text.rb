@@ -206,7 +206,7 @@ module LocomotiveCMS
               end
             end
           end
-          if html.css('div.product-summary:not(.accommodation)').size == 0
+          if html.css('div.product-summary:not(.accommodation)').size > 0
             
             # Find all elements with class="product-summary"
             product_summaries = html.css('.product-summary')
