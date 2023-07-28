@@ -177,31 +177,84 @@ module LocomotiveCMS
             html = Nokogiri.HTML(string)
           end
 
-          # Adding numbering on h3
-          h2_elements = html.css('h2')
+          if html.css('h2').size == 0
+            # Adding numbering on h3
+            h2_elements = html.css('h2')
 
-          # Initialize a counter for the h3 elements
-          h3_counter = 1
+            # Initialize a counter for the h3 elements
+            h3_counter = 1
 
-          # Iterate through the h2 elements
-          h2_elements.each do |h2|
-            # Check if the h2 text starts with a number
-            if h2.text.strip.match?(/^\d(?!.*itinerary)/i)
-              # Find adjacent h3 elements until the next h2 is encountered
-              next_element = h2.next_element
-              while next_element && next_element.name != 'h2'
-                if next_element.name == 'h3'
-                  # Add the number counter to the h3 element's text
-                  next_element.inner_html = "#{h3_counter}. #{next_element.inner_html.strip}"
-                  h3_counter += 1
+            # Iterate through the h2 elements
+            h2_elements.each do |h2|
+              # Check if the h2 text starts with a number
+              if h2.text.strip.match?(/^\d(?!.*itinerary)/i)
+                # Find adjacent h3 elements until the next h2 is encountered
+                next_element = h2.next_element
+                while next_element && next_element.name != 'h2'
+                  if next_element.name == 'h3'
+                    # Add the number counter to the h3 element's text
+                    if !next_element.text.match?(/^\d+\./)
+                      next_element.inner_html = "#{h3_counter}. #{next_element.inner_html.strip}"
+                      h3_counter += 1
+                    end
+                  end
+                  next_element = next_element.next_element
                 end
-                next_element = next_element.next_element
-              end
 
-              # Reset the counter for the next group of h3 elements
-              h3_counter = 1
+                # Reset the counter for the next group of h3 elements
+                h3_counter = 1
+              end
             end
           end
+          if html.css('div.product-summary:not(.accommodation)').size == 0
+            
+            # Find all elements with class="product-summary"
+            product_summaries = html.css('.product-summary')
+
+            # Iterate through each .product-summary element
+            product_summaries.each do |product_summary|
+              # Create a new <table> element and copy attributes
+              table = Nokogiri::XML::Node.new('table', html)
+              product_summary.attributes.each { |name, value| table[name] = value.value }
+
+              # Find all <a> elements inside .product-summary
+              links = product_summary.css('a')
+              new_link = Nokogiri::XML::Node.new('a', html)
+              new_link.inner_html = "Check Price"
+              new_link["class"] = "btn btn-primary"
+
+              # Iterate through each <a> element
+              links.each do |link|
+                # Create a new <tr> element and copy attributes
+                tr = Nokogiri::XML::Node.new('tr', html)
+                new_link.attributes.each { |name, value| tr[name] = value.value }
+
+                links.at_css(".btn.btn-primary").replace(new_link)
+                # Find all <div> elements with class="col-md" inside the <a> element
+                col_md_divs = link.css('div.col-md')
+
+                # Iterate through each <div class="col-md"> element
+                col_md_divs.each do |div|
+                  # Create a new <td> element and copy attributes
+                  td = Nokogiri::XML::Node.new('td', html)
+                  div.attributes.each { |name, value| td[name] = value.value }
+
+                  # Move the content of the <div class="col-md"> to the <td>
+                  td.inner_html = div.inner_html
+
+                  # Append the <td> to the <tr>
+                  tr.add_child(td)
+                end
+
+                # Append the <tr> to the <table>
+                table.add_child(tr)
+              end
+
+              # Replace the .product-summary with the new <table>
+              product_summary.replace(table)
+            end
+          end
+          
 
           html.css('img.lazy').each do |i|
 
