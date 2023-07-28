@@ -176,6 +176,31 @@ module LocomotiveCMS
             string.gsub!("-xxx</div>", "</div></div>")
             html = Nokogiri.HTML(string)
           end
+          # Adding numbering on h3
+          h2_elements = html.css('h2')
+
+          # Initialize a counter for the h3 elements
+          h3_counter = 1
+
+          # Iterate through the h2 elements
+          h2_elements.each do |h2|
+            # Check if the h2 text starts with a number
+            if h2.text.strip.match?(/\A\d+\./)
+              # Find adjacent h3 elements until the next h2 is encountered
+              next_element = h2.next_element
+              while next_element && next_element.name != 'h2'
+                if next_element.name == 'h3'
+                  # Add the number counter to the h3 element's text
+                  next_element.inner_html = "#{h3_counter}. #{next_element.inner_html.strip}"
+                  h3_counter += 1
+                end
+                next_element = next_element.next_element
+              end
+
+              # Reset the counter for the next group of h3 elements
+              h3_counter = 1
+            end
+          end
 
           html.css('img.lazy').each do |i|
 
@@ -250,31 +275,7 @@ module LocomotiveCMS
           #  html = Nokogiri.HTML(string)
           #end
 
-          # add numbering to h3
-          h2_elements = html.css('h2')
-
-          # Initialize a counter for the h3 elements
-          h3_counter = 1
-
-          # Iterate through the h2 elements
-          h2_elements.each do |h2|
-            # Check if the h2 text starts with a number
-            if h2.text.strip.match?(/\A\d+\./)
-              # Find adjacent h3 elements until the next h2 is encountered
-              next_element = h2.next_element
-              while next_element && next_element.name != 'h2'
-                if next_element.name == 'h3'
-                  # Add the number counter to the h3 element's text
-                  next_element.inner_html = "#{h3_counter}. #{next_element.inner_html.strip}"
-                  h3_counter += 1
-                end
-                next_element = next_element.next_element
-              end
-
-              # Reset the counter for the next group of h3 elements
-              h3_counter = 1
-            end
-          end
+          
 
           html.css('img.lazy').each do |i|
 
