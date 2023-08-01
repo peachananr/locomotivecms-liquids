@@ -212,9 +212,14 @@ module LocomotiveCMS
               while current_element && (current_element.name == 'ul' || current_element.name == 'p')
                 # Check if the current element doesn't have children with "lightbox-full" or "image-block" class
                 if current_element.css('.lightbox-full, .image-block').empty?
-                  if !current_element["class"].nil? and !current_element["class"].include? "readmore" and !current_element["class"].include? "credit"
-                  adjacent_elements << current_element
+                  if !current_element["class"].nil?
+                    if !current_element["class"].include? "readmore" and !current_element["class"].include? "credit"
+                      adjacent_elements << current_element
+                    end
+                  else 
+                    adjacent_elements << current_element
                   end
+                  
                 end
 
                 current_element = current_element.next_element
