@@ -205,10 +205,24 @@ module LocomotiveCMS
             selected_h2_elements.each do |h2|
               question = h2.text
               answer = ""
-              selected_p_tags = h2.xpath('following-sibling::p[following-sibling::*[not(self::p)][1][count(preceding-sibling::p) = 0 and not(.//a[@class="image-block" or @class="lightbox-full"])]]')
-              selected_p_tags.each do |p|
-                answer << p.to_html
+
+              adjacent_elements = []
+              current_element = h2.next_element
+
+              while current_element && (current_element.name == 'ul' || current_element.name == 'p')
+                # Check if the current element doesn't have children with "lightbox-full" or "image-block" class
+                if current_element.css('.lightbox-full, .image-block').empty?
+                  adjacent_elements << current_element
+                end
+
+                current_element = current_element.next_element
               end
+
+              # Display the adjacent ul and p elements
+              adjacent_elements.each do |element|
+                answer << element.to_html
+              end
+
               qa = "{
                 \"@type\": \"Question\",
                 \"name\": \"#{question}\",
