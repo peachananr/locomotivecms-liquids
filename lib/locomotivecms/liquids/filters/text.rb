@@ -214,6 +214,7 @@ module LocomotiveCMS
                 if current_element.css('.lightbox-full, .image-block').empty?
                   if !current_element["class"].nil? and !current_element["class"].include? "readmore" and !current_element["class"].include? "credit"
                   adjacent_elements << current_element
+                  end
                 end
 
                 current_element = current_element.next_element
