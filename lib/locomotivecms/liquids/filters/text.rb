@@ -209,7 +209,7 @@ module LocomotiveCMS
               adjacent_elements = []
               current_element = h2.next_element
 
-              while current_element && (current_element.name == 'ul' || current_element.name == 'p' || (current_element.name == 'div' && current_element.key?('class') && current_element['class'] == 'accommodation-block'))
+              while current_element && (current_element.name == 'ul' || current_element.name == 'p' || (current_element.name == 'div' && current_element.css(".product-summary.accommodation").size > 0 ))
                 if current_element.css('.product-summary.accommodation').size > 0
                   element = "<p>The best place to stay are"
                   current_element.css('.product-summary.accommodation a').each do |i|
