@@ -142,6 +142,96 @@ module LocomotiveCMS
           return tags
         end
 
+        def generate_structured_data(input)
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+          result = ""
+
+          if html.css('.pros-n-cons').size == 1
+            i = html.at_css('.pros-n-cons')
+            product_name = i.previous_element.at_css('a').text
+            pros = i.css('.pros li')
+            pros_result = ""
+            pros.each_with_index do |j, index|
+              pros_result = "{
+                \"@type\": \"ListItem\",
+                \"position\": #{index + 1},
+                \"name\": \"#{j.text}\"
+              },"
+            end
+
+            cons = i.css('.cons li')
+            cons_result = ""
+            cons.each_with_index do |j, index|
+              cons_result = "{
+                \"@type\": \"ListItem\",
+                \"position\": #{index + 1},
+                \"name\": \"#{j.text}\"
+              },"
+            end
+
+            result = "<script type=\"application/ld+json\">
+              {
+                \"@context\": \"https://schema.org\",
+                \"@type\": \"Product\",
+                \"name\": \"#{product_name}\",
+                \"review\": {
+                  \"@type\": \"Review\",
+                  \"name\": \"#{product_name} review\",
+                  \"author\": {
+                    \"@type\": \"Person\",
+                    \"name\": \"Pete Rojwongsuriya\"
+                  },
+                  \"positiveNotes\": {
+                    \"@type\": \"ItemList\",
+                    \"itemListElement\": [
+                      #{pros_result.chomp(",")}
+                    ]
+                  },
+                  \"negativeNotes\": {
+                    \"@type\": \"ItemList\",
+                    \"itemListElement\": [
+                      #{cons_result.chomp(",")}
+                    ]
+                  }
+                }
+              }
+            </script>"
+          end
+
+          selected_h2_elements = html.xpath('//h2[substring(., string-length(.) - 0) = "?"]')
+          if selected_h2_elements.size > 2
+            qa = ""
+            selected_h2_elements.each do |h2|
+              question = h2.text
+              answer = ""
+              selected_p_tags = h2.xpath('following-sibling::p[following-sibling::*[not(self::p)][1][count(preceding-sibling::p) = 0 and not(.//a[@class="image-block" or @class="lightbox-full"])]]')
+              selected_p_tags.each do |p|
+                answer << p.to_html
+              end
+              qa = "{
+                \"@type\": \"Question\",
+                \"name\": \"#{question}\",
+                \"acceptedAnswer\": {
+                  \"@type\": \"Answer\",
+                  \"text\": \"#{answer}\"
+                }
+              },"
+            end
+          end
+
+          result << "<script type=\"application/ld+json\">
+          {
+            \"@context\": \"https://schema.org\",
+            \"@type\": \"FAQPage\",
+            \"mainEntity\": [#{qa.chomp(",")}]
+          }
+          </script>"
+
+          result
+        end
+
+
         def remove_placeholder_img(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
