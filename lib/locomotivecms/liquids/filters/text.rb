@@ -208,9 +208,10 @@ module LocomotiveCMS
 
               adjacent_elements = []
               current_element = h2.next_element
+              if current_element && ()
 
-              while current_element && (current_element.name == 'ul' || current_element.name == 'p' || (current_element.name == 'div' && !current_element["class"].nil? && current_element["class"].include?("accommodation-block")))
-                if !current_element.css('.product-summary.accommodation').nil?
+              while current_element && (current_element.name == 'ul' || current_element.name == 'p' || (current_element.name == 'div' && current_element.key?('class') && current_element['class'] == 'accommodation-block'))
+                if current_element.css('.product-summary.accommodation').size > 0
                   element = "<p>The best place to stay are"
                   current_element.css('.product-summary.accommodation a').each do |i|
                     hotel = "<a href=\"#{i["href"]}\" target=\"_blank\" rel=\"nofollow noopener\">#{i.at_css(".ps-name").text}</a>"
