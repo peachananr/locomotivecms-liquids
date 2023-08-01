@@ -223,7 +223,7 @@ module LocomotiveCMS
                 answer << element.to_html
               end
 
-              qa = "{
+              qa << "{
                 \"@type\": \"Question\",
                 \"name\": \"#{question}\",
                 \"acceptedAnswer\": {
