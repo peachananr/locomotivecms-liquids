@@ -200,7 +200,7 @@ module LocomotiveCMS
           end
 
           selected_h2_elements = html.xpath('//h2[substring(., string-length(.) - 0) = "?"]')
-          if selected_h2_elements.size > 2
+          if selected_h2_elements.size > 1
             qa = ""
             selected_h2_elements.each do |h2|
               question = h2.text
@@ -232,15 +232,16 @@ module LocomotiveCMS
                 }
               },"
             end
+            result << "<script type=\"application/ld+json\">
+            {
+              \"@context\": \"https://schema.org\",
+              \"@type\": \"FAQPage\",
+              \"mainEntity\": [#{qa.chomp(",")}]
+            }
+            </script>"
           end
 
-          result << "<script type=\"application/ld+json\">
-          {
-            \"@context\": \"https://schema.org\",
-            \"@type\": \"FAQPage\",
-            \"mainEntity\": [#{qa.chomp(",")}]
-          }
-          </script>"
+          
 
           result
         end
