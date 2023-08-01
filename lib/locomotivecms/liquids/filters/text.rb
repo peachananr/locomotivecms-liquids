@@ -280,11 +280,11 @@ module LocomotiveCMS
 
           if html.css('#pinterest').size > 0 and html.css("h3").size > 3
             html.at_css("#pinterest").remove()
-            insurance = '<div id="insurance"></div>'
+            pinterest = '<div id="pinterest"></div>'
             if !html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))").nil? and !html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))")[1].nil?
-              html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
+              html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
             else
-              html.css("h2:eq(3) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
+              html.css("h2:eq(3) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
             end
           end
 
