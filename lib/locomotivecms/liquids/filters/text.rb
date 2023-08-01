@@ -223,7 +223,7 @@ module LocomotiveCMS
                   # Check if the current element doesn't have children with "lightbox-full" or "image-block" class
                   if current_element.css('.lightbox-full, .image-block').empty?
                     if !current_element["class"].nil?
-                      if !current_element["class"].include? "readmore" and !current_element["class"].include? "credit"
+                      if !current_element["class"].include? "readmore" and !current_element["class"].include? "credit" and !current_element["class"].include? "tips-block"
                         adjacent_elements << current_element
                       end
                     else 
