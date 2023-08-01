@@ -279,8 +279,9 @@ module LocomotiveCMS
           end
 
           if html.css('#pinterest').size > 0 and html.css("h3").size > 3
+            
+            pinterest = "<div id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
             html.at_css("#pinterest").remove()
-            pinterest = '<div id="pinterest"></div>'
             if !html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))").nil? and !html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))")[1].nil?
               html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
             else
