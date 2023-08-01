@@ -209,19 +209,29 @@ module LocomotiveCMS
               adjacent_elements = []
               current_element = h2.next_element
 
-              while current_element && (current_element.name == 'ul' || current_element.name == 'p')
-                # Check if the current element doesn't have children with "lightbox-full" or "image-block" class
-                if current_element.css('.lightbox-full, .image-block').empty?
-                  if !current_element["class"].nil?
-                    if !current_element["class"].include? "readmore" and !current_element["class"].include? "credit"
+              while current_element && (current_element.name == 'ul' || current_element.name == 'p' || (current_element.name == 'div' && !current_element["class"].nil? && current_element["class"].include?("accommodation-block")))
+                if !current_element.css('.product-summary.accommodation').nil?
+                  element = "<p>The best place to stay are"
+                  current_element.css('.product-summary.accommodation a').each do |i|
+                    hotel = "<a href=\"#{i["href"]}\" target=\"_blank\" rel=\"nofollow noopener\">#{i.at_css(".ps-name").text}</a>"
+                    budget = i.at_css(".ps-title").text
+                    element << " #{hotel} (#{budget}),"
+                  end
+                  element = "#{element.chomp(",")}."
+                  adjacent_elements << element
+                else
+                  # Check if the current element doesn't have children with "lightbox-full" or "image-block" class
+                  if current_element.css('.lightbox-full, .image-block').empty?
+                    if !current_element["class"].nil?
+                      if !current_element["class"].include? "readmore" and !current_element["class"].include? "credit"
+                        adjacent_elements << current_element
+                      end
+                    else 
                       adjacent_elements << current_element
                     end
-                  else 
-                    adjacent_elements << current_element
+                    
                   end
-                  
                 end
-
                 current_element = current_element.next_element
               end
 
