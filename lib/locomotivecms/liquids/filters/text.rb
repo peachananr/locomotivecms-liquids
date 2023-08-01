@@ -228,7 +228,7 @@ module LocomotiveCMS
                 \"name\": \"#{question}\",
                 \"acceptedAnswer\": {
                   \"@type\": \"Answer\",
-                  \"text\": \"#{answer}\"
+                  \"text\": \"#{JSON.generate(answer)}\"
                 }
               },"
             end
