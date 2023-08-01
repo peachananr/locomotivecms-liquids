@@ -153,7 +153,7 @@ module LocomotiveCMS
             pros = i.css('.pros li')
             pros_result = ""
             pros.each_with_index do |j, index|
-              pros_result = "{
+              pros_result << "{
                 \"@type\": \"ListItem\",
                 \"position\": #{index + 1},
                 \"name\": \"#{j.text}\"
@@ -163,7 +163,7 @@ module LocomotiveCMS
             cons = i.css('.cons li')
             cons_result = ""
             cons.each_with_index do |j, index|
-              cons_result = "{
+              cons_result << "{
                 \"@type\": \"ListItem\",
                 \"position\": #{index + 1},
                 \"name\": \"#{j.text}\"
