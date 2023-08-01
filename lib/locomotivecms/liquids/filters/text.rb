@@ -229,15 +229,16 @@ module LocomotiveCMS
               adjacent_elements.each do |element|
                 answer << element.to_html
               end
-
-              qa << "{
-                \"@type\": \"Question\",
-                \"name\": \"#{question}\",
-                \"acceptedAnswer\": {
-                  \"@type\": \"Answer\",
-                  \"text\": #{JSON.generate(answer)}
-                }
-              },"
+              if !answer.empty?
+                qa << "{
+                  \"@type\": \"Question\",
+                  \"name\": \"#{question}\",
+                  \"acceptedAnswer\": {
+                    \"@type\": \"Answer\",
+                    \"text\": #{JSON.generate(answer)}
+                  }
+                },"
+              end
             end
             result << "<script type=\"application/ld+json\">
             {
