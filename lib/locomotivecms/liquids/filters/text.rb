@@ -149,7 +149,7 @@ module LocomotiveCMS
 
           if html.css('.pros-n-cons').size == 1
             i = html.at_css('.pros-n-cons')
-            product_name = i.previous_element.at_css('a').text
+            product_name = i.parent.previous_element.at_css('a').text
             pros = i.css('.pros li')
             pros_result = ""
             pros.each_with_index do |j, index|
