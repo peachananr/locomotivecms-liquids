@@ -283,9 +283,9 @@ module LocomotiveCMS
           if html.css('#pinterest').size > 0
             target_p = false
             if html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))").size > 2
-              target_p = html.css('h3:eq(2) ~ p:not(:empty):not(:has(img))')[2]
+              target_p = html.css('h3:eq(2) ~ p:not(:empty):not(:has(img))')[0]
             elsif html.css("h2:eq(2) ~ p:not(:empty):not(:has(img))").size > 2
-              target_p = html.css('h2:eq(2) ~ p:not(:empty):not(:has(img))')[2]
+              target_p = html.css('h2:eq(2) ~ p:not(:empty):not(:has(img))')[0]
               puts "xx"
             end
             
