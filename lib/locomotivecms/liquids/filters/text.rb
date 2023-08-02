@@ -285,7 +285,7 @@ module LocomotiveCMS
             if html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))").size > 2
               target_p = html.css('h3:eq(2) ~ p:not(:empty):not(:has(img))')[2]
             elsif html.css("h2:eq(2) ~ p:not(:empty):not(:has(img))").size > 2
-              target_p = html.css('h3:eq(2) ~ p:not(:empty):not(:has(img))')[2]
+              target_p = html.css('h2:eq(2) ~ p:not(:empty):not(:has(img))')[2]
               puts "xx"
             end
             
