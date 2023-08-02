@@ -292,11 +292,9 @@ module LocomotiveCMS
             if target_p
 
               while target_p && ((target_p.next_element.name == 'p' && target_p.next_element.css('img').any?) || (target_p.next_element&.classes&.any? { |cls| cls.include?('block') }))
-                puts "yy"
                 target_p = target_p.next_element
               end
-              if target_p
-                puts "zz #{target_p.next_element}"
+              if target_p.next_element
                 pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
                 html.at_css("#pinterest").remove()
                 target_p.add_next_sibling(pinterest)
