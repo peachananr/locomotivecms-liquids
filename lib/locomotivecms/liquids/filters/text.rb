@@ -287,14 +287,14 @@ module LocomotiveCMS
             if selected_ps.size > 0 or selected_ps2.size > 0
               
               if !selected_ps.nil? && !selected_ps[1].nil?
-                if !selected_ps[1].next_element.nil? and !selected_ps[1].next_element["class"].nil? and !selected_ps[1].next_element["class"].include? "readmore-block"
+                unless !selected_ps[1].next_element.nil? and !selected_ps[1].next_element["class"].nil? and selected_ps[1].next_element["class"].include? "readmore-block"
                   pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
                   html.at_css("#pinterest").remove()
                   selected_ps[1].add_next_sibling(pinterest)
                 end
 
               elsif !selected_ps.nil? and !selected_ps[1].nil?
-                if !selected_ps2[1].next_element.nil? and !selected_ps2[1].next_element["class"].nil? and !selected_p2s[1].next_element["class"].include? "readmore-block"
+                unless !selected_ps2[1].next_element.nil? and !selected_ps2[1].next_element["class"].nil? and selected_p2s[1].next_element["class"].include? "readmore-block"
                   pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
                   html.at_css("#pinterest").remove()
                   selected_ps2[1].add_next_sibling(pinterest)
