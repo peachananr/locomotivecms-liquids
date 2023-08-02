@@ -279,29 +279,17 @@ module LocomotiveCMS
               html.css("h2:eq(1) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
             end
           end
-
+          
           if html.css('#pinterest').size > 0 and html.css("h3").size > 2
-
-            selected_ps = html.css('h3:eq(2) ~ p:not(:empty):not(:has(img))')
-            selected_ps2 = html.css('h2:eq(2) ~ p:not(:empty):not(:has(img))')
-            if selected_ps.size > 0 or selected_ps2.size > 0
-              
-              if !selected_ps.nil? && !selected_ps[1].nil?
-                if !selected_ps[1].next_element.nil? and !selected_ps[1].next_element["class"].nil? and selected_ps[1].next_element["class"].include? "readmore-block"
-                else
-                  pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
-                  html.at_css("#pinterest").remove()
-                  selected_ps[1].add_next_sibling(pinterest)
+            if html.css("h2:eq(3) ~ p:not(:empty):not(:has(img))").size > 0 or html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))").size > 0
+              pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
+              html.at_css("#pinterest").remove()
+              if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))").nil? and !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].nil?
+                if html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].next_element.nil? or html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].next_element["class"].nil? or !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].next_element["class"].include? "readmore"
+                  html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
                 end
-
-              elsif !selected_ps2.nil? and !selected_ps2[1].nil?
-                if !selected_ps2[1].next_element.nil? and !selected_ps2[1].next_element["class"].nil? and selected_ps2[1].next_element["class"].include? "readmore-block"
-                  
-                else
-                  pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
-                  html.at_css("#pinterest").remove()
-                  selected_ps2[1].add_next_sibling(pinterest)
-                end
+              else
+                html.css("h2:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
               end
             end
           end
