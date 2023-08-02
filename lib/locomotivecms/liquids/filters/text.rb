@@ -283,9 +283,10 @@ module LocomotiveCMS
           #if html.css('#pinterest').size > 0
           #  target_p = false
           #  target_p = html.css('h2,h3')[2]
-          #  
+            
           #  if target_p
-          #    while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') or cls.include?('credit') } || target_p.previous_element.text.strip.empty? || target_p.previous_element.name != "p")
+
+          #   while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') or cls.include?('credit') } || target_p.previous_element.text.strip.empty? || target_p.previous_element.name != "p")
           #      target_p = target_p.next_element
           #    end
           #    if target_p
