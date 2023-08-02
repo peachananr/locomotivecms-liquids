@@ -273,20 +273,22 @@ module LocomotiveCMS
           if html.css('#insurance').size > 0
             html.at_css("#insurance").remove()
             insurance = '<div id="insurance"></div>'
-            target_p = 'body > h2:eq(2)~ p:not(:empty):not(:has(img)), body > h3:eq(2) ~ p:not(:empty):not(:has(img))'
-
-            if !html.css(target_p).nil? and !html.css(target_p)[1].nil?
-              html.css(target_p)[1].add_next_sibling(insurance)
+            if !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img))").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img))")[1].nil?
+              html.css("h3:eq(1) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
+            else
+              html.css("h2:eq(1) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
             end
           end
           
           if html.css('#pinterest').size > 0
 
             target_p = 'body > h2 ~ p:not(:empty):not(:has(img)), body > h3 ~ p:not(:empty):not(:has(img))'
-            if !html.css(target_p).nil? and !html.css(target_p)[1].nil?
+            puts "xx #{html.css(target_p)}"
+            if !html.css(target_p).nil? and !html.css(target_p)[2].nil?
               pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
               html.at_css("#pinterest").remove()
-              html.css(target_p)[1].add_next_sibling(pinterest)
+              html.css(target_p)[2].add_next_sibling(pinterest)
+              puts "yy #{html.css(target_p)[2]}"
             end
 
           
