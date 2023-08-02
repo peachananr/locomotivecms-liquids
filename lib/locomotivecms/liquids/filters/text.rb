@@ -273,28 +273,24 @@ module LocomotiveCMS
           if html.css('#insurance').size > 0
             html.at_css("#insurance").remove()
             insurance = '<div id="insurance"></div>'
-            if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))").nil? and !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].nil?
-              html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
+            if !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img))").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img))")[1].nil?
+              html.css("h3:eq(1) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
             else
-              html.css("h2:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
+              html.css("h2:eq(1) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
             end
           end
           
           if html.css('#pinterest').size > 0
-            target_p = false
-            target_p = html.css('h2,h3')[2]
-            
-            if target_p
 
-              while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') or cls.include?('credit') } || target_p.previous_element.text.strip.empty? || target_p.previous_element.name != "p")
-                target_p = target_p.next_element
-              end
-              if target_p
-                pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
-                html.at_css("#pinterest").remove()
-                target_p.add_previous_sibling(pinterest)
-              end
+            target_p = '.post_body > h2 ~ p:not(:empty):not(:has(img)), .post_body > h3 ~ p:not(:empty):not(:has(img))'
+            
+            if !html.css(target_p).nil? and !html.css(target_p)[0].nil?
+              pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
+              html.at_css("#pinterest").remove()
+              html.css(target_p)[0].add_next_sibling(pinterest)
             end
+
+          
           end
 
           #if html.css('h2, h3').size > 4
