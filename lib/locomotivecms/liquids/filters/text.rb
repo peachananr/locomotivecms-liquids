@@ -291,7 +291,7 @@ module LocomotiveCMS
             
             if target_p
 
-              while target_p && ((target_p.next_element.name == 'p' && target_p.next_element.css('img').any?)) && (target_p.next_element&.classes&.any? { |cls| cls.include?('block') })
+              while target_p && ((target_p.next_element.name == 'p' && target_p.next_element.css('img').any?) || (target_p.next_element&.classes&.any? { |cls| cls.include?('block') }))
                 puts "yy"
                 target_p = target_p.next_element
               end
