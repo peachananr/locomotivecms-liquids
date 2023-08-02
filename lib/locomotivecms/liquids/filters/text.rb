@@ -280,17 +280,23 @@ module LocomotiveCMS
             end
           end
           
-          if html.css('#pinterest').size > 0 and html.css("p:not(:empty):not(:has(img))").size > 5
-
-            target_p = html.css('p:not(:empty):not(:has(img))')[5]
-
-            while target_p && (target_p.next_element&.classes & ['block', 'readmore']).any? and (target_p.previous_element.name != "h2" or target_p.previous_element.name != "h3")
-              target_p = target_p.next_element
+          if html.css('#pinterest').size > 0
+            target_p = false
+            if html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))").size > 2
+              target_p = html.css('h3:eq(2) ~ p:not(:empty):not(:has(img))')[2]
+            elsif html.css("h2:eq(2) ~ p:not(:empty):not(:has(img))").size > 2
+              target_p = html.css('h3:eq(2) ~ p:not(:empty):not(:has(img))')[2]
             end
+            
             if target_p
-              pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
-              html.at_css("#pinterest").remove()
-              target_p.add_next_sibling(pinterest)
+              while target_p && (target_p.next_element&.name == 'p') && (target_p.next_element&.classes & ['block', 'readmore']).any? and (target_p.previous_element.name != "h2" or target_p.previous_element.name != "h3")
+                target_p = target_p.next_element
+              end
+              if target_p
+                pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
+                html.at_css("#pinterest").remove()
+                target_p.add_next_sibling(pinterest)
+              end
             end
           end
 
