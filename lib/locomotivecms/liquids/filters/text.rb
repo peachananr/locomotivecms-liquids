@@ -293,7 +293,7 @@ module LocomotiveCMS
             if target_p
 
               while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') or cls.include?('credit') } || target_p.previous_element.text.strip.empty? || target_p.previous_element.name != "p")
-                target_p = target_p.next_element { |el| el.name.start_with?('h') }
+                target_p = target_p.at('./following-sibling::*[starts-with(name(), "h")]')
               end
               if target_p
                 pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
