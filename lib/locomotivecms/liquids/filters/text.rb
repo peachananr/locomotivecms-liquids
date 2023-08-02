@@ -281,23 +281,18 @@ module LocomotiveCMS
           end
           
           if html.css('#pinterest').size > 0
-            target_p = "h3"
-            if html.css("h3").size > 2
-              target_p_s = 'h3'
-            elsif html.css("h2").size > 2
-              target_p_s = 'h2'
+            target_p = false
+            if html.css("h3").size > 3
+              target_p = html.css('h3')[2]
+            elsif html.css("h2").size > 3
+              target_p = html.css('h2')[2]
+              
             end
-
-            target_p = html.css(target_p_s)[1]
             
             if target_p
 
               while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') or cls.include?('credit') } || target_p.previous_element.text.strip.empty? || target_p.previous_element.name != "p")
-                target_p = target_p.at("./following::#{target_p_s}[1]")
-                if target_p.previous_element.nil?
-                  break
-                end
-                puts "xxx"
+                target_p = target_p.next_element
               end
               if target_p
                 pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
