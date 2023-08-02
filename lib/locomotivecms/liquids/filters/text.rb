@@ -291,7 +291,7 @@ module LocomotiveCMS
             
             if target_p
 
-              while target_p && (target_p.next_element&.name == 'p') && (target_p.next_element&.classes & ['block', 'readmore']).any? and (target_p.previous_element.name != "h2" or target_p.previous_element.name != "h3")
+              while target_p && (target_p.next_element&.name == 'p') && (target_p.next_element["class"].nil? and target_p.next_element["class"].include? "-block") and (target_p.previous_element.name != "h2" or target_p.previous_element.name != "h3")
                 puts "yy"
                 target_p = target_p.next_element
               end
