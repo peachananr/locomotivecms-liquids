@@ -291,12 +291,12 @@ module LocomotiveCMS
             
             if target_p
 
-              while target_p && (target_p.next_element&.name == 'p') && (target_p.next_element["class"].nil? and target_p.next_element["class"].include? "-block") and (target_p.previous_element.name != "h2" or target_p.previous_element.name != "h3")
+              while target_p && (target_p.next_element&.name == 'p') && (target_p.next_element&.classes&.any? { |cls| cls.include?('block') }) and (target_p.previous_element.name != "h2" or target_p.previous_element.name != "h3")
                 puts "yy"
                 target_p = target_p.next_element
               end
               if target_p
-                puts "zz #{target_p.next_element.to_html}"
+                puts "zz #{target_p.next_element}"
                 pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
                 html.at_css("#pinterest").remove()
                 target_p.add_next_sibling(pinterest)
