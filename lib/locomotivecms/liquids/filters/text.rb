@@ -282,22 +282,22 @@ module LocomotiveCMS
           
           if html.css('#pinterest').size > 0
             target_p = false
-            if html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))").size > 2
-              target_p = html.css('h3:eq(2) ~ p:not(:empty):not(:has(img))')[0]
-            elsif html.css("h2:eq(2) ~ p:not(:empty):not(:has(img))").size > 2
-              target_p = html.css('h2:eq(2) ~ p:not(:empty):not(:has(img))')[0]
-              puts "xx"
+            if html.css("h3").size > 2
+              target_p = html.css('h3')[1]
+            elsif html.css("h2").size > 2
+              target_p = html.css('h2')[1]
+              
             end
             
             if target_p
 
-              while target_p && ((target_p.next_element.name == 'p' && target_p.next_element.css('img').any?) || (target_p.next_element&.classes&.any? { |cls| cls.include?('block') }))
-                target_p = target_p.next_element
+              while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') })
+                target_p = target_p.previous_element
               end
-              if target_p.next_element
+              if target_p
                 pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
                 html.at_css("#pinterest").remove()
-                target_p.next_element.add_next_sibling(pinterest)
+                target_p.next_element.add_previous_sibling(pinterest)
               end
             end
           end
