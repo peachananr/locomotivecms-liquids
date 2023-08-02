@@ -285,9 +285,7 @@ module LocomotiveCMS
               pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
               html.at_css("#pinterest").remove()
               if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))").nil? and !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].nil?
-                if html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].next_element.nil? or html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].next_element["class"].nil? or !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].next_element["class"].include? "readmore"
-                  html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
-                end
+                html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
               else
                 html.css("h2:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
               end
