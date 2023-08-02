@@ -280,19 +280,16 @@ module LocomotiveCMS
             end
           end
           
-          if html.css('#pinterest').size > 0 and html.css("h3").size > 2
+          if html.css('#pinterest').size > 0 and (html.css("h3").size > 2 or html.css("h2").size > 2)
             if html.css("h2:eq(3) ~ p:not(:empty):not(:has(img))").size > 0 or html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))").size > 0
               
               if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))").nil? and !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].nil?
                 pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
                 html.at_css("#pinterest").remove()
-                puts "xx"
                 if html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].next_element.nil? or html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].next_element["class"].nil? or !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].next_element["class"].include? "readmore"
-                  puts "yy"
                   html.css("h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
                 end
               else
-                puts "zz"
                 pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
                 html.at_css("#pinterest").remove()
                 html.css("h2:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(pinterest)
