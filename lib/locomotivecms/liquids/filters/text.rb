@@ -209,7 +209,7 @@ module LocomotiveCMS
               adjacent_elements = []
               current_element = h2.next_element
 
-              while current_element && (current_element.name == 'ul' || current_element.name == 'p' || (current_element.name == 'div' && current_element.css(".product-summary.accommodation").size > 0 ))
+              while current_element && (current_element.name == 'ul' || current_element.name == 'p' || (current_element.name == 'div' && current_element.css(".product-summary.accommodation").size > 0 ) || (current_element.name == 'h3'))
                 if current_element.css('.product-summary.accommodation').size > 0
                   element = "<p>The best place to stay are"
                   current_element.css('.product-summary.accommodation a').each do |i|
@@ -219,6 +219,8 @@ module LocomotiveCMS
                   end
                   element = "#{element.chomp(",")}."
                   adjacent_elements << element
+                elsif current_element.name == 'h3'
+                  adjacent_elements << "#{current_element.text}, "
                 else
                   # Check if the current element doesn't have children with "lightbox-full" or "image-block" class
                   if current_element.css('.lightbox-full, .image-block').empty?
@@ -237,7 +239,7 @@ module LocomotiveCMS
 
               # Display the adjacent ul and p elements
               adjacent_elements.each do |element|
-                answer << element.to_html
+                answer << element.chomp(", ").to_html
               end
               if !answer.empty?
                 qa << "{
