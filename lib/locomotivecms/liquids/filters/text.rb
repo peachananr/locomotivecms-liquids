@@ -282,12 +282,7 @@ module LocomotiveCMS
           
           if html.css('#pinterest').size > 0
             target_p = false
-            if html.css("h3").size > 3
-              target_p = html.css('h3')[2]
-            elsif html.css("h2").size > 3
-              target_p = html.css('h2')[2]
-              
-            end
+            target_p = html.css('h2,h3')[2]
             
             if target_p
 
