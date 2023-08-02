@@ -291,7 +291,7 @@ module LocomotiveCMS
             
             if target_p
 
-              while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') } || target_p.previous_element.text.strip.empty?)
+              while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') } || target_p.previous_element.text.strip.empty? || target_p.previous_element.name != "p")
                 target_p = target_p.previous_element
               end
               if target_p
