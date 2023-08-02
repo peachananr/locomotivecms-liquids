@@ -279,7 +279,7 @@ module LocomotiveCMS
               html.css("h2:eq(1) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
             end
           end
-          
+
           if html.css('#pinterest').size > 0 and html.css("h3").size > 2
             if html.css("h2:eq(3) ~ p:not(:empty):not(:has(img))").size > 0 or html.css("h3:eq(3) ~ p:not(:empty):not(:has(img))").size > 0
               pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
