@@ -283,7 +283,7 @@ module LocomotiveCMS
           if html.css('#pinterest').size > 0
 
             target_p = '.post_body > h2 ~ p:not(:empty):not(:has(img)), .post_body > h3 ~ p:not(:empty):not(:has(img))'
-            puts "xx"
+            puts "xx #{html.css(target_p)}"
             if !html.css(target_p).nil? and !html.css(target_p)[1].nil?
               pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
               html.at_css("#pinterest").remove()
