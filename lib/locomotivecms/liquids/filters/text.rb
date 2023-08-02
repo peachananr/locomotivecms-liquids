@@ -220,7 +220,7 @@ module LocomotiveCMS
                   element = "#{element.chomp(",")}."
                   adjacent_elements << element
                 elsif current_element.name == 'h3'
-                  adjacent_elements << "#{current_element.text}, "
+                  adjacent_elements << "<strong>#{current_element.text}: </strong>"
                 else
                   # Check if the current element doesn't have children with "lightbox-full" or "image-block" class
                   if current_element.css('.lightbox-full, .image-block').empty?
@@ -239,7 +239,7 @@ module LocomotiveCMS
 
               # Display the adjacent ul and p elements
               adjacent_elements.each do |element|
-                answer << element.chomp(", ").to_html
+                answer << element.to_html
               end
               if !answer.empty?
                 qa << "{
