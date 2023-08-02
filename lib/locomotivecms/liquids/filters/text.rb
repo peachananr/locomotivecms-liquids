@@ -280,22 +280,21 @@ module LocomotiveCMS
             end
           end
           
-          if html.css('#pinterest').size > 0
-            target_p = false
-            target_p = html.css('h2,h3')[2]
-            
-            if target_p
-
-              while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') or cls.include?('credit') } || target_p.previous_element.text.strip.empty? || target_p.previous_element.name != "p")
-                target_p = target_p.next_element
-              end
-              if target_p
-                pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
-                html.at_css("#pinterest").remove()
-                target_p.add_previous_sibling(pinterest)
-              end
-            end
-          end
+          #if html.css('#pinterest').size > 0
+          #  target_p = false
+          #  target_p = html.css('h2,h3')[2]
+          #  
+          #  if target_p
+          #    while target_p && (target_p.previous_element.css('img').any?) || (target_p.previous_element&.classes&.any? { |cls| cls.include?('block') or cls.include?('credit') } || target_p.previous_element.text.strip.empty? || target_p.previous_element.name != "p")
+          #      target_p = target_p.next_element
+          #    end
+          #    if target_p
+          #      pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
+          #      html.at_css("#pinterest").remove()
+          #      target_p.add_previous_sibling(pinterest)
+          #    end
+          #  end
+          #end
 
           #if html.css('h2, h3').size > 4
           #  newsletter = '<div id="small-newsletter"></div>'
