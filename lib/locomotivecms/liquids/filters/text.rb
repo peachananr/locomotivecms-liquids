@@ -273,10 +273,10 @@ module LocomotiveCMS
           if html.css('#insurance').size > 0
             html.at_css("#insurance").remove()
             insurance = '<div id="insurance"></div>'
-            if !html.css("body > h3:eq(2) ~ p:not(:empty):not(:has(img))").nil? and !html.css("body > h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].nil?
-              html.css("body > h3:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
-            else
-              html.css("body > h2:eq(2) ~ p:not(:empty):not(:has(img))")[1].add_next_sibling(insurance)
+            target_p = 'body > h2:eq(2)~ p:not(:empty):not(:has(img)), body > h3:eq(2) ~ p:not(:empty):not(:has(img))'
+
+            if !html.css(target_p).nil? and !html.css(target_p)[1].nil?
+              html.css(target_p)[1].add_next_sibling(insurance)
             end
           end
           
