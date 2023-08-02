@@ -297,7 +297,7 @@ module LocomotiveCMS
               if target_p.next_element
                 pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
                 html.at_css("#pinterest").remove()
-                target_p.add_next_sibling(pinterest)
+                target_p.next_element.add_next_sibling(pinterest)
               end
             end
           end
