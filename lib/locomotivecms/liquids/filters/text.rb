@@ -296,14 +296,14 @@ module LocomotiveCMS
               html.css(target_p)[2].add_next_sibling(pinterest)
             end
           end
-
-          if html.css('.accommodation-block').size == 1
+          el = html.at_css('.accommodation-block')
+          if el.size == 1
             if html.css('.activity-block').size == 1
-              html.at_css('.activity-block').add_next_sibling(html.at_css('.accommodation-block'))
-              html.at_css('.accommodation-block').remove
+              html.at_css('.activity-block').add_next_sibling(el)
+              el.remove
             elsif html.css('.video-block-wrapper').size == 1
-              html.at_css('.video-block-wrapper').add_next_sibling(html.at_css('.accommodation-block'))
-              html.at_css('.accommodation-block').remove
+              html.at_css('.video-block-wrapper').add_next_sibling(el)
+              el.remove
             end
           end
 
