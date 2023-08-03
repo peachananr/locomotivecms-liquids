@@ -300,10 +300,10 @@ module LocomotiveCMS
           if html.css('.accommodation-block').size == 1
             if html.css('.activity-block').size == 1
               html.at_css('.activity-block').add_next_sibling(el)
-              el.remove
+              #el.remove
             elsif html.css('.video-block-wrapper').size == 1
               html.at_css('.video-block-wrapper').add_next_sibling(el)
-              el.remove
+              #el.remove
             end
           end
 
