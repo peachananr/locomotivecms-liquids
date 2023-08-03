@@ -305,18 +305,19 @@ module LocomotiveCMS
               block = html.at_css('.activity-block h2')["id"]
 
               html.at_css('.activity-block').add_next_sibling(el)
-
-              el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
-              puts "xxx #{el2}"
-              html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent)
+              if html.css(".toc-list").size > 0
+                el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
+                html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent) 
+              end
               #el.remove
             elsif html.css('.video-block-wrapper').size == 1
               block = html.at_css('.video-block-wrapper h2')["id"]
 
               html.at_css('.video-block-wrapper').add_next_sibling(el)
-
-              el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
-              html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent)
+              if html.css(".toc-list").size > 0
+                el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
+                html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent)
+              end
               #el.remove
             end
           end
