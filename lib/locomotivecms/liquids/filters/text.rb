@@ -283,15 +283,28 @@ module LocomotiveCMS
           if html.css('#pinterest').size > 0
 
             target_p = 'body > h2 ~ p:not(:empty):not(:has(img)), body > h3 ~ p:not(:empty):not(:has(img))'
-            puts "xx #{html.css(target_p)}"
             if !html.css(target_p).nil? and !html.css(target_p)[2].nil?
               pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
               html.at_css("#pinterest").remove()
               html.css(target_p)[2].add_next_sibling(pinterest)
-              puts "yy #{html.css(target_p)[2]}"
             end
 
-          
+            target_p = 'body > h2 ~ p:not(:empty):not(:has(img)), body > h3 ~ p:not(:empty):not(:has(img))'
+            if !html.css(target_p).nil? and !html.css(target_p)[2].nil?
+              pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
+              html.at_css("#pinterest").remove()
+              html.css(target_p)[2].add_next_sibling(pinterest)
+            end
+          end
+
+          if html.css('.accommodation-block').size == 1
+            if html.css('.activity-block').size == 1
+              html.at_css('.activity-block').add_next_sibling(html.at_css('.accommodation-block'))
+              html.at_css('.accommodation-block').remove
+            elsif html.css('.video-block-wrapper').size == 1
+              html.at_css('.video-block-wrapper').add_next_sibling(html.at_css('.accommodation-block'))
+              html.at_css('.accommodation-block').remove
+            end
           end
 
           #if html.css('h2, h3').size > 4
