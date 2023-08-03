@@ -296,14 +296,20 @@ module LocomotiveCMS
               html.css(target_p)[2].add_next_sibling(pinterest)
             end
           end
-          el = html.at_css('.accommodation-block')
+
           if html.css('.accommodation-block').size == 1
-            if html.css('.activity-block').size == 1
-              html.at_css('.activity-block').add_next_sibling(el)
-              #el.remove
-            elsif html.css('.video-block-wrapper').size == 1
-              html.at_css('.video-block-wrapper').add_next_sibling(el)
-              #el.remove
+            target_h3 = html.css('h3:contains(?i)' + "where to stay")
+            index = h3_elements.index(target_h3)
+
+            el = html.at_css('.accommodation-block')
+            if index < 5
+              if html.css('.activity-block').size == 1
+                html.at_css('.activity-block').add_next_sibling(el)
+                #el.remove
+              elsif html.css('.video-block-wrapper').size == 1
+                html.at_css('.video-block-wrapper').add_next_sibling(el)
+                #el.remove
+              end
             end
           end
 
