@@ -295,6 +295,7 @@ module LocomotiveCMS
               html.at_css("#pinterest").remove()
               html.css(target_p)[2].add_next_sibling(pinterest)
             end
+          end
           el = html.at_css('.accommodation-block')
           if html.css('.accommodation-block').size == 1
             if html.css('.activity-block').size == 1
