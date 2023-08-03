@@ -298,7 +298,7 @@ module LocomotiveCMS
           end
 
           if html.css('.accommodation-block').size == 1
-            target_h3 = html.css('h3:contains(?i)' + "where to stay")
+            target_h3 = html.css.find { |h3| h3.content.downcase.include?("where to stay") }
             index = h3_elements.index(target_h3)
 
             el = html.at_css('.accommodation-block')
