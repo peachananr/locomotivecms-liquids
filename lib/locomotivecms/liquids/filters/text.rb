@@ -299,12 +299,19 @@ module LocomotiveCMS
           
           if html.css('.accommodation-block').size == 1
             el = html.at_css('.accommodation-block')
+            h2 = el.at_css('h2')["id"]
 
             if html.css('.activity-block').size == 1
+              block = el.at_css('.activity-block h2')["id"]
               html.at_css('.activity-block').add_next_sibling(el)
+              el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2}']")
+              html.at_css(".toc-list .toc-l1 a[href*='#{h2}']").add_child(el2)
               #el.remove
             elsif html.css('.video-block-wrapper').size == 1
+              block = el.at_css('.video-block-wrapper h2')["id"]
               html.at_css('.video-block-wrapper').add_next_sibling(el)
+              el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2}']")
+              html.at_css(".toc-list .toc-l1 a[href*='#{h2}']").add_child(el2)
               #el.remove
             end
           end
