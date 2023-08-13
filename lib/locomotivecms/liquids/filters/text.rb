@@ -252,7 +252,7 @@ module LocomotiveCMS
                 },"
               end
             end
-            if !qa.nil?
+            if !qa.chomp(",").empty?
               result << "<script type=\"application/ld+json\">
               {
                 \"@context\": \"https://schema.org\",
