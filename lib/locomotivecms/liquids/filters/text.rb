@@ -252,13 +252,15 @@ module LocomotiveCMS
                 },"
               end
             end
-            result << "<script type=\"application/ld+json\">
-            {
-              \"@context\": \"https://schema.org\",
-              \"@type\": \"FAQPage\",
-              \"mainEntity\": [#{qa.chomp(",")}]
-            }
-            </script>"
+            if !qa.nil?
+              result << "<script type=\"application/ld+json\">
+              {
+                \"@context\": \"https://schema.org\",
+                \"@type\": \"FAQPage\",
+                \"mainEntity\": [#{qa.chomp(",")}]
+              }
+              </script>"
+            end
           end
 
           
