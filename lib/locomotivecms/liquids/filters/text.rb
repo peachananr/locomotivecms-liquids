@@ -334,12 +334,13 @@ module LocomotiveCMS
             
             if html.css(".pin-img-tag a img").length > 0 and (html.at_css(".pin-img-tag a img")["alt"].downcase.include? "things to do" or html.at_css(".pin-img-tag a img")["alt"].downcase.include? "itinerary")
 
-                el = html.at_css('.activity-block')
-                h2 = html.at_css('.activity-block h2')
-                new_h2 = "<h4 id='#{h2["id"]}'>Tours & Tickets You Might Like</h4>"
-                h2.replace(new_h2)
+                
                 
                 if html.css("body h2[id*='things-to-do'] ~ h3:eq(4)").length > 0
+                  el = html.at_css('.activity-block')
+                  h2 = html.at_css('.activity-block h2')
+                  new_h2 = "<h4 id='#{h2["id"]}'>Tours & Tickets You Might Like</h4>"
+                  h2.replace(new_h2)
                   html.at_css("body h2[id*='things-to-do'] ~ h3:eq(4)").add_previous_sibling(el)
                 end
               
