@@ -329,9 +329,12 @@ module LocomotiveCMS
 
           if html.css('.activity-block').size == 1
             el = html.at_css('.activity-block')
+            h2 = html.at_css('.activity-block h2')
+            new_h2 = "<h2>Tours and Tickets</h2>"
+            h2.replace(new_h2)
             h2_text = html.xpath('//h2').detect { |node| /things to do/i === node.text}
-            if html.css("body > h3:not(.adj-header):eq(3)").length > 0 and !h2_text.nil?
-              html.at_css("body > h3:not(.adj-header):eq(3)").add_previous_sibling(el)
+            if html.css("body > h3:not(.adj-header):eq(4)").length > 0 and !h2_text.nil?
+              html.at_css("body > h3:not(.adj-header):eq(4)").add_previous_sibling(el)
             end
           end
           #if html.css('h2, h3').size > 4
