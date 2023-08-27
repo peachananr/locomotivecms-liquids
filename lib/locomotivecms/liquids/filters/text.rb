@@ -331,6 +331,7 @@ module LocomotiveCMS
             el = html.at_css('.activity-block')
             if html.css("body > h3:not(.adj-header):eq(3)").length > 0 and html.at_css(".post-preview h1.post-title").text.downcase.include? "things to do"
               html.at_css("body > h3:not(.adj-header):eq(3)").add_previous_sibling(el)
+            end
           end
           #if html.css('h2, h3').size > 4
           #  newsletter = '<div id="small-newsletter"></div>'
