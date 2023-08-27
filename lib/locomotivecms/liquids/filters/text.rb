@@ -303,7 +303,7 @@ module LocomotiveCMS
             el = html.at_css('.accommodation-block')
             h2 = el.at_css('h2')["id"]
 
-            if !html.css("body > h3:not(.adj-header):eq(2)").nil?
+            if !html.css("body > h3:not(.adj-header):eq(2)").nil? and html.css(".product-summary.accommodation").length == 1
               html.at_css("body > h3:not(.adj-header):eq(2)").add_previous_sibling(el)              
               #el.remove
             elsif html.css('.activity-block').size == 1
