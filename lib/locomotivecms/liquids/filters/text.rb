@@ -305,7 +305,7 @@ module LocomotiveCMS
 
             if !html.css("body > h3:not(.adj-header):eq(2)").nil?
               html.at_css("body > h3:not(.adj-header):eq(2)").add_next_sibling(el)              
-              el.remove
+              #el.remove
             elsif html.css('.activity-block').size == 1
               block = html.at_css('.activity-block h2')["id"]
 
@@ -314,7 +314,7 @@ module LocomotiveCMS
                 el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
                 html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent) 
               end
-              el.remove
+              #el.remove
             elsif html.css('.video-block-wrapper').size == 1
               block = html.at_css('.video-block-wrapper h2')["id"]
 
@@ -323,7 +323,7 @@ module LocomotiveCMS
                 el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
                 html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent)
               end
-              el.remove
+              #el.remove
             end
           end
           #if html.css('h2, h3').size > 4
