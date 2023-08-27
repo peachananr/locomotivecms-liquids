@@ -329,7 +329,8 @@ module LocomotiveCMS
 
           if html.css('.activity-block').size == 1
             el = html.at_css('.activity-block')
-            if html.css("body > h3:not(.adj-header):eq(3)").length > 0 and html.at_css(".post-preview h1.post-title").text.downcase.include? "things to do"
+            h2 = html.xpath('//h2').detect { |node| /things to do/i === node.text}
+            if html.css("body > h3:not(.adj-header):eq(3)").length > 0 and !h2.nil?
               html.at_css("body > h3:not(.adj-header):eq(3)").add_previous_sibling(el)
             end
           end
