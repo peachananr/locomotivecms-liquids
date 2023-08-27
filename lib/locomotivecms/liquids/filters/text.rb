@@ -307,7 +307,7 @@ module LocomotiveCMS
               
               html.at_css("body > h3:not(.adj-header):eq(2)").add_previous_sibling(el)     
               h2 = html.at_css('.accommodation-block h2')
-              new_h2 = "<h4>#{h2.inner_html}</h4>"
+              new_h2 = "<h4 id='#{h2["id"]}'>#{h2.inner_html}</h4>"
               h2.replace(new_h2)
                        
               #el.remove
@@ -335,7 +335,7 @@ module LocomotiveCMS
           if html.css('.activity-block').size == 1
             el = html.at_css('.activity-block')
             h2 = html.at_css('.activity-block h2')
-            new_h2 = "<h4>Tours & Tickets You Might Like</h4>"
+            new_h2 = "<h4 id='#{h2["id"]}'>Tours & Tickets You Might Like</h4>"
             h2.replace(new_h2)
             h2_text = html.xpath('//h2').detect { |node| /things to do/i === node.text}
             if html.css("body > h3:not(.adj-header):eq(4)").length > 0 and !h2_text.nil?
