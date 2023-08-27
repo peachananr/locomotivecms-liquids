@@ -304,7 +304,7 @@ module LocomotiveCMS
             h2 = el.at_css('h2')["id"]
 
             if !html.css("body > h3:not(.adj-header):eq(2)").nil?
-              html.at_css("body > h3:not(.adj-header):eq(2)").add_next_sibling(el)              
+              html.at_css("body > h3:not(.adj-header):eq(2)").add_previous_sibling(el)              
               #el.remove
             elsif html.css('.activity-block').size == 1
               block = html.at_css('.activity-block h2')["id"]
