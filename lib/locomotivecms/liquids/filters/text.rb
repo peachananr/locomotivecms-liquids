@@ -200,6 +200,11 @@ module LocomotiveCMS
                 html.css('h2').each_with_index do |p, index|
                   break if index == 5;              
                   name = p.text
+                  if !name.match?(/^\d+\./)
+                    name = "<span class='number'>#{index+1}</span> #{name}"
+                  else 
+                    name = "<span class='number'>#{index+1}</span> #{name.split(".")[1].strip}"
+                  end
                   img = ""
                   if p.next_element.name == 'p'
                     if p.next_element.css(".lightbox-full").length > 0 or p.next_element.css(".image-block").length > 0
@@ -217,7 +222,7 @@ module LocomotiveCMS
     
                   content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                             <div class=\"title safe_area\">
-                          <h2><span class='number'>#{index+1}</span> #{name}</h2>
+                          <h2>#{name}</h2>
                                     </div>
                                     <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                                     <div  class=\"logo\">
