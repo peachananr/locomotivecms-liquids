@@ -183,7 +183,7 @@ module LocomotiveCMS
                               </div>
                             </amp-story-grid-layer>"
                       content = ""
-                      if next_element.next_element["class"].include? "lightbox-full" or next_element.next_element["class"].include? "image-block"
+                      if !next_element.next_element["class"].nil? and (next_element.next_element["class"].include? "lightbox-full" or next_element.next_element["class"].include? "image-block")
                         get_img = next_element.next_element.at_css("img")
                         img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img animate-in=\"zoom-in\" animate-in-duration=\"30s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
                       end
