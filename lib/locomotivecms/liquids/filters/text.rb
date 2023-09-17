@@ -146,11 +146,11 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
           result = []
-          if  html.css('.product-summary').size > 0
-            html.css('.product-summary .ps-row').each_with_index do |p, index|
+          if  html.css('.product-summary:not(.accommodation)').size > 0
+            html.css('.product-summary:not(.accommodation) .ps-row').each_with_index do |p, index|
               break if index == 5;              
-              name = p.at_css(".ps-name")
-              name2 = p.at_css(".ps-title")
+              name = p.at_css(".ps-name").text
+              name2 = p.at_css(".ps-title").text
               shop_link = p["href"]
               thumb_img = p.at_css(".ps-image img")["data-original"]
               main_img = html.at_css(".image-block[href='#{shop_link}'] img")["data-original"]
