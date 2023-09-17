@@ -167,9 +167,9 @@ module LocomotiveCMS
                     # Add the number counter to the h3 element's text
                     name = next_element.inner_html.strip
                     if !next_element.text.match?(/^\d+\./)
-                      name = "<span class='number'>#{h3_counter}</span> #{name}"
+                      name = "#{h3_counter} #{name}"
                     else 
-                      name = "<span class='number'>#{h3_counter}</span> #{name.split(".")[1].strip}"
+                      name = "#{h3_counter} #{name.split(".")[1].strip}"
                     end
                       img = ""
                       link = ""
