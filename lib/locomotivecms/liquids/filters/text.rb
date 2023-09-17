@@ -165,17 +165,21 @@ module LocomotiveCMS
 
                   if next_element.name == 'h3'
                     # Add the number counter to the h3 element's text
+                    name = next_element.inner_html.strip
                     if !next_element.text.match?(/^\d+\./)
+                      name = " #{h3_counter}. #{name}"
+                    end
                       img = ""
                       link = ""
+                      
                       if !slug.nil?
-                        link = '<amp-story-page-outlink layout="nodisplay">
-                        <a href="https://www.bucketlistly.blog/posts/#{slug}" title="Go to Blog">Go to Blog</a>
-                        </amp-story-page-outlink>'
+                        link = "<amp-story-page-outlink layout=\"nodisplay\">
+                        <a href=\"https://www.bucketlistly.blog/posts/#{slug}\" title=\"Go to Blog\">Go to Blog</a>
+                        </amp-story-page-outlink>"
                       end
                       content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                       <div class=\"title safe_area\">
-                    <h2>{{#{h3_counter}. #{next_element.inner_html.strip}}}</h2>
+                    <h2>#{name}</h2>
                               </div>
                               <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                               <div  class=\"logo\">
@@ -197,10 +201,6 @@ module LocomotiveCMS
 
                       result << content
                       h3_counter += 1
-                    else 
-                      result << "#{next_element.inner_html.strip}"
-                      h3_counter += 1
-                    end
                   end
                   next_element = next_element.next_element
                 end
