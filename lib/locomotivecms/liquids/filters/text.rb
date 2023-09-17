@@ -198,7 +198,7 @@ module LocomotiveCMS
 
 
                       content = <<~EOS
-                      <amp-story-page id="page_#{h3_counter + 1}" auto-advance-after="7s">
+                      <amp-story-page id="page_#{h3_counter + 1}" class="normal-page" auto-advance-after="7s">
                         #{img}#{content}#{link}                        
                       </amp-story-page>
                       EOS
