@@ -153,7 +153,7 @@ module LocomotiveCMS
               name2 = p.at_css(".ps-title")
               shop_link = p["href"]
               thumb_img = p.at_css(".ps-image img")["data-original"]
-              main_img = p.at_css(".image-block[href='#{shop_link}'] img")["data-original"]
+              main_img = html.at_css(".image-block[href='#{shop_link}'] img")["data-original"]
 
               if !slug.nil?
                 link = "<amp-story-page-outlink layout=\"nodisplay\">
