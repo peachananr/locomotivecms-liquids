@@ -161,7 +161,7 @@ module LocomotiveCMS
                 # Find adjacent h3 elements until the next h2 is encountered
                 next_element = h2.next_element
                 while next_element && next_element.name != 'h2'
-                  break if h3_counter == 5;
+                  break if h3_counter == 6;
 
                   if next_element.name == 'h3'
                     # Add the number counter to the h3 element's text
@@ -190,13 +190,13 @@ module LocomotiveCMS
                       if next_element.next_element.name == 'p'
                         if next_element.next_element.css(".lightbox-full").length > 0 or next_element.next_element.css(".image-block").length > 0
                           get_img = next_element.next_element.at_css("img")
-                          img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img animate-in=\"pan-right\" animate-in-duration=\"30s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
+                          img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img animate-in=\"zoom-out\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
                         end
                       end
 
 
                       content = <<~EOS
-                      <amp-story-page id="page_#{h3_counter + 1}">
+                      <amp-story-page id="page_#{h3_counter + 1}" auto-advance-after="7s">
                         #{img}#{content}#{link}                        
                       </amp-story-page>
                       EOS
