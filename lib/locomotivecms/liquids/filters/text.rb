@@ -151,9 +151,15 @@ module LocomotiveCMS
               break if index == 5;              
               name = p.at_css(".ps-name")
               name2 = p.at_css(".ps-title")
-              link = p.at_css("a")["href"]
+              shop_link = p.at_css("a")["href"]
               thumb_img = p.at_css(".ps-image img")["data-original"]
-              main_img = p.at_css(".image-block[href='#{link}'] img")["data-original"]
+              main_img = p.at_css(".image-block[href='#{shop_link}'] img")["data-original"]
+
+              if !slug.nil?
+                link = "<amp-story-page-outlink layout=\"nodisplay\">
+                <a href=\"https://www.bucketlistly.blog/posts/#{slug}\" title=\"Go to Blog\">Go to Blog</a>
+                </amp-story-page-outlink>"
+              end
 
               content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                         <div class=\"title safe_area\">
@@ -178,11 +184,7 @@ module LocomotiveCMS
             end
             
 
-            if !slug.nil?
-              link = "<amp-story-page-outlink layout=\"nodisplay\">
-              <a href=\"https://www.bucketlistly.blog/posts/#{slug}\" title=\"Go to Blog\">Go to Blog</a>
-              </amp-story-page-outlink>"
-            end
+           
 
            
 
