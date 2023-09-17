@@ -256,7 +256,7 @@ module LocomotiveCMS
                         # Add the number counter to the h3 element's text
                         name = next_element.inner_html.strip
                         if !next_element.text.match?(/^\d+\./)
-                          name = "<amp-fit-text class='number' width=\"65\" height=\"75\" layout=\"responsive\">#{h3_counter}</amp-fit-text> #{name}"
+                          name = "<span class='number'>#{h3_counter}</span> #{name}"
                         else 
                           name = "<span class='number'>#{h3_counter}</span> #{name.split(".")[1].strip}"
                         end
