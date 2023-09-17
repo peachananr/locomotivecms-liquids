@@ -167,9 +167,9 @@ module LocomotiveCMS
                     # Add the number counter to the h3 element's text
                     name = next_element.inner_html.strip
                     if !next_element.text.match?(/^\d+\./)
-                      name = "#{h3_counter} #{name}"
+                      name = "<span class='number'>#{h3_counter}</span> #{name}"
                     else 
-                      name = "#{h3_counter} #{name.split(".")[1].strip}"
+                      name = "<span class='number'>#{h3_counter}</span> #{name.split(".")[1].strip}"
                     end
                       img = ""
                       link = ""
@@ -192,7 +192,7 @@ module LocomotiveCMS
                       if next_element.next_element.name == 'p'
                         if next_element.next_element.css(".lightbox-full").length > 0 or next_element.next_element.css(".image-block").length > 0
                           get_img = next_element.next_element.at_css("img")
-                          img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img translate-x=\"200px\" pan-scaling-factor=\"1.2\" animate-in=\"pan-right\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
+                          img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img translate-x=\"80px\"  animate-in=\"pan-right\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
                         end
                       end
 
