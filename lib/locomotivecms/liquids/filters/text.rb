@@ -169,7 +169,7 @@ module LocomotiveCMS
                               scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{main_img}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{main_img} 640w, #{thumb_img} 320w\"></amp-img></amp-story-grid-layer>"
 
               content = <<~EOS
-              <amp-story-page id="page_#{h3_counter + 1}" class="normal-page" auto-advance-after="7s">
+              <amp-story-page id="page_#{index + 1}" class="normal-page" auto-advance-after="7s">
                 #{img}#{content}#{link}                        
               </amp-story-page>
               EOS
