@@ -334,7 +334,7 @@ module LocomotiveCMS
 
                     h3_limit = 8
                     if html.css("h3").length > 15
-                      h3_limit = 11
+                      h3_limit = 10
                     end
 
                     while next_element && next_element.name != 'h2'
