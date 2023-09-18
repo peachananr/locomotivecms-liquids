@@ -149,7 +149,7 @@ module LocomotiveCMS
           # PRODUCT SUMMARY WEB STORY
           if  html.css('.product-summary:not(.accommodation)').size > 0
             html.css('.product-summary:not(.accommodation) .ps-row').each_with_index do |p, index|
-              break if index == 5;              
+              break if index == 7;              
               name = p.at_css(".ps-name").text
               name2 = p.at_css(".ps-title").text
               shop_link = p["href"]
@@ -197,7 +197,7 @@ module LocomotiveCMS
                 # Find adjacent h3 elements until the next h2 is encountered
                 next_element = h2.next_element
                 while next_element && next_element.name != 'h2'
-                  break if h3_counter == 6;
+                  break if h3_counter == 8;
 
                   if next_element.name == 'h3'
                     # Add the number counter to the h3 element's text
@@ -252,7 +252,7 @@ module LocomotiveCMS
                   end
                   next_element = next_element.next_element
                 end
-                break if h3_counter == 5;
+                break if h3_counter == 7;
               end
             end
 
@@ -267,7 +267,7 @@ module LocomotiveCMS
 
               if html.css('h3').size == 0
                 html.css('h2').each_with_index do |p, index|
-                  break if index == 5;              
+                  break if index == 7;              
                   name = p.text
                   if !name.match?(/^\d+\./)
                     name = "<span class='number'>#{index+1}</span> #{name}"
@@ -316,7 +316,7 @@ module LocomotiveCMS
                     # Find adjacent h3 elements until the next h2 is encountered
                     next_element = h2.next_element
                     while next_element && next_element.name != 'h2'
-                      break if h3_counter == 6;
+                      break if h3_counter == 8;
 
                       if next_element.name == 'h3'
                         # Add the number counter to the h3 element's text
@@ -364,7 +364,7 @@ module LocomotiveCMS
                       end
                       next_element = next_element.next_element
                     end
-                    break if h3_counter == 5;
+                    break if h3_counter == 7;
                   end
                 end
               end
