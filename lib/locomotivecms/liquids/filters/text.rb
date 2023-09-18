@@ -190,7 +190,6 @@ module LocomotiveCMS
 
           # PRODUCT REVIEW WEB STORY
           elsif html.css('.pros-n-cons').length == 1
-            what i Love | drawbacks | what i hate
             
             if h2.text.strip.match?(/^(?=.*(?:what i love|drawbacks|what i hate)).*$/i)
               # Find adjacent h3 elements until the next h2 is encountered
