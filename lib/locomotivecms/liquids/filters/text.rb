@@ -192,6 +192,7 @@ module LocomotiveCMS
           elsif html.css('.pros-n-cons').length == 1
             h3_counter = 1
             html.css('h2').each do |h2|
+              # Check if the h2 text starts with a number
               if h2.text.strip.match?(/^(?=.*(?:what i love|drawbacks|what i hate)).*$/i)
                 # Find adjacent h3 elements until the next h2 is encountered
                 next_element = h2.next_element
@@ -199,14 +200,13 @@ module LocomotiveCMS
                   break if h3_counter == 6;
 
                   if next_element.name == 'h3'
-                    label = ""
+                    # Add the number counter to the h3 element's text
                     name = next_element.inner_html.strip
                     if next_element.text.downcase.include? "what i love"
                       label = "What I Love:"
                     elsif next_element.text.downcase.include? "what i hate" or next_element.text.downcase.include? "drawbacks"
                       label = "What I Hate:"
                     end
-
                     if !next_element.text.match?(/^\d+\./)
                       name = "<span class='number'>#{h3_counter}</span> #{name}"
                     else 
@@ -225,7 +225,6 @@ module LocomotiveCMS
                       <div class=\"title safe_area\">
                       <p>#{label}</p>
                     <h2>#{name}</h2>
-                    
                               </div>
                               <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                               <div  class=\"logo\">
