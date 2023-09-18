@@ -170,9 +170,9 @@ module LocomotiveCMS
 
               content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                         <div class=\"title safe_area\">
-                        <p class=\"bold\">#{name2}</p>
+                        
 
-                      <h2><span class='number'>#{index+1}</span> <span class='text'>#{name}</span></h2>
+                      <h2><span class='number'>#{index+1}</span> <span class='text'><small class=\"bold\">#{name2}</small> #{name}</span></h2>
                       
 
                                 </div>
@@ -232,8 +232,8 @@ module LocomotiveCMS
                       end
                       content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                       <div class=\"title safe_area\">
-                      <p class=\"bold\">#{label}</p>
-                    <h2>#{name}</h2>
+                      
+                    <h2> <span class='text'><small class=\"bold\">#{label}</small> #{name}</span></h2>
                               </div>
                               <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                               <div  class=\"logo\">
