@@ -204,9 +204,9 @@ module LocomotiveCMS
                     name = next_element.inner_html.strip
                     label = ""
                     if h2.text.downcase.include? "what i love"
-                      label = "What I Love:"
+                      label = "What I love about this:"
                     elsif h2.text.downcase.include? "what i hate" or h2.text.downcase.include? "drawbacks"
-                      label = "What I Hate:"
+                      label = "What I hate about this:"
                     end
                     if !next_element.text.match?(/^\d+\./)
                       name = "<span class='number'>#{h3_counter}</span> #{name}"
@@ -224,7 +224,7 @@ module LocomotiveCMS
                       end
                       content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                       <div class=\"title safe_area\">
-                      <p>#{label}</p>
+                      <p class=\"bold\">#{label}</p>
                     <h2>#{name}</h2>
                               </div>
                               <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
