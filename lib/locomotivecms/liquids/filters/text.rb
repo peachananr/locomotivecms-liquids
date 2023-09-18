@@ -170,7 +170,7 @@ module LocomotiveCMS
 
               content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                         <div class=\"title safe_area\">
-                      <h2><span class='number'>#{index+1}</span> #{name}</h2>
+                      <h2><span class='number'>#{index+1}</span> <span class='text'>#{name}</span></h2>
                       <p>#{name2}</p>
 
                                 </div>
@@ -215,9 +215,9 @@ module LocomotiveCMS
                       label = "What I hate about this:"
                     end
                     if !next_element.text.match?(/^\d+\./)
-                      name = "<span class='number'>#{h3_counter}</span> #{name}"
+                      name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name}</span>"
                     else 
-                      name = "<span class='number'>#{h3_counter}</span> #{name.split(".")[1].strip}"
+                      name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name.split(".")[1].strip}</span>"
                     end
                       img = ""
                       link = ""
@@ -279,9 +279,9 @@ module LocomotiveCMS
                   break if h3_counter == 8;              
                   name = p.text
                   if !name.match?(/^\d+\./)
-                    name = "<span class='number'>#{h3_counter}</span> #{name}"
+                    name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name}</span>"
                   else 
-                    name = "<span class='number'>#{h3_counter}</span> #{name.split(".")[1].strip}"
+                    name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name.split(".")[1].strip}</span>"
                   end
                   img = ""
                   if p.next_element.name == 'p' or p.next_element.name == 'div'
@@ -344,9 +344,9 @@ module LocomotiveCMS
                         # Add the number counter to the h3 element's text
                         name = next_element.text.strip
                         if !next_element.text.match?(/^\d+\./)
-                          name = "<span class='number'>#{h3_counter}</span> #{name}"
+                          name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name}</span>"
                         else 
-                          name = "<span class='number'>#{h3_counter}</span> #{name.split(".")[1].strip}"
+                          name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name.split(".")[1].strip}</span>"
                         end
                           img = ""
                           link = ""
