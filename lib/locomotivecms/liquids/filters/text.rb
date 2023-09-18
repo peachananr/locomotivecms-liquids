@@ -217,9 +217,9 @@ module LocomotiveCMS
                       label = "What I hate about this:"
                     end
                     if !next_element.text.match?(/^\d+\./)
-                      name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name}</span>"
+                      name = "<span class='number'>#{h3_counter}</span> <h2><span class=\"bold\">#{label}</span> <span class='text'>#{name}</span></h2>"
                     else 
-                      name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name.split(".")[1].strip}</span>"
+                      name = "<span class='number'>#{h3_counter}</span> <h2><span class=\"bold\">#{label}</span> <span class='text'>#{name.split(".")[1].strip}ame}</span></h2>"
                     end
                       img = ""
                       link = ""
@@ -233,7 +233,7 @@ module LocomotiveCMS
                       content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                       <div class=\"title safe_area\">
                       
-                    <h2> <span class='text'><small class=\"bold\">#{label}</small> #{name}</span></h2>
+                      <div class='header'>#{name}</div>
                               </div>
                               <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                               <div  class=\"logo\">
@@ -281,9 +281,9 @@ module LocomotiveCMS
                   break if h3_counter == 8;              
                   name = p.text
                   if !name.match?(/^\d+\./)
-                    name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name}</span>"
+                    name = "<span class='number'>#{h3_counter}</span> <h2><span class='text'>#{name}</span></h2>"
                   else 
-                    name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name.split(".")[1].strip}</span>"
+                    name = "<span class='number'>#{h3_counter}</span> <h2><span class='text'>#{name.split(".")[1].strip}</span></h2>"
                   end
                   img = ""
                   if p.next_element.name == 'p' or p.next_element.name == 'div'
@@ -307,7 +307,7 @@ module LocomotiveCMS
                   
                   content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                             <div class=\"title safe_area\">
-                          <h2>#{name}</h2>
+                          <div class='header'>#{name}</div>
                                     </div>
                                     <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                                     <div  class=\"logo\">
@@ -346,9 +346,9 @@ module LocomotiveCMS
                         # Add the number counter to the h3 element's text
                         name = next_element.text.strip
                         if !next_element.text.match?(/^\d+\./)
-                          name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name}</span>"
+                          name = "<span class='number'>#{h3_counter}</span> <h2><span class='text'>#{name}</span></h2>"
                         else 
-                          name = "<span class='number'>#{h3_counter}</span> <span class='text'>#{name.split(".")[1].strip}</span>"
+                          name = "<span class='number'>#{h3_counter}</span> <h2><span class='text'>#{name.split(".")[1].strip}</span></h2>"
                         end
                           img = ""
                           link = ""
@@ -361,7 +361,7 @@ module LocomotiveCMS
                           end
                           content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                           <div class=\"title safe_area\">
-                        <h2>#{name}</h2>
+                          <div class='header'>#{name}</div>
                                   </div>
                                   <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                                   <div  class=\"logo\">
