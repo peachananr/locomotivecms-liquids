@@ -275,13 +275,13 @@ module LocomotiveCMS
               h3_counter = 1
 
               if html.css('h3').size == 0
-                html.css('h2').each_with_index do |p, index|
-                  break if index == 7;              
+                html.css('h2').each do |p|
+                  break if h3_counter == 8;              
                   name = p.text
                   if !name.match?(/^\d+\./)
-                    name = "<span class='number'>#{index+1}</span> #{name}"
+                    name = "<span class='number'>#{h3_counter}</span> #{name}"
                   else 
-                    name = "<span class='number'>#{index+1}</span> #{name.split(".")[1].strip}"
+                    name = "<span class='number'>#{h3_counter}</span> #{name.split(".")[1].strip}"
                   end
                   img = ""
                   if p.next_element.name == 'p' or p.next_element.name == 'div'
@@ -315,12 +315,13 @@ module LocomotiveCMS
                   
                   
                   content = <<~EOS
-                  <amp-story-page id="page_#{index + 1}" class="normal-page" auto-advance-after="7s">
+                  <amp-story-page id="page_#{h3_counter}" class="normal-page" auto-advance-after="7s">
                     #{img}#{content}#{link}                        
                   </amp-story-page>
                   EOS
     
                   result << content
+                  h3_counter += 1
                 end
               else
                 # THINGS TO DO WEB STORY
