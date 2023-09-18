@@ -188,7 +188,73 @@ module LocomotiveCMS
 
            
 
-           
+          # PRODUCT REVIEW WEB STORY
+          elsif html.css('.pros-n-cons').length == 1
+            what i Love | drawbacks | what i hate
+            
+            if h2.text.strip.match?(/^(?=.*(?:what i love|drawbacks|what i hate)).*$/i)
+              # Find adjacent h3 elements until the next h2 is encountered
+              next_element = h2.next_element
+              while next_element && next_element.name != 'h2'
+                break if h3_counter == 6;
+
+                if next_element.name == 'h3'
+                  label = ""
+                  name = next_element.inner_html.strip
+                  if next_element.text.downcase.include? "what i love"
+                    label = "What I Love:"
+                  elsif next_element.text.downcase.include? "what i hate" or next_element.text.downcase.include? "drawbacks"
+                    label = "What I Hate:"
+                  end
+
+                  if !next_element.text.match?(/^\d+\./)
+                    name = "<span class='number'>#{h3_counter}</span> #{name}"
+                  else 
+                    name = "<span class='number'>#{h3_counter}</span> #{name.split(".")[1].strip}"
+                  end
+                    img = ""
+                    link = ""
+                    content = ""
+
+                    if !slug.nil?
+                      link = "<amp-story-page-outlink layout=\"nodisplay\">
+                      <a href=\"https://www.bucketlistly.blog/posts/#{slug}\" title=\"Go to Blog\">Go to Blog</a>
+                      </amp-story-page-outlink>"
+                    end
+                    content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
+                    <div class=\"title safe_area\">
+                    <p>#{label}</p>
+                  <h2>#{name}</h2>
+                  
+                            </div>
+                            <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
+                            <div  class=\"logo\">
+                              <svg width=\"35\" height=\"35\" viewBox=\"0 0 48.57 48.57\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><title>BucketListly Logo</title><path d=\"m48.56 24.28a24.28 24.28 0 1 0 -24.28 24.29 24.28 24.28 0 0 0 24.28-24.29z\" fill=\"#eebf25\"></path><path d=\"m12.506 19.144 1.258-.871 14.231 20.567-1.258.871zm20.844 1.626-7.78 5.38-1.29-1.87-3.32 2.3-6.22-8.99 5.91-4.09 2.24 3.24 7.54-5.21.61 5.21 4.66 2.4z\" fill=\"#231f20\"></path></svg> <span>BucketListly Blog</span>
+                            </div>
+                          </amp-story-grid-layer>"
+                    if next_element.next_element.name == 'p' or next_element.next_element.name == 'div'
+                      if next_element.next_element.css(".lightbox-full").length > 0 or next_element.next_element.css(".image-block").length > 0
+                        get_img = next_element.next_element.at_css("img")
+                        img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img translate-x=\"80px\" scale-start=\"1\"
+                        scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
+                      end
+                    end
+
+
+                    content = <<~EOS
+                    <amp-story-page id="page_#{h3_counter + 1}" class="normal-page" auto-advance-after="7s">
+                      #{img}#{content}#{link}                        
+                    </amp-story-page>
+                    EOS
+
+                    result << content
+                    h3_counter += 1
+                end
+                next_element = next_element.next_element
+              end
+              break if h3_counter == 5;
+            end
+
 
           else
           # H2 ONLY WEB STORY
