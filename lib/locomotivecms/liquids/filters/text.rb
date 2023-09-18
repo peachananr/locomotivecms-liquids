@@ -162,6 +162,12 @@ module LocomotiveCMS
                 </amp-story-page-outlink>"
               end
 
+              if !shop_link.blank?
+                link = "<amp-story-page-outlink layout=\"nodisplay\">
+                <a href=\"#{shop_link}\" title=\"Check Price\">Check Price</a>
+                </amp-story-page-outlink>"
+              end
+
               content = "<amp-story-grid-layer template=\"vertical\" class=\"vertical_full\">
                         <div class=\"title safe_area\">
                       <h2><span class='number'>#{index+1}</span> #{name}</h2>
