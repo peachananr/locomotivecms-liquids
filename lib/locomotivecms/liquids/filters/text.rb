@@ -372,7 +372,7 @@ module LocomotiveCMS
               
             end
           end
-          if !result.nil?
+          if !result.blank?
             return result
           else
             return "false"
