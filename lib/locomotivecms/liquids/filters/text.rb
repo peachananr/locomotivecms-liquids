@@ -339,7 +339,7 @@ module LocomotiveCMS
 
                     while next_element && next_element.name != 'h2'
                       break if h3_counter == h3_limit;
-
+                      img = ""
                       if next_element.name == 'h3'
                         # Add the number counter to the h3 element's text
                         name = next_element.text.strip
@@ -374,16 +374,17 @@ module LocomotiveCMS
                               scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
                               rescue => error
                               end
+                              
                             end
                           end
 
-
+                          next if img.blank?
                           content = <<~EOS
                           <amp-story-page id="page_#{h3_counter + 1}" class="normal-page" auto-advance-after="7s">
                             #{img}#{content}#{link}                        
                           </amp-story-page>
                           EOS
-
+                          
                           result << content
                           h3_counter += 1
                       end
