@@ -209,7 +209,7 @@ module LocomotiveCMS
                     name = "<span class='number'>#{index+1}</span> #{name.split(".")[1].strip}"
                   end
                   img = ""
-                  if p.next_element.name == 'p'
+                  if p.next_element.name == 'p' or p.next_element.name == 'div'
                     if p.next_element.css(".lightbox-full").length > 0 or p.next_element.css(".image-block").length > 0
                       get_img = p.next_element.at_css("img")
                       img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img translate-x=\"80px\" scale-start=\"1\"
