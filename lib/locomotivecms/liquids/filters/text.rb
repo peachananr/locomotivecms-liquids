@@ -172,7 +172,7 @@ module LocomotiveCMS
                         <div class=\"title safe_area\">
                         
 
-                      <span class='number'>#{index+1}</span> <h2><span class=\"bold\">#{name2}</span> <span class='text'>#{name}</span></h2>
+                        <div class='header'><span class='number'>#{index+1}</span> <h2><span class=\"bold\">#{name2}</span> <span class='text'>#{name}</span></h2></div>
                       
 
                                 </div>
