@@ -374,6 +374,8 @@ module LocomotiveCMS
           end
           if !result.nil?
             return result
+          else
+            return "false"
           end
         end
 
