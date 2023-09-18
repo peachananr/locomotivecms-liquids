@@ -201,7 +201,7 @@ module LocomotiveCMS
 
                   if next_element.name == 'h3'
                     # Add the number counter to the h3 element's text
-                    name = next_element.inner_html.strip
+                    name = next_element.text.strip
                     label = ""
                     if h2.text.downcase.include? "what i love"
                       label = "What I love about this:"
@@ -320,7 +320,7 @@ module LocomotiveCMS
 
                       if next_element.name == 'h3'
                         # Add the number counter to the h3 element's text
-                        name = next_element.inner_html.strip
+                        name = next_element.text.strip
                         if !next_element.text.match?(/^\d+\./)
                           name = "<span class='number'>#{h3_counter}</span> #{name}"
                         else 
