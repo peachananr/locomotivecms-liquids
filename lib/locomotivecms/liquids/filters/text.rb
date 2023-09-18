@@ -378,15 +378,17 @@ module LocomotiveCMS
                             end
                           end
 
-                          next if img.blank?
+                          
+                          
                           content = <<~EOS
                           <amp-story-page id="page_#{h3_counter + 1}" class="normal-page" auto-advance-after="7s">
                             #{img}#{content}#{link}                        
                           </amp-story-page>
                           EOS
-                          
-                          result << content
-                          h3_counter += 1
+                          if !img.blank?
+                            result << content
+                            h3_counter += 1
+                          end
                       end
                       next_element = next_element.next_element
                     end
