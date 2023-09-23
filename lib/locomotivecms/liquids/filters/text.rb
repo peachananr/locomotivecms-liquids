@@ -576,7 +576,7 @@ module LocomotiveCMS
               h2.replace(new_h2)
                        
               #el.remove
-            elsif html.css('.activity-block').size == 1
+            elsif html.css('.activity-block').size == 1 and html.css('.activity-block h2').length > 0
               block = html.at_css('.activity-block h2')["id"]
 
               html.at_css('.activity-block').add_next_sibling(el)
