@@ -673,6 +673,7 @@ module LocomotiveCMS
                 if html.at_css("h3:contains('#{name}')").text =~ /Day (\d+)/i
                   html.at_css("h3:contains('#{name}')").inner_html = "#{label.gsub("☀️ ","").gsub("-", " - ")} #{html.at_css("h3:contains('#{name}')").inner_html}" 
                   puts "yyyyy #{html.at_css("h3:contains('#{name}')").inner_html}"
+                end
               end
             end
           end
