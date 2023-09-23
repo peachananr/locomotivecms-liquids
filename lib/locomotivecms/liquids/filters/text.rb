@@ -666,9 +666,9 @@ module LocomotiveCMS
           end
           if html.css('.post-summary.day-to-day').size > 0
             if html.css('.post-summary.day-to-day td:contains("Day ")').size > 0
-              html.css('.post-summary.day-to-day tr').each do |a|
-                label = a.at_css("tr:first-child").strip
-                name = a.at_css("tr:last-child").strip
+              html.css('.post-summary.day-to-day tr:not(:empty)').each do |a|
+                label = a.at_css("td:first-child").strip
+                name = a.at_css("td:last-child").strip
 
                 html.at_css("h3:contains('#{name}')").inner_html = "#{label} #{html.at_css("h3:contains('#{name}')").inner_html}" if html.at_css("h3:contains('#{name}')").text =~ /Day (\d+)/i
               end
