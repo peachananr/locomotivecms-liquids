@@ -669,8 +669,7 @@ module LocomotiveCMS
               html.css('.post-summary.day-to-day tr:not(:empty)').each do |a|
                 label = a.at_css("td:first-child").text.strip
                 name = a.at_css("td:last-child").text.strip
-                puts "xxxxx #{html.at_css("h3:contains('#{name}')").inner_html}"
-                if html.at_css("h3:contains('#{name}')").text =~ /Day (\d+)/i
+                if !html.at_css("h3:contains('#{name}')").text.match(/Day (\d+)/i)
                   html.at_css("h3:contains('#{name}')").inner_html = "#{label.gsub("☀️ ","").gsub("-", " - ")} #{html.at_css("h3:contains('#{name}')").inner_html}" 
                   puts "yyyyy #{html.at_css("h3:contains('#{name}')").inner_html}"
                 end
