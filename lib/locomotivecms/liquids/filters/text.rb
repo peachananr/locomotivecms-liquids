@@ -118,11 +118,11 @@ module LocomotiveCMS
           html = Nokogiri.HTML(input)
           tags = ""
 
-          #if html.css('.itinerary img').size > 0
-          #  html.css('.itinerary img').each do |i|
-          #    tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption>#{i['alt'].to_s.gsub("&", "&amp;")}</image:caption>\n</image:image>"
-          #  end
-          #end
+          if html.css('.itinerary img').size > 0
+            html.css('.itinerary img').each do |i|
+              tags = "#{tags}\n<image:image>\n<image:loc>#{i['data-original']}</image:loc>\n<image:caption>#{i['alt'].to_s.gsub("&", "&amp;")}</image:caption>\n</image:image>"
+            end
+          end
 
           #if html.css('h3').size > 0
           #  html.css('h3').each do |i|
@@ -542,7 +542,7 @@ module LocomotiveCMS
           if html.css('#insurance').size > 0
             html.at_css("#insurance").remove()
             insurance = '<div id="insurance"></div>'
-            if !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].nil?
+            if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].nil?
               html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].add_next_sibling(insurance)
             else
               html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].add_next_sibling(insurance)
