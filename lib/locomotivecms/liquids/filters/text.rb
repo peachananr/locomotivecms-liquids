@@ -646,7 +646,6 @@ module LocomotiveCMS
             h2_elements.each do |h2|
               # Check if the h2 text starts with a number
               
-              if h2.text.strip.match?(/^\d(?!.*itinerary)/i) and h2.text.strip.match?(/^\d(?!.*things to do)/i)
                  if h2.text.strip.match?(/^(?![0-9])(?!.*\bmap\b)(?=.*(?:things to do|what to eat|best places to)).*$/i)
                   # Find adjacent h3 elements until the next h2 is encountered
                   next_element = h2.next_element
@@ -664,7 +663,7 @@ module LocomotiveCMS
                   # Reset the counter for the next group of h3 elements
                   h3_counter = 1
                 end    
-              end
+              
             end
           end
           if html.css('.post-summary.day-to-day').size > 0
