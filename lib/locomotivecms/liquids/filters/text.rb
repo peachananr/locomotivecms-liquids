@@ -645,22 +645,25 @@ module LocomotiveCMS
             # Iterate through the h2 elements
             h2_elements.each do |h2|
               # Check if the h2 text starts with a number
-              if h2.text.strip.match?(/^(?![0-9])(?!.*\bmap\b)(?=.*(?:things to do|what to eat|best places to)).*$/i)
-                # Find adjacent h3 elements until the next h2 is encountered
-                next_element = h2.next_element
-                while next_element && next_element.name != 'h2'
-                  if next_element.name == 'h3'
-                    # Add the number counter to the h3 element's text
-                    if !next_element.text.match?(/^\d+\./)
-                      next_element.inner_html = "#{h3_counter}. #{next_element.inner_html.strip}"
-                      h3_counter += 1
+              
+              if h2.text.strip.match?(/^\d(?!.*itinerary)/i) and h2.text.strip.match?(/^\d(?!.*things to do)/i)
+                 if h2.text.strip.match?(/^(?![0-9])(?!.*\bmap\b)(?=.*(?:things to do|what to eat|best places to)).*$/i)
+                  # Find adjacent h3 elements until the next h2 is encountered
+                  next_element = h2.next_element
+                  while next_element && next_element.name != 'h2'
+                    if next_element.name == 'h3'
+                      # Add the number counter to the h3 element's text
+                      if !next_element.text.match?(/^\d+\./)
+                        next_element.inner_html = "#{h3_counter}. #{next_element.inner_html.strip}"
+                        h3_counter += 1
+                      end
                     end
+                    next_element = next_element.next_element
                   end
-                  next_element = next_element.next_element
-                end
 
-                # Reset the counter for the next group of h3 elements
-                h3_counter = 1
+                  # Reset the counter for the next group of h3 elements
+                  h3_counter = 1
+                end    
               end
             end
           end
