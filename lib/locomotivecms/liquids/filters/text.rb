@@ -549,9 +549,17 @@ module LocomotiveCMS
             #  html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].add_next_sibling(insurance)
             #end
             if html.css(".table-of-contents-wrapper").size > 0
-              html.at_css(".table-of-contents-wrapper").add_previous_sibling(insurance)
+              if !html.at_css(".table-of-contents-wrapper").previous_element.attributes["class"].nil? and html.at_css(".table-of-contents-wrapper").previous_element["class"].include? "readmore-block"
+                html.at_css(".table-of-contents-wrapper").previous_element.add_previous_sibling(insurance)
+              else
+                html.at_css(".table-of-contents-wrapper").add_previous_sibling(insurance)
+              end
             elsif html.css("h2").size > 0
-              html.at_css("h2").add_previous_sibling(insurance)
+              if !html.at_css("h2").previous_element.attributes["class"].nil? and html.at_css("h2").previous_element["class"].include? "readmore-block"
+                html.at_css("h2").previous_element.add_previous_sibling(insurance)
+              else
+                html.at_css("h2").add_previous_sibling(insurance)
+              end
             end
           end
           
