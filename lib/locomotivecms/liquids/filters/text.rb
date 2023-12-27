@@ -541,11 +541,17 @@ module LocomotiveCMS
           html = Nokogiri.HTML(input)
           if html.css('#insurance').size > 0
             html.at_css("#insurance").remove()
+            
             insurance = '<div id="insurance"></div>'
-            if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].nil?
-              html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].add_next_sibling(insurance)
-            else
-              html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].add_next_sibling(insurance)
+            #if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].nil?
+            #  html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].add_next_sibling(insurance)
+            #else
+            #  html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].add_next_sibling(insurance)
+            #end
+            if html.css(".table-of-contents-wrapper").size > 0
+              html.at_css(".table-of-contents-wrapper").add_previous_sibling(insurance)
+            elsif html.css("h2").size > 0
+              html.at_css("h2").add_previous_sibling(insurance)
             end
           end
           
