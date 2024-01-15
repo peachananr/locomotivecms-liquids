@@ -581,8 +581,8 @@ module LocomotiveCMS
             end
           end
           
-          if html.css('.accommodation-block').size == 1
-            el = html.at_css('.accommodation-block')
+          if html.css('.accommodation-block:not(.dont-move)').size == 1
+            el = html.at_css('.accommodation-block:not(.dont-move)')
             h2 = el.at_css('h2')["id"]
             if html.css(".pin-img-tag a img").length > 0 and (html.at_css(".pin-img-tag a img")["alt"].downcase.include? "things to do" or html.at_css(".pin-img-tag a img")["alt"].downcase.include? "itinerary") and html.css("body h2[id*='things-to-do'] ~ h3:eq(2)").length > 0 and html.css(".product-summary.accommodation").length == 1   
               html.at_css("body h2[id*='things-to-do'] ~ h3:eq(2)").add_previous_sibling(el)     
