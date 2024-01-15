@@ -591,6 +591,11 @@ module LocomotiveCMS
               h2.replace(new_h2)
                        
               #el.remove
+            elsif html.css("body h2[id*='things-to-do'] ~ h3:eq(2)").length > 0
+              html.at_css("body h2[id*='things-to-do'] ~ h3:eq(2)").add_previous_sibling(el)     
+              h2 = html.at_css('.accommodation-block h2')
+              new_h2 = "<h4 id='#{h2["id"]}'>#{h2.inner_html}</h4>"
+              h2.replace(new_h2)
             elsif html.css('.activity-block').size == 1 and html.css('.activity-block h2').length > 0
               block = html.at_css('.activity-block h2')["id"]
 
