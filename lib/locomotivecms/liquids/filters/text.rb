@@ -155,6 +155,7 @@ module LocomotiveCMS
               shop_link = p["href"]
               thumb_img = p.at_css(".ps-image img")["data-original"]
               main_img = html.at_css(".image-block[href='#{shop_link}'] img")["data-original"]
+              main_alt = html.at_css(".image-block[href='#{shop_link}'] img")["alt"]
 
               if !slug.nil?
                 link = "<amp-story-page-outlink layout=\"nodisplay\">
@@ -182,7 +183,7 @@ module LocomotiveCMS
                                 </div>
                               </amp-story-grid-layer>"
                               img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img translate-x=\"80px\" scale-start=\"1\"
-                              scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{main_img}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{main_img} 640w, #{thumb_img} 320w\"></amp-img></amp-story-grid-layer>"
+                              scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{main_img}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"#{main_alt}\"></amp-img></amp-story-grid-layer>"
 
               content = <<~EOS
               <amp-story-page id="page_#{index + 1}" class="normal-page" auto-advance-after="7s">
@@ -245,7 +246,7 @@ module LocomotiveCMS
                           get_img = next_element.next_element.at_css("img")
                           begin
                           img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img translate-x=\"80px\" scale-start=\"1\"
-                          scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
+                          scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"#{get_img["alt"]}\"></amp-img></amp-story-grid-layer>"
                           rescue => error
                           end
                         end
@@ -291,7 +292,7 @@ module LocomotiveCMS
                       get_img = p.next_element.at_css("img")
                       begin
                         img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img translate-x=\"80px\" scale-start=\"1\"
-                        scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
+                        scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"#{get_img["alt"]}\"></amp-img></amp-story-grid-layer>"
                       rescue => error
                       end
                     end
@@ -373,7 +374,7 @@ module LocomotiveCMS
                               get_img = next_element.next_element.at_css("img")
                               begin
                               img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img translate-x=\"80px\" scale-start=\"1\"
-                              scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"{{post.title}}\" srcset=\"#{get_img["data-original"]} 640w, #{get_img["data-srcset"].split(",")[0].gsub(" 500w","")} 320w\"></amp-img></amp-story-grid-layer>"
+                              scale-end=\"1.1\" animate-in=\"zoom-in\" animate-in-duration=\"7s\" src=\"#{get_img["data-original"]}\" width=\"1280\" height=\"853\" layout=\"fill\" alt=\"#{get_img["alt"]}\"></amp-img></amp-story-grid-layer>"
                               rescue => error
                               end
                               
