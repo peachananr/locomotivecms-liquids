@@ -179,7 +179,7 @@ module LocomotiveCMS
                                 </div>
                                 <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                                 <div  class=\"logo\">
-                                  <svg width=\"35\" height=\"35\" viewBox=\"0 0 48.57 48.57\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><title>BucketListly Logo</title><path d=\"m48.56 24.28a24.28 24.28 0 1 0 -24.28 24.29 24.28 24.28 0 0 0 24.28-24.29z\" fill=\"#eebf25\"></path><path d=\"m12.506 19.144 1.258-.871 14.231 20.567-1.258.871zm20.844 1.626-7.78 5.38-1.29-1.87-3.32 2.3-6.22-8.99 5.91-4.09 2.24 3.24 7.54-5.21.61 5.21 4.66 2.4z\" fill=\"#231f20\"></path></svg> <span>BucketListly Blog</span>
+                                  <svg width=\"35\" height=\"35\" viewBox=\"0 0 48.57 48.57\" xmlns=\"http://www.w3.org/2000/svg\"><title>BucketListly Logo</title><path d=\"m48.56 24.28a24.28 24.28 0 1 0 -24.28 24.29 24.28 24.28 0 0 0 24.28-24.29z\" fill=\"#eebf25\"></path><path d=\"m12.506 19.144 1.258-.871 14.231 20.567-1.258.871zm20.844 1.626-7.78 5.38-1.29-1.87-3.32 2.3-6.22-8.99 5.91-4.09 2.24 3.24 7.54-5.21.61 5.21 4.66 2.4z\" fill=\"#231f20\"></path></svg> <span>BucketListly Blog</span>
                                 </div>
                               </amp-story-grid-layer>"
                               img = "<amp-story-grid-layer template=\"fill\" class=\"poster\"><amp-img translate-x=\"80px\" scale-start=\"1\"
@@ -238,7 +238,7 @@ module LocomotiveCMS
                               </div>
                               <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                               <div  class=\"logo\">
-                                <svg width=\"35\" height=\"35\" viewBox=\"0 0 48.57 48.57\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><title>BucketListly Logo</title><path d=\"m48.56 24.28a24.28 24.28 0 1 0 -24.28 24.29 24.28 24.28 0 0 0 24.28-24.29z\" fill=\"#eebf25\"></path><path d=\"m12.506 19.144 1.258-.871 14.231 20.567-1.258.871zm20.844 1.626-7.78 5.38-1.29-1.87-3.32 2.3-6.22-8.99 5.91-4.09 2.24 3.24 7.54-5.21.61 5.21 4.66 2.4z\" fill=\"#231f20\"></path></svg> <span>BucketListly Blog</span>
+                                <svg width=\"35\" height=\"35\" viewBox=\"0 0 48.57 48.57\" xmlns=\"http://www.w3.org/2000/svg\"><title>BucketListly Logo</title><path d=\"m48.56 24.28a24.28 24.28 0 1 0 -24.28 24.29 24.28 24.28 0 0 0 24.28-24.29z\" fill=\"#eebf25\"></path><path d=\"m12.506 19.144 1.258-.871 14.231 20.567-1.258.871zm20.844 1.626-7.78 5.38-1.29-1.87-3.32 2.3-6.22-8.99 5.91-4.09 2.24 3.24 7.54-5.21.61 5.21 4.66 2.4z\" fill=\"#231f20\"></path></svg> <span>BucketListly Blog</span>
                               </div>
                             </amp-story-grid-layer>"
                       if next_element.next_element.name == 'p' or next_element.next_element.name == 'div'
@@ -312,7 +312,7 @@ module LocomotiveCMS
                                     </div>
                                     <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                                     <div  class=\"logo\">
-                                      <svg width=\"35\" height=\"35\" viewBox=\"0 0 48.57 48.57\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><title>BucketListly Logo</title><path d=\"m48.56 24.28a24.28 24.28 0 1 0 -24.28 24.29 24.28 24.28 0 0 0 24.28-24.29z\" fill=\"#eebf25\"></path><path d=\"m12.506 19.144 1.258-.871 14.231 20.567-1.258.871zm20.844 1.626-7.78 5.38-1.29-1.87-3.32 2.3-6.22-8.99 5.91-4.09 2.24 3.24 7.54-5.21.61 5.21 4.66 2.4z\" fill=\"#231f20\"></path></svg> <span>BucketListly Blog</span>
+                                      <svg width=\"35\" height=\"35\" viewBox=\"0 0 48.57 48.57\" xmlns=\"http://www.w3.org/2000/svg\"><title>BucketListly Logo</title><path d=\"m48.56 24.28a24.28 24.28 0 1 0 -24.28 24.29 24.28 24.28 0 0 0 24.28-24.29z\" fill=\"#eebf25\"></path><path d=\"m12.506 19.144 1.258-.871 14.231 20.567-1.258.871zm20.844 1.626-7.78 5.38-1.29-1.87-3.32 2.3-6.22-8.99 5.91-4.09 2.24 3.24 7.54-5.21.61 5.21 4.66 2.4z\" fill=\"#231f20\"></path></svg> <span>BucketListly Blog</span>
                                     </div>
                                   </amp-story-grid-layer>"
                   
@@ -366,7 +366,7 @@ module LocomotiveCMS
                                   </div>
                                   <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"mask\" xml:space=\"preserve\" fill-rule=\"evenodd\" stroke-linejoin=\"round\" stroke-miterlimit=\"2\" clip-rule=\"evenodd\" viewBox=\"0 0 1183 43\"><path fill=\"#f8f3f3\" fill-rule=\"nonzero\" d=\"M1183 42S648-36 0 42V0h1183v42Z\"/></svg>
                                   <div  class=\"logo\">
-                                    <svg width=\"35\" height=\"35\" viewBox=\"0 0 48.57 48.57\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\"><title>BucketListly Logo</title><path d=\"m48.56 24.28a24.28 24.28 0 1 0 -24.28 24.29 24.28 24.28 0 0 0 24.28-24.29z\" fill=\"#eebf25\"></path><path d=\"m12.506 19.144 1.258-.871 14.231 20.567-1.258.871zm20.844 1.626-7.78 5.38-1.29-1.87-3.32 2.3-6.22-8.99 5.91-4.09 2.24 3.24 7.54-5.21.61 5.21 4.66 2.4z\" fill=\"#231f20\"></path></svg> <span>BucketListly Blog</span>
+                                    <svg width=\"35\" height=\"35\" viewBox=\"0 0 48.57 48.57\" xmlns=\"http://www.w3.org/2000/svg\"><title>BucketListly Logo</title><path d=\"m48.56 24.28a24.28 24.28 0 1 0 -24.28 24.29 24.28 24.28 0 0 0 24.28-24.29z\" fill=\"#eebf25\"></path><path d=\"m12.506 19.144 1.258-.871 14.231 20.567-1.258.871zm20.844 1.626-7.78 5.38-1.29-1.87-3.32 2.3-6.22-8.99 5.91-4.09 2.24 3.24 7.54-5.21.61 5.21 4.66 2.4z\" fill=\"#231f20\"></path></svg> <span>BucketListly Blog</span>
                                   </div>
                                 </amp-story-grid-layer>"
                           if next_element.next_element.name == 'p' or next_element.next_element.name == 'div'
