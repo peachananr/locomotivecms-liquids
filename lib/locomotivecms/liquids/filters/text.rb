@@ -149,7 +149,7 @@ module LocomotiveCMS
           # PRODUCT SUMMARY WEB STORY
           if  html.css('.product-summary:not(.accommodation)').size > 0
             html.css('.product-summary:not(.accommodation) .ps-row').each_with_index do |p, index|
-              break if index == 7;              
+                            
               name = p.at_css(".ps-name").text
               name2 = p.at_css(".ps-title").text
               shop_link = p["href"]
