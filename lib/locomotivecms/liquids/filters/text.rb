@@ -550,6 +550,7 @@ module LocomotiveCMS
               end
               hotel_list = "<ol class='hotel-list-loaded item-list'>#{hotel_list}</ol>"
               html.at_css(".hotel-list").replace(hotel_list)
+              html.css("body").inner_html
             end
           end
         end
