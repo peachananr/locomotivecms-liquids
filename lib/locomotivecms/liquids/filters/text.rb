@@ -536,6 +536,24 @@ module LocomotiveCMS
           result
         end
 
+        def list_tour_hotel(input)
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+          if html.css('.hotel-list').size > 0
+          
+
+            if html.css('.hotel-list').size > 0 and html.css('.product-summary.accommodation.tripple').size == 1
+              hotel_list = ""
+              html.css('.product-summary.accommodation.tripple a').each do |a|
+                new_hotel = "<li><a href=\"#{a["href"]}\" target=\"_blank\" rel=\"nofollow noopener\">#{a.at_css(".ps-name").text.strip}</a> (#{a.at_css(".ps-title").text.strip})</li>"
+                hotel_list << new_hotel
+              end
+              hotel_list = "<ol class='hotel-list-loaded item-list'>#{hotel_list}</ol>"
+              html.gsub('<div class="hotel-list"></div>', hotel_list)  
+            end
+          end
+        end
+
 
         def remove_placeholder_img(input)
           require 'nokogiri'
