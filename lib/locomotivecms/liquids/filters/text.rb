@@ -556,7 +556,7 @@ module LocomotiveCMS
         end
 
         def pdf_render(input)
-          equire 'nokogiri'
+          require 'nokogiri'
           html = Nokogiri.HTML(input)
           if html.css('.product-summary.accommodation').size > 0
             html.css('.product-summary.accommodation a').each do |a|
