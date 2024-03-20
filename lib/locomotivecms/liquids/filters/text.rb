@@ -569,6 +569,13 @@ module LocomotiveCMS
             end
           end
 
+          amzn_links = html.css('a[href*="amzn.to"]')
+
+          # Replace each link with its text content
+          amzn_links.each do |link|
+            link.replace(link.text)
+          end
+
           html.css("body").inner_html.gsub(/\p{Emoji_Presentation}/, '')
         end
 
