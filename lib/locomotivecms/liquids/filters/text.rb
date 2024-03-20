@@ -564,12 +564,12 @@ module LocomotiveCMS
 
               a.at_css(".ps-price span").replace(new_a)
 
-              new_e = "<div style='display: contents;color: inherit;background: 0 0;'>#{a.inner_html.gsub(/\p{Emoji_Presentation}/, '')}</div>"
+              new_e = "<div style='display: contents;color: inherit;background: 0 0;'>#{a.inner_html}</div>"
               a.replace(new_e)
             end
           end
 
-          html.css("body").inner_html
+          html.css("body").inner_html.gsub(/\p{Emoji_Presentation}/, '')
         end
 
 
