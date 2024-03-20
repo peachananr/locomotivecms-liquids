@@ -573,7 +573,7 @@ module LocomotiveCMS
 
           # Replace each link with its text content
           amzn_links.each do |link|
-            link.replace(link.text)
+            link.replace("<strong>#{link.text}</strong>")
           end
 
           html.css("body").inner_html.gsub(/\p{Emoji_Presentation}/, '')
