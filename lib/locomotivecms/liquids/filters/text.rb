@@ -587,10 +587,10 @@ module LocomotiveCMS
             html.at_css("#insurance").remove()
             
             insurance = '<div id="insurance"></div>'
-            if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].nil?
-              html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].add_next_sibling(insurance)
+            if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
+              html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
             elsif !html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil?
-              html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[1].add_next_sibling(insurance)
+              html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
             else
               if html.css(".table-of-contents-wrapper").size > 0
                 if !html.at_css(".table-of-contents-wrapper").previous_element.attributes["class"].nil? and html.at_css(".table-of-contents-wrapper").previous_element["class"].include? "readmore-block"
