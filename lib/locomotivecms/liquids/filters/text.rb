@@ -744,10 +744,10 @@ module LocomotiveCMS
               end
             end
           end
-          if html.css('div.product-summary:not(.accommodation)').size > 0
+          if html.css('div.product-summary:not(.accommodation):not(.itinerary)').size > 0
             
             # Find all elements with class="product-summary"
-            product_summaries = html.css('.product-summary')
+            product_summaries = html.css('.product-summary:not(.accommodation):not(.itinerary)')
 
             # Iterate through each .product-summary element
             product_summaries.each do |product_summary|
