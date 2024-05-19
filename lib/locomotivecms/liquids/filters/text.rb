@@ -587,22 +587,27 @@ module LocomotiveCMS
             html.at_css("#insurance").remove()
             
             insurance = '<div id="insurance"></div>'
-            if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
-              html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
-            elsif !html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil?
-              html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
+
+            if html.css('.product-summary.itinerary-summary').size > 0
+              html.at_css('.product-summary.itinerary-summary').add_child(insurance)
             else
-              if html.css(".table-of-contents-wrapper").size > 0
-                if !html.at_css(".table-of-contents-wrapper").previous_element.attributes["class"].nil? and html.at_css(".table-of-contents-wrapper").previous_element["class"].include? "readmore-block"
-                  html.at_css(".table-of-contents-wrapper").previous_element.add_previous_sibling(insurance)
-                else
-                  html.at_css(".table-of-contents-wrapper").add_previous_sibling(insurance)
-                end
-              elsif html.css("h2").size > 0
-                if !html.at_css("h2").previous_element.attributes["class"].nil? and html.at_css("h2").previous_element["class"].include? "readmore-block"
-                  html.at_css("h2").previous_element.add_previous_sibling(insurance)
-                else
-                  html.at_css("h2").add_previous_sibling(insurance)
+              if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
+                html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
+              elsif !html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil?
+                html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
+              else
+                if html.css(".table-of-contents-wrapper").size > 0
+                  if !html.at_css(".table-of-contents-wrapper").previous_element.attributes["class"].nil? and html.at_css(".table-of-contents-wrapper").previous_element["class"].include? "readmore-block"
+                    html.at_css(".table-of-contents-wrapper").previous_element.add_previous_sibling(insurance)
+                  else
+                    html.at_css(".table-of-contents-wrapper").add_previous_sibling(insurance)
+                  end
+                elsif html.css("h2").size > 0
+                  if !html.at_css("h2").previous_element.attributes["class"].nil? and html.at_css("h2").previous_element["class"].include? "readmore-block"
+                    html.at_css("h2").previous_element.add_previous_sibling(insurance)
+                  else
+                    html.at_css("h2").add_previous_sibling(insurance)
+                  end
                 end
               end
             end
