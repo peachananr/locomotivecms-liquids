@@ -695,10 +695,10 @@ module LocomotiveCMS
             html.css('.product-summary.itinerary-summary').each do |i|
               items = i.css(".ps-row")
               midpoint = (items.size / 2.0).ceil
-              items[midpoint - 1].add_next_sibling("<div id='xxxxx'></div>")
+              items[midpoint - 1].add_next_sibling('<div id="xxxxx"></div>')
               
               string = html.css('body').first.to_s
-              string.gsub!("<div id='xxxxx'></div>", "</div><div class='product-summary itinerary-summary'>")
+              string.gsub!('<div id="xxxxx"></div>', '</div><div class="product-summary itinerary-summary">')
               html = Nokogiri.HTML(string)
             end
           end
