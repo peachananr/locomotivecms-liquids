@@ -698,7 +698,7 @@ module LocomotiveCMS
               items[midpoint - 1].add_next_sibling('<div id="xxxxx"></div>')
               
               string = html.css('body').first.to_s
-              string.gsub!('<div id="xxxxx"></div>', '</div><div class="product-summary itinerary-summary">')
+              string.gsub!('<div id="xxxxx"></div>', '</div><div class="mod product-summary itinerary-summary">')
               html = Nokogiri.HTML(string)
             end
           end
