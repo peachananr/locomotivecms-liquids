@@ -828,7 +828,7 @@ module LocomotiveCMS
               if table.css('span.small-link').size > 0
                 table.css('span.small-link').each do |i|
                   begin
-                    new_element = "<a href=\"#{i["data-href"]}\" target=\"_blank\">#{i.inner_html}</a>"
+                    new_element = "<a class=\"small-link\" href=\"#{i["data-href"]}\" target=\"_blank\">#{i.inner_html}</a>"
                     i.replace(new_element)
                   rescue
                   end
