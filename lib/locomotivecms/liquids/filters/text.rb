@@ -825,7 +825,7 @@ module LocomotiveCMS
                
               end
               # Find all small-link 
-              if product_summary.css('span.small-link').size > 0
+              if table.css('span.small-link').size > 0
                 product_summary.css('span.small-link').each do |i|
                   begin
                     new_element = "<a href=\"#{i["data-href"]}\" target=\"_blank\">#{i.inner_html}</a>"
