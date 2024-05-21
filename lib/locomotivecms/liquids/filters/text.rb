@@ -782,9 +782,19 @@ module LocomotiveCMS
               # Create a new <table> element and copy attributes
               table = Nokogiri::XML::Node.new('table', html)
               product_summary.attributes.each { |name, value| table[name] = value.value }
-
+              # Find all small-link 
+              if product_summary.css('span.small-link').size > 0
+                product_summary.css('span.small-link').each do |i|
+                  begin
+                    new_element = "<a href=\"#{i["data-href"]}\" target=\"_blank\">#{i.inner_html}</a>"
+                    i.replace(new_element)
+                  rescue
+                  end
+                end
+              end
+              
               # Find all <a> elements inside .product-summary
-              links = product_summary.css('a')
+              links = product_summary.css('a.btn-primary')
               new_link = Nokogiri::XML::Node.new('a', html)
               new_link.inner_html = "Check Price"
 
