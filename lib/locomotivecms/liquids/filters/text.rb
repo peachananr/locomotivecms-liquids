@@ -782,16 +782,7 @@ module LocomotiveCMS
               # Create a new <table> element and copy attributes
               table = Nokogiri::XML::Node.new('table', html)
               product_summary.attributes.each { |name, value| table[name] = value.value }
-              # Find all small-link 
-              if product_summary.css('span.small-link').size > 0
-                product_summary.css('span.small-link').each do |i|
-                  begin
-                    new_element = "<a href=\"#{i["data-href"]}\" target=\"_blank\">#{i.inner_html}</a>"
-                    i.replace(new_element)
-                  rescue
-                  end
-                end
-              end
+             
               
               # Find all <a> elements inside .product-summary
               links = product_summary.css('a.btn-primary')
@@ -833,6 +824,15 @@ module LocomotiveCMS
                 table.add_child(tr)
 
                
+              end
+               # Find all small-link 
+               if product_summary.css('span.small-link').size > 0
+                product_summary.css('span.small-link').each do |i|
+                  
+                    new_element = "<a href=\"#{i["data-href"]}\" target=\"_blank\">#{i.inner_html}</a>"
+                    i.replace(new_element)
+                  
+                end
               end
               table.prepend_child("<thead><tr class=\"ps-row\"><th class=\"col-md hidden-xs\">Image</th><th class=\"col-md\">Product</th><th class=\"col-md  hidden-xs\">Features</th><th class=\"col-md  hidden-xs\"></th></tr></thead>")
 
