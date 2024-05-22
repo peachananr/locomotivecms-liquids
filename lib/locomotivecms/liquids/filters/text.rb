@@ -691,28 +691,28 @@ module LocomotiveCMS
             end
           end
 
-          if html.css('.product-summary.itinerary-summary').size > 0          
-            html.css('.product-summary.itinerary-summary').each do |i|
-              if i.css(".editor-choice").size > 0
-                i.css(".editor-choice").each do |i|
-                  id_el = i.xpath('ancestor::*[@class="ps-row"]').first["href"]
+          #if html.css('.product-summary.itinerary-summary').size > 0          
+          #  html.css('.product-summary.itinerary-summary').each do |i|
+          #    if i.css(".editor-choice").size > 0
+          #      i.css(".editor-choice").each do |i|
+          #        id_el = i.xpath('ancestor::*[@class="ps-row"]').first["href"]
 
-                  if html.css(id_el).size > 0
-                    iduplicate = i.dup
-                    html.at_css(id_el).add_child(iduplicate)
-                  end
-                end
-              end
+          #        if html.css(id_el).size > 0
+          #          iduplicate = i.dup
+          #          html.at_css(id_el).add_child(iduplicate)
+          #        end
+          #      end
+          #    end
               
-              items = i.css(".ps-row")
-              midpoint = (items.size / 2.0).ceil
-              items[midpoint - 1].add_next_sibling('<div id="xxxxx"></div>')
+          #    items = i.css(".ps-row")
+          #    midpoint = (items.size / 2.0).ceil
+          #    items[midpoint - 1].add_next_sibling('<div id="xxxxx"></div>')
               
-              string = html.css('body').first.to_s
-              string.gsub!('<div id="xxxxx"></div>', '</div><div class="mod product-summary itinerary-summary">')
-              html = Nokogiri.HTML(string)
-            end
-          end
+          #    string = html.css('body').first.to_s
+          #    string.gsub!('<div id="xxxxx"></div>', '</div><div class="mod product-summary itinerary-summary">')
+          #    html = Nokogiri.HTML(string)
+          #  end
+          #end
 
           if html.css('.table-of-contents-wrapper').size > 0
             html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
