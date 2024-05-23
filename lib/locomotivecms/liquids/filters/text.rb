@@ -711,7 +711,7 @@ module LocomotiveCMS
           #    string = html.css('body').first.to_s
           #    string.gsub!('<div id="xxxxx"></div>', '</div><div class="mod product-summary itinerary-summary">')
           #    html = Nokogiri.HTML(string)
-          #  end
+            end
           end
 
           if html.css('.table-of-contents-wrapper').size > 0
