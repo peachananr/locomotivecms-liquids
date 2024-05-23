@@ -691,20 +691,16 @@ module LocomotiveCMS
             end
           end
 
-          if html.css('.product-summary').size > 0          
-            html.css('.product-summary').each do |i|
+          if html.css('.product-summary.itinerary-summary').size > 0          
+            html.css('.product-summary.itinerary-summary').each do |i|
               if i.css(".editor-choice").size > 0
                 i.css(".editor-choice").each do |i|
-                  id_el = i.xpath('ancestor::a[1]').first["href"]
+                  id_el = i.xpath('ancestor::a').first["href"]
 
                   if html.css(id_el).size > 0
                     iduplicate = i.dup
                     html.at_css(id_el).add_child(iduplicate)
-                  end 
-                  #if html.css("#table-of-contents a[href='#{id_el}'] .toc-text").size > 0
-                  #  iduplicate = i.dup
-                  #  html.at_css("#table-of-contents a[href='#{id_el}'] .toc-text").add_child(iduplicate)
-                  #end
+                  end
                 end
               end
               
