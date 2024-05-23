@@ -701,10 +701,10 @@ module LocomotiveCMS
                     iduplicate = i.dup
                     html.at_css(id_el).add_child(iduplicate)
                   end 
-                  if html.css("#table-of-contents a[href='#{id_el}'] .toc-text").size > 0
-                    iduplicate = i.dup
-                    html.at_css("#table-of-contents a[href='#{id_el}'] .toc-text").add_child(iduplicate)
-                  end
+                  #if html.css("#table-of-contents a[href='#{id_el}'] .toc-text").size > 0
+                  #  iduplicate = i.dup
+                  #  html.at_css("#table-of-contents a[href='#{id_el}'] .toc-text").add_child(iduplicate)
+                  #end
                 end
               end
               
