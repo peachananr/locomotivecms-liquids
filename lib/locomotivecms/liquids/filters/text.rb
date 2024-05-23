@@ -695,7 +695,7 @@ module LocomotiveCMS
             html.css('.product-summary').each do |i|
               if i.css(".editor-choice").size > 0
                 i.css(".editor-choice").each do |i|
-                  id_el = i.xpath('ancestor::a').first["href"]
+                  id_el = i.xpath('ancestor::a[1]').first["href"]
 
                   if html.css(id_el).size > 0
                     iduplicate = i.dup
