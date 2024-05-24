@@ -616,9 +616,7 @@ module LocomotiveCMS
 
           if html.css('p > a[href*="goo.gl"], p > a[href*="g.page"], p > a[href*="google.com/maps"]').size > 0
             html.css('p > a[href*="goo.gl"], p > a[href*="g.page"], p > a[href*="google.com/maps"]').each do |i|
-              i["aria-label"] = "Open in Maps ↗️"
-              i["data-microtip-position"] = "bottom"
-              i["role"] = "tooltip"
+              i.add_child('<span class="tooltip"></span>')
             end
           end
           if html.css('#pinterest').size > 0
