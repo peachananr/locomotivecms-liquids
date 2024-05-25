@@ -615,7 +615,9 @@ module LocomotiveCMS
 
           maps_links = html.css('p > a[href*="goo.gl"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), p > a[href*="g.page"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), p > a[href*="google.com/maps"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block)')
           if maps_links.size > 0
+            
             maps_links[0]["class"] = "first-of-type #{maps_links[0]["class"]}"
+            puts "xxxxx#{maps_links[0]["class"]}"
           end
           if html.css('#pinterest').size > 0
 
