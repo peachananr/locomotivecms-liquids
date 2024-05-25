@@ -613,11 +613,9 @@ module LocomotiveCMS
             end
           end
 
-
-          if html.css('p > a[href*="goo.gl"], p > a[href*="g.page"], p > a[href*="google.com/maps"]').size > 0
-            html.css('p > a[href*="goo.gl"], p > a[href*="g.page"], p > a[href*="google.com/maps"]').each do |i|
-              i.add_child('<span class="tooltip"></span>')
-            end
+          maps_links = html.css('p > a[href*="goo.gl"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), p > a[href*="g.page"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), p > a[href*="google.com/maps"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block)')
+          if maps_links.size > 0
+            maps_links[0]["class"] += " first-of-type"
           end
           if html.css('#pinterest').size > 0
 
