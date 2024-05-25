@@ -612,7 +612,7 @@ module LocomotiveCMS
               end
             end
           end
-          html.css('p').each do |i|
+          html.css('p:has(a[href*="goo.gl"],a[href*="g.page"],a[href*="google.com/maps"])').each do |i|
             maps_links = i.css('a[href*="goo.gl"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), a[href*="g.page"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), a[href*="google.com/maps"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block)')
             if maps_links.size > 0
               maps_links[0]["class"] = "first-of-type #{maps_links[0]["class"]}"
