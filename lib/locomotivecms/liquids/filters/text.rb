@@ -148,7 +148,7 @@ module LocomotiveCMS
           result = []
           # PRODUCT SUMMARY WEB STORY
           if  html.css('.product-summary:not(.accommodation):not(.itinerary-summary)').size > 0
-            html.css('.product-summary:not(.accommodation:not(.itinerary-summary) .ps-row').each_with_index do |p, index|
+            html.css('.product-summary:not(.accommodation):not(.itinerary-summary) .ps-row').each_with_index do |p, index|
               break if index == 20;              
               name = p.at_css(".ps-name").text
               name2 = p.at_css(".ps-title").text
