@@ -705,6 +705,7 @@ module LocomotiveCMS
 
                   if html.css(id_el).size > 0
                     iduplicate = i.dup
+                    iduplicate["aria-hidden"] = "true"
                     html.at_css(id_el).add_child(iduplicate)
                   end
                 end
