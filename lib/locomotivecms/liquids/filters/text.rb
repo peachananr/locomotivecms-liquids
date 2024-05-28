@@ -46,13 +46,22 @@ module LocomotiveCMS
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
           require 'nokogiri'
           html = Nokogiri.HTML(input)
-          if html.xpath("//body/p[text() and contains(@class, 'itinerary-summary')]").length > 150
+          if html.xpath("//body/p[text()]").length > 150
             spread = html.xpath("//body/p[text()]").length.to_i/50
             spread = spread.floor
           else
             spread = freq
           end
-          html.xpath("//body/p[text() and contains(@class, 'itinerary-summary')]").each_with_index do |i, index|
+          html.xpath("//body/p[text()]").each_with_index do |i, index|
+            if (index + 1) % spread == 0
+              i.replace i.to_s.gsub("</p>", "</p>#{placeholder}")
+            end
+          end
+          if html.css(".itinerary-summary-wrapper").size > 0
+            html.at_css(".itinerary-summary-wrapper").add_next_sibling(placeholder)
+            html.at_css(".itinerary-summary-wrapper").add_previous_sibling(placeholder)
+          end
+          html.css(".itinerary-summary").each_with_index do |i, index|
             if (index + 1) % spread == 0
               i.replace i.to_s.gsub("</p>", "</p>#{placeholder}")
             end
