@@ -587,8 +587,22 @@ module LocomotiveCMS
             html.at_css("#insurance").remove()
             
             insurance = '<div id="insurance"></div>'
+            
 
-            if html.css('.itinerary-summary-wrapper').size > 0
+            #remove unused html
+            if html.css(".post-summary-wrapper.hide").size > 0
+              html.css(".post-summary-wrapper.hide").remove
+            end
+            if html.css(".btn-wrap.hide").size > 0
+              html.css(".btn-wrap.hide").remove
+            end
+            if html.css(".viator-extra.hide").size > 0
+              html.css(".viator-extra.hide").remove
+            end
+
+             
+
+            if html.css('.itinerary-summary-wrapper').size > 0    
               html.at_css('.itinerary-summary-wrapper').add_child(insurance)
             else
               if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
