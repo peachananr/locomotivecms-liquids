@@ -36,6 +36,7 @@ module LocomotiveCMS
           I18n.transliterate(input).downcase
         end
         
+        
         def get_html_attr(input, css = 'img', att = 'src')
           require 'nokogiri'
           html = Nokogiri.HTML(input)
@@ -156,6 +157,46 @@ module LocomotiveCMS
           end
 
           return tags
+        end
+        def about_metadata(input, title, desc, slug)
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+
+          if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
+            list = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
+            list_count = list.size
+            list_items = ""
+            list.each_with_index do |i, index| 
+              l_name = i.at_css(".ps-title").sub(/\b\d+\.\s*/, '').strip
+              l_pos = index + 1
+              l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
+
+              list_items << " {
+                \"@type\": \"ListItem\",
+                \"position\": #{l_pos},
+                \"name\": \"#{l_name}\",
+                \"url\": \"#{l_url}\"
+                },"
+            end
+
+            if list_items != ""
+              list_final = "[#{list_items.chomp(',')}]"
+              result = "\"about\": [
+              {
+                \"@context\": \"http://schema.org\",
+                \"@type\": \"ItemList\",
+                \"name\": #{title},
+                \"description\": #{desc},
+                \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
+                \"numberOfItems\": #{list_count},
+                #{list_final}
+              }
+            ],"
+
+              return result
+            end
+            
+          end
         end
 
         def amp_story(input, slug = '') 
