@@ -185,10 +185,10 @@ module LocomotiveCMS
               {
                 \"@context\": \"http://schema.org\",
                 \"@type\": \"ItemList\",
-                \"name\": #{title},
-                \"description\": #{desc},
+                \"name\": \"#{title}\",
+                \"description\": \"#{desc}\",
                 \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
-                \"numberOfItems\": #{list_count},
+                \"numberOfItems\": \"#{list_count}\",
                 \"itemListElement\": #{list_final}
               }
             ],"
