@@ -200,7 +200,7 @@ module LocomotiveCMS
             list = html.css(".product-summary.itinerary-summary.day-to-day .ps-row > a:not(:empty)")
             list_items = ""
             list.each_with_index do |i, index| 
-              l_country = location.split(",")[1].strip
+              l_country = location.split(",").last.strip
               l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
               l_image = i.at_css(".ps-image img")["data-original"]
               l_description = i.at_css(".ps-desc").text
