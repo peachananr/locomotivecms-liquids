@@ -167,7 +167,7 @@ module LocomotiveCMS
             list_count = list.size
             list_items = ""
             list.each_with_index do |i, index| 
-              l_name = i.at_css(".ps-title").sub(/\b\d+\.\s*/, '').strip
+              l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
               l_pos = index + 1
               l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
 
