@@ -189,7 +189,7 @@ module LocomotiveCMS
                 \"description\": #{desc},
                 \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
                 \"numberOfItems\": #{list_count},
-                #{list_final}
+                \"itemListElement\": #{list_final}
               }
             ],"
 
