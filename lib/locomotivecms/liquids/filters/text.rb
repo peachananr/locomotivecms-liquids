@@ -197,7 +197,7 @@ module LocomotiveCMS
             end
             
           elsif html.css(".product-summary.itinerary-summary.day-to-day").size == 1
-            list = html.css(".product-summary.itinerary-summary.day-to-day .ps-row:not(:empty) > a")
+            list = html.css(".product-summary.itinerary-summary.day-to-day .ps-row:not(:empty) > a:not(.small-link)")
             list_items = ""
             list.each_with_index do |i, index| 
               l_country = location.split(",").last.strip
