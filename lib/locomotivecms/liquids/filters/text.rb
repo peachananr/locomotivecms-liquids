@@ -196,6 +196,38 @@ module LocomotiveCMS
               return result
             end
             
+          elsif html.css(".product-summary.itinerary-summary.day-to-day").size == 1
+            list = html.css(".product-summary.itinerary-summary.day-to-day .ps-row > a:not(:empty)")
+            list_items = ""
+            list.each_with_index do |i, index| 
+              l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+              l_image = i.at_css(".ps-image img")["data-original"]
+              l_description = i.at_css(".ps-desc").text
+              l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
+
+              list_items << " {
+                \"@type\": \"TouristAttraction\",
+                \"name\": \"#{l_name}\",
+                \"url\": \"#{l_url}\",
+                \"image\": \"#{l_image}\",
+                \"description\": \"#{l_description}\",
+                \"address\": \"#{l_name}\",
+                },"
+            end
+
+            if list_items != ""
+              list_final = "[#{list_items.chomp(',')}]"
+              result = "\"about\": [
+              {
+                \"@type\": \"Trip\",
+                \"name\": \"#{title}\",
+                \"description\": \"#{desc}\",
+                \"itinerary\": #{list_final}
+              }
+            ],"
+
+              return result
+            end
           end
         end
 
