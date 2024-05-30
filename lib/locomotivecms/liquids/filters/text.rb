@@ -158,7 +158,7 @@ module LocomotiveCMS
 
           return tags
         end
-        def about_metadata(input, title, desc, slug)
+        def about_metadata(input, title, desc, slug, location)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
 
@@ -200,6 +200,7 @@ module LocomotiveCMS
             list = html.css(".product-summary.itinerary-summary.day-to-day .ps-row > a:not(:empty)")
             list_items = ""
             list.each_with_index do |i, index| 
+              l_country = location.split(",")[1].strip
               l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
               l_image = i.at_css(".ps-image img")["data-original"]
               l_description = i.at_css(".ps-desc").text
@@ -211,7 +212,7 @@ module LocomotiveCMS
                 \"url\": \"#{l_url}\",
                 \"image\": \"#{l_image}\",
                 \"description\": \"#{l_description}\",
-                \"address\": \"#{l_name.sub(/.*?:\s*/, '')}\"
+                \"address\": \"#{l_name.sub(/.*?:\s*/, '')}, #{l_country}\"
                 },"
             end
 
