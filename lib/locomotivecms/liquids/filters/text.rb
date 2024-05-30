@@ -207,11 +207,11 @@ module LocomotiveCMS
 
               list_items << " {
                 \"@type\": \"TouristAttraction\",
-                \"name\": \"#{l_name}\",
+                \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
                 \"url\": \"#{l_url}\",
                 \"image\": \"#{l_image}\",
                 \"description\": \"#{l_description}\",
-                \"address\": \"#{l_name}\",
+                \"address\": \"#{l_name.sub(/.*?:\s*/, '')}\"
                 },"
             end
 
