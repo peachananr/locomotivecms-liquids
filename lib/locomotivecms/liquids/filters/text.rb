@@ -64,7 +64,7 @@ module LocomotiveCMS
             end
           end
           if html.css(".itinerary-summary-wrapper").size > 0
-            html.at_css(".itinerary-summary-wrapper").add_previous_sibling(placeholder.gsub('class="ads"', 'class="ads prerendered"'))
+            html.at_css(".itinerary-summary-wrapper").add_previous_sibling(placeholder.gsub('content_hint', 'content_hint prerendered'))
             #if html.css(".itinerary-summary-wrapper .last-minute-section").size > 0
             #  html.at_css(".itinerary-summary-wrapper .last-minute-section").add_previous_sibling(placeholder)
             #end
