@@ -203,6 +203,10 @@ module LocomotiveCMS
               l_country = location.split(",").last.strip
               l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
               l_image = i.at_css(".ps-image img")["data-original"]
+              l_image_full = ""
+              if !l_image.include? "data:image/svg+xml;base6"
+                l_image_full = "\"image\": \"#{l_image}\","
+              end
               l_description = i.at_css(".ps-desc").text
               l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
 
@@ -210,7 +214,7 @@ module LocomotiveCMS
                 \"@type\": \"TouristAttraction\",
                 \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
                 \"url\": \"#{l_url}\",
-                \"image\": \"#{l_image}\",
+                #{l_image_full}                
                 \"description\": \"#{l_description}\",
                 \"address\": \"#{l_name.sub(/.*?:\s*/, '')}, #{l_country}\"
                 },"
