@@ -193,7 +193,7 @@ module LocomotiveCMS
                 \"@context\": \"http://schema.org\",
                 \"@type\": \"ItemList\",
                 \"name\": \"#{title}\",
-                \"description\": \"#{desc}\",
+                \"description\": \"#{desc.gsub('"', '\"')}\",
                 \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
                 \"numberOfItems\": \"#{list_count}\",
                 \"itemListElement\": #{list_final}
@@ -222,7 +222,7 @@ module LocomotiveCMS
                 \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
                 \"url\": \"#{l_url}\",
                 #{l_image_full}                
-                \"description\": \"#{l_description}\",
+                \"description\": \"#{l_description.gsub('"', '\"')}\",
                 \"address\": \"#{l_name.sub(/.*?:\s*/, '')}, #{l_country}\"
                 },"
             end
