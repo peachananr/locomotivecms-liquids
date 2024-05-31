@@ -168,6 +168,12 @@ module LocomotiveCMS
             list_items = ""
             list.each_with_index do |i, index| 
               l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+              l_image = i.at_css(".ps-image img")["data-original"]
+              l_image_full = ""
+              if !l_image.include? "data:image/svg+xml;base6"
+                l_image_full = "\"image\": \"#{l_image}\","
+              end
+              
               l_pos = index + 1
               l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
 
@@ -175,6 +181,7 @@ module LocomotiveCMS
                 \"@type\": \"ListItem\",
                 \"position\": #{l_pos},
                 \"name\": \"#{l_name}\",
+                #{l_image_full}                
                 \"url\": \"#{l_url}\"
                 },"
             end
