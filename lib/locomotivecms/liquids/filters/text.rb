@@ -63,8 +63,8 @@ module LocomotiveCMS
               #i.replace i.to_s.gsub("</p>", "</p>#{placeholder}")
             end
           end
-          #if html.css(".itinerary-summary-wrapper").size > 0
-          #  html.at_css(".itinerary-summary-wrapper").add_previous_sibling(placeholder.gsub('content_hint', 'content_hint prerendered'))
+          if html.css(".itinerary-summary-wrapper").size > 0
+            html.at_css(".itinerary-summary-wrapper").add_child(placeholder.gsub('content_hint', 'content_hint'))
             #if html.css(".itinerary-summary-wrapper .last-minute-section").size > 0
             #  html.at_css(".itinerary-summary-wrapper .last-minute-section").add_previous_sibling(placeholder)
             #end
@@ -180,7 +180,7 @@ module LocomotiveCMS
               list_items << " {
                 \"@type\": \"ListItem\",
                 \"position\": #{l_pos},
-                \"name\": \"#{l_name}\",
+                \"name\": \"#{l_name.gsub('"', '\"')}\",
                 #{l_image_full}                
                 \"url\": \"#{l_url}\"
                 },"
@@ -192,7 +192,7 @@ module LocomotiveCMS
               {
                 \"@context\": \"http://schema.org\",
                 \"@type\": \"ItemList\",
-                \"name\": \"#{title}\",
+                \"name\": \"#{title.gsub('"', '\"')}\",
                 \"description\": \"#{desc.gsub('"', '\"')}\",
                 \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
                 \"numberOfItems\": \"#{list_count}\",
@@ -232,8 +232,8 @@ module LocomotiveCMS
               result = "\"about\": [
               {
                 \"@type\": \"Trip\",
-                \"name\": \"#{title}\",
-                \"description\": \"#{desc}\",
+                \"name\": \"#{title.gsub('"', '\"')}\",
+                \"description\": \"#{desc.gsub('"', '\"')}\",
                 \"itinerary\": #{list_final}
               }
             ],"
