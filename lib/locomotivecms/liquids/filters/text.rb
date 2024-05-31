@@ -64,7 +64,7 @@ module LocomotiveCMS
             end
           end
           if html.css(".itinerary-summary-wrapper").size > 0
-            html.at_css(".itinerary-summary-wrapper").add_child(placeholder.gsub('content_hint', 'content_hint'))
+            html.at_css(".itinerary-summary-wrapper").add_next_sibling(placeholder.gsub('content_hint', 'content_hint'))
             #if html.css(".itinerary-summary-wrapper .last-minute-section").size > 0
             #  html.at_css(".itinerary-summary-wrapper .last-minute-section").add_previous_sibling(placeholder)
             #end
