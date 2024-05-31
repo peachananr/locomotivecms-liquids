@@ -73,10 +73,12 @@ module LocomotiveCMS
             #el.first.add_next_sibling(placeholder.gsub('content_hint', 'content_hint'))
             
             items = el.first.css(".ps-row")
-            if items.size > 5
-              midpoint = (items.size / 2.0).ceil
+            if items.size > 3
+              #midpoint = (items.size / 2.0).ceil
               ad_placeholder = '<div class="ads"><div class="content_hint"></div></div>'
-              items[midpoint - 1].add_next_sibling(ad_placeholder)
+              items[3].add_next_sibling(ad_placeholder)
+            else
+              el.first.add_next_sibling(placeholder.gsub('content_hint', 'content_hint'))
             end
           end
           
