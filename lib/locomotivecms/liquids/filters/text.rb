@@ -716,6 +716,9 @@ module LocomotiveCMS
             if html.css(".post-summary-wrapper.hide").size > 0
               html.css(".post-summary-wrapper.hide").remove
             end
+            if html.css("p.temp").size > 0
+              html.css("p.temp").remove
+            end
             if html.css(".btn-wrap.hide").size > 0
               html.css(".btn-wrap.hide").remove
             end
