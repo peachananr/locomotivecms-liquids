@@ -80,7 +80,7 @@ module LocomotiveCMS
               if items.size > 11
                 #midpoint = (items.size / 2.0).ceil
                 ad_placeholder = '<div class="ads"><div class="content_hint"></div></div>'
-                items[8].add_next_sibling(ad_placeholder)
+                items[7].add_next_sibling(ad_placeholder)
               end
             else
               el.first.add_next_sibling(placeholder.gsub('content_hint', 'content_hint'))
