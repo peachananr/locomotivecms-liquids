@@ -63,35 +63,35 @@ module LocomotiveCMS
               #i.replace i.to_s.gsub("</p>", "</p>#{placeholder}")
             end
           end
+          
+          #el = html.css(".itinerary-summary-wrapper")
 
-          el = html.css(".itinerary-summary-wrapper")
-
-          if el.size > 0
+          #if el.size > 0
              #if html.css(".itinerary-summary-wrapper .last-minute-section").size > 0
             #  html.at_css(".itinerary-summary-wrapper .last-minute-section").add_previous_sibling(placeholder)
             #end
             #el.first.add_next_sibling(placeholder.gsub('content_hint', 'content_hint'))
             
-            items = el.first.css(".ps-row")
-            if items.size == 4 or items.size > 5
+          #  items = el.first.css(".ps-row")
+          #  if items.size == 4 or items.size > 5
               #midpoint = (items.size / 2.0).ceil
-              ad_placeholder = '<div class="ads"><div class="content_hint"></div></div>'
-              items[3].add_next_sibling(ad_placeholder)
+          #    ad_placeholder = '<div class="ads"><div class="content_hint"></div></div>'
+          #    items[3].add_next_sibling(ad_placeholder)
               #if items.size == 10 or items.size > 13
               #  #midpoint = (items.size / 2.0).ceil
               #  ad_placeholder = '<div class="ads"><div class="content_hint"></div></div>'
               #  items[9].add_next_sibling(ad_placeholder)
               #end
-            else
-              el.first.add_next_sibling(placeholder.gsub('content_hint', 'content_hint'))
-            end
-          end
+          #  else
+          #    el.first.add_next_sibling(placeholder.gsub('content_hint', 'content_hint'))
+          #  end
+          #end
           
-          html.css(".itinerary-summary").each_with_index do |i, index|
-            if (index + 1) % spread == 0
-              i.replace i.to_s.gsub("</p>", "</p>#{placeholder}")
-            end
-          end
+          #html.css(".itinerary-summary").each_with_index do |i, index|
+          #  if (index + 1) % spread == 0
+          #    i.replace i.to_s.gsub("</p>", "</p>#{placeholder}")
+          #  end
+          #end
           
 
           html.css("body").inner_html
