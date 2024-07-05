@@ -660,7 +660,7 @@ module LocomotiveCMS
           html = Nokogiri.HTML(input)
           if html.css('.hotel-list').size > 0
             autopick = true
-            if html.at_css('.product-summary.accommodation.tripple .editor-choice').size != 0
+            if html.css('.product-summary.accommodation.tripple .editor-choice').size != 0
               autopick = false
             end
 
