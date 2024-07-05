@@ -665,7 +665,7 @@ module LocomotiveCMS
               hotel_list = ""
               html.css('.product-summary.accommodation.tripple a').each do |a|
                 ext = ""
-                if a.at_css(".ps-title").text.downcase.strip.include? "mid-range"
+                if a.parent.css(".editors-choice").size < 1 and a.at_css(".ps-title").text.downcase.strip.include? "mid-range"
                   ext = '<span class="editor-choice">👍 Top Pick</span>'
                 end
                 new_hotel = "<li><a href=\"#{a["href"]}\" target=\"_blank\" rel=\"nofollow noopener\">#{a.at_css(".ps-name").text.strip}</a> (#{a.at_css(".ps-title").text.strip}) #{ext}</li>"
