@@ -1023,7 +1023,11 @@ module LocomotiveCMS
               end
 
               no_script_image = "<noscript><img width=\"#{i["width"]}\" height=\"#{i["height"]}\" src=\"#{i["data-original"]}\" alt=\"#{i["alt"]}\"></noscript>"
-              i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
+              # testing lazyload native
+              #i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
+              i["src"] = "#{i["data-original"]}"
+              i["loading"] = "lazy"
+
               #i.remove_attribute('src')
               i.remove_attribute('data-size') if !i["data-size"].nil?
               i["data-sizes"] = i["sizes"]
@@ -1039,13 +1043,19 @@ module LocomotiveCMS
               i.replace "<span class=\"img-wrapper #{extra_class}\"><i class=\"img-sizer\" style=\"padding-top: #{padding_top}%;\"></i>#{i.to_s}#{no_script_image}</span>"
 
             elsif !i["data-original"].nil? and i["data-original"].include? "assets.bucketlistly.blog"
-              i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
+              # testing lazyload native
+              #i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
+              i["src"] = "#{i["data-original"]}"
+              i["loading"] = "lazy"
               
             end
 
           end
           html.css('source[data-srcset]').each do |i|
-            i["srcset"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
+            # testing lazyload native
+            #i["srcset"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
+            i["srcset"] = "#{i["data-srcset"]}"
+            i["loading"] = "lazy"
             #i.remove_attribute('data-srcset') 
           end
           html.css("body").inner_html
