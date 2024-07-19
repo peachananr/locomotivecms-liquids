@@ -1000,6 +1000,8 @@ module LocomotiveCMS
           
 
           html.css('img.lazy').each do |i|
+            ## testing lazyload native
+            i["class"] = "#{i["class"]} lazyloaded"
 
             if !i.parent.nil? and i.parent.name == "a"
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
@@ -1027,7 +1029,6 @@ module LocomotiveCMS
               #i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
               i["src"] = "#{i["data-original"]}"  # testing lazyload native
               i["loading"] = "lazy"  # testing lazyload native
-
               #i.remove_attribute('src')
 
               ## testing lazyload native
@@ -1054,7 +1055,7 @@ module LocomotiveCMS
               #i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
               i["src"] = "#{i["data-original"]}"  # testing lazyload native
               i["loading"] = "lazy"  # testing lazyload native
-              
+
             end
 
           end
