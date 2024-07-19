@@ -1001,7 +1001,7 @@ module LocomotiveCMS
 
           html.css('img.lazy').each do |i|
             ## testing lazyload native
-            i["class"] = "#{i["class"]} lazyloaded"
+            i["class"] = "#{i["class"]} native-load loading"
 
             if !i.parent.nil? and i.parent.name == "a"
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
@@ -1048,7 +1048,7 @@ module LocomotiveCMS
               if i["height"].to_f > i["width"].to_f
                 extra_class = "landscape #{extra_class}"
               end
-              i.replace "<span class=\"img-wrapper #{extra_class}\"><i class=\"img-sizer\" style=\"padding-top: #{padding_top}%;\"></i>#{i.to_s}#{no_script_image}</span>"
+              i.replace "<span class=\"img-wrapper loading #{extra_class}\"><i class=\"img-sizer\" style=\"padding-top: #{padding_top}%;\"></i>#{i.to_s}#{no_script_image}</span>"
 
             elsif !i["data-original"].nil? and i["data-original"].include? "assets.bucketlistly.blog"
               ## testing lazyload native
@@ -1063,7 +1063,6 @@ module LocomotiveCMS
             # testing lazyload native
             #i["srcset"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
             i["srcset"] = "#{i["data-srcset"]}"  # testing lazyload native
-            i["loading"] = "lazy"  # testing lazyload native
             #i.remove_attribute('data-srcset') 
           end
           html.css("body").inner_html
