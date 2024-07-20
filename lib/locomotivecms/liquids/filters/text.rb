@@ -999,7 +999,7 @@ module LocomotiveCMS
           end
           
 
-          html.css('img.lazy').each do |i|
+          html.css('img.lazy:not(.native-load)').each do |i|
             ## testing lazyload native
             i["class"] = "#{i["class"]} native-load"
 
