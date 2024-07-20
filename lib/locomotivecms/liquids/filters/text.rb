@@ -1115,8 +1115,8 @@ module LocomotiveCMS
                 aspect_ratio = "#{i["width"]}/#{i["height"]}"
               end
 
-              no_script_image = "<noscript><img src='#{i["data-original"]}' alt='#{i["alt"]}'></noscript>"
-              i.add_next_sibling(no_script_image)
+              #no_script_image = "<noscript><img src='#{i["data-original"]}' alt='#{i["alt"]}'></noscript>"
+              #i.add_next_sibling(no_script_image)
 
               i.remove_attribute('src')
               i.remove_attribute('data-size') if !i["data-size"].nil?
