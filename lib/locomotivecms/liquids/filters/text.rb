@@ -1024,7 +1024,7 @@ module LocomotiveCMS
                 padding_top = (i["height"].to_f/i["width"].to_f) * 100
               end
 
-              no_script_image = "<noscript><img width=\"#{i["width"]}\" height=\"#{i["height"]}\" src=\"#{i["data-original"]}\" alt=\"#{i["alt"]}\"></noscript>"
+              #no_script_image = "<noscript><img width=\"#{i["width"]}\" height=\"#{i["height"]}\" src=\"#{i["data-original"]}\" alt=\"#{i["alt"]}\"></noscript>"
               ## testing lazyload native
               #i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
               i["src"] = "#{i["data-original"]}"  # testing lazyload native
@@ -1048,7 +1048,7 @@ module LocomotiveCMS
               if i["height"].to_f > i["width"].to_f
                 extra_class = "landscape #{extra_class}"
               end
-              i.replace "<span class=\"img-wrapper loading #{extra_class}\"><i class=\"img-sizer\" style=\"padding-top: #{padding_top}%;\"></i>#{i.to_s}#{no_script_image}</span>"
+              i.replace "<span class=\"img-wrapper loading #{extra_class}\"><i class=\"img-sizer\" style=\"padding-top: #{padding_top}%;\"></i>#{i.to_s}</span>"
 
             elsif !i["data-original"].nil? and i["data-original"].include? "assets.bucketlistly.blog"
               ## testing lazyload native
