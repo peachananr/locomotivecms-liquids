@@ -1056,6 +1056,10 @@ module LocomotiveCMS
               i["src"] = "#{i["data-original"]}"  # testing lazyload native
               i["loading"] = "lazy"  # testing lazyload native
               i.parent["class"] = "#{i.parent["class"]} loading"
+            else
+              i["src"] = "#{i["data-original"]}"  # testing lazyload native
+              i["loading"] = "lazy"  # testing lazyload native
+              i.parent["class"] = "#{i.parent["class"]} loading"
             end
 
           end
