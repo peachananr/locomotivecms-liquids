@@ -731,6 +731,17 @@ module LocomotiveCMS
             if html.css(".viator-extra.hide").size > 0
               html.css(".viator-extra.hide").remove
             end
+            if html.css(".product-summary.accommodation").length > 0
+              html.css(".product-summary.accommodation").each do |i|                
+                if i.at_css(".editor-choice").length < 1
+                  if i.css(".ps-tripple-row a:nth-child(2)").length > 0
+                    i.at_css(".ps-tripple-row a:nth-child(2) .ps-image").add_child('<span class="editor-choice">👍 Top Pick</span>')
+                  end
+                end
+              end
+            end
+            
+          
 
              
 
