@@ -823,23 +823,23 @@ module LocomotiveCMS
               #el.remove
             end
           end
-
-          if html.css('.activity-block').size == 1
+          #
+          #if html.css('.activity-block').size == 1
             
-            if html.css(".pin-img-tag a img").length > 0 and (html.at_css(".pin-img-tag a img")["alt"].downcase.include? "things to do" or html.at_css(".pin-img-tag a img")["alt"].downcase.include? "itinerary")
+          #  if html.css(".pin-img-tag a img").length > 0 and (html.at_css(".pin-img-tag a img")["alt"].downcase.include? "things to do" or html.at_css(".pin-img-tag a img")["alt"].downcase.include? "itinerary")
 
                 
                 
-                if html.css("body h2[id*='things-to-do'] ~ h3:eq(4)").length > 0
-                  el = html.at_css('.activity-block')
-                  h2 = html.at_css('.activity-block h2')
-                  new_h2 = "<h4 id='#{h2["id"]}'>Tours & Tickets You Might Like</h4>"
-                  h2.replace(new_h2)
-                  html.at_css("body h2[id*='things-to-do'] ~ h3:eq(4)").add_previous_sibling(el)
-                end
+          #      if html.css("body h2[id*='things-to-do'] ~ h3:eq(4)").length > 0
+          #        el = html.at_css('.activity-block')
+          #        h2 = html.at_css('.activity-block h2')
+          #        new_h2 = "<h4 id='#{h2["id"]}'>Tours & Tickets You Might Like</h4>"
+          #        h2.replace(new_h2)
+          #        html.at_css("body h2[id*='things-to-do'] ~ h3:eq(4)").add_previous_sibling(el)
+          #      end
               
-            end
-          end
+          #  end
+          #end
           #if html.css('h2, h3').size > 4
           #  newsletter = '<div id="small-newsletter"></div>'
           #  html.at_css("h2:eq(4), h3:not(.adj-header):eq(4)").add_previous_sibling(newsletter)
