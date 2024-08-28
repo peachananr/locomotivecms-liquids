@@ -806,10 +806,10 @@ module LocomotiveCMS
             elsif html.css('.activity-block').size == 1 and html.css('.activity-block h2').length > 0
               block = html.at_css('.activity-block h2')["id"]
 
-              html.at_css('.activity-block').add_next_sibling(el)
+             html.at_css('.activity-block').add_next_sibling(el)
               if html.css(".toc-list").size > 0
                 el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
-                html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent) 
+                el2.remove
               end
               #el.remove
             elsif html.css('.video-block-wrapper').size == 1
