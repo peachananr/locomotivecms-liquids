@@ -51,9 +51,9 @@ module LocomotiveCMS
           doc = Nokogiri::HTML(input)
           
           p_tags = doc.css('body > p')
-          
+          counter = 0
           p_tags.each do |p_tag|
-            counter = 0
+            
 
             if p_tag.name == "p"              
               if counter == 0 
