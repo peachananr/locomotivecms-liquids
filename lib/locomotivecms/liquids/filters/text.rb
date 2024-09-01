@@ -44,7 +44,7 @@ module LocomotiveCMS
           e[att].to_s
         end
 
-        def add_blocks(input)
+        def add_blocks(input, p_limit = 5)
           require 'nokogiri'
           #given this input = "<h2>xxx</h2><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><h2>yyy</h2><p></p><p></p>"
 
@@ -64,7 +64,7 @@ module LocomotiveCMS
       
               end
               counter = counter + 1
-              if counter == 5 
+              if counter == p_limit 
                 counter = 0
                 p_tag.add_previous_sibling('<div class="new-intro-close"></div>')   
                 inside_div = false  
