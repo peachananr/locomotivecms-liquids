@@ -44,6 +44,35 @@ module LocomotiveCMS
           e[att].to_s
         end
 
+        def add_blocks(input, p_num = '5')
+          require 'nokogiri'
+          doc = Nokogiri::HTML.fragment(input)
+
+          # Find all <p> tags
+          p_tags = doc.css('p')
+
+          # Create an empty array to hold the new structure
+          new_structure = []
+
+          # Iterate over p_tags in groups of 5
+          p_tags.each_slice(p_num) do |group|
+            # Create a new <div>
+            div = Nokogiri::XML::Node.new("div", doc)
+            
+            # Append each <p> tag to the new <div>
+            group.each { |p| div.add_child(p) }
+            
+            # Add the new <div> to the new structure
+            new_structure << div
+          end
+
+          # Replace the old structure with the new one
+          doc.children = new_structure
+
+          # Output the modified HTML
+          doc.to_html
+        end
+
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
           require 'nokogiri'
           html = Nokogiri.HTML(input)
