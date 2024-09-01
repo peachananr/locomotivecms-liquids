@@ -48,23 +48,46 @@ module LocomotiveCMS
           require 'nokogiri'
           doc = Nokogiri::HTML(html)
 
-# Select all <p> tags
-p_tags = doc.css('body > p')
+          # Select all <p> tags
+          p_tags = doc.css('body > p')
 
-# Loop through the <p> tags in groups of 5
-p_tags.each_slice(5) do |slice|
-  # Create a new <div> element
-  wrapper_div = Nokogiri::XML::Node.new("div", doc)
-  
-  # Append each <p> tag in the slice to the new <div>
-  slice.each do |p_tag|
-    wrapper_div.add_child(p_tag)
-  end
+          # Initialize a counter and a list to hold groups of <p> tags
+          counter = 0
+          p_group = []
 
-  # Insert the <div> into the document, replacing the first <p> in the slice
-  slice.first.add_next_sibling(wrapper_div)
-end
-doc.css("body").inner_html
+          p_tags.each do |p_tag|
+            # Add the current <p> tag to the group
+            p_group << p_tag
+            counter += 1
+
+            # If we have 5 <p> tags, wrap them in a <div>
+            if counter == 5
+              # Create a new <div> element
+              wrapper_div = Nokogiri::XML::Node.new("div", doc)
+
+              # Move each <p> tag into the <div>
+              p_group.each do |p|
+                wrapper_div.add_child(p)
+              end
+
+              # Insert the <div> before the first <p> in the group
+              p_group.first.add_previous_sibling(wrapper_div)
+
+              # Reset the counter and group
+              counter = 0
+              p_group = []
+            end
+          end
+
+          # Handle any remaining <p> tags (less than 5)
+          unless p_group.empty?
+            wrapper_div = Nokogiri::XML::Node.new("div", doc)
+            p_group.each do |p|
+              wrapper_div.add_child(p)
+            end
+            p_group.first.add_previous_sibling(wrapper_div)
+          end
+          doc.css("body").inner_html
 
         end
 
