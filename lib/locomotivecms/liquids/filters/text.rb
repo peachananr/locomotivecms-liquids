@@ -63,7 +63,7 @@ module LocomotiveCMS
                 inside_div = true
       
               elsif  counter == p_limit 
-                p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
                 counter = 0
                 inside_div = false  
                 next
@@ -85,7 +85,7 @@ module LocomotiveCMS
             end
           end
 
-          doc.css("body").inner_html.gsub('<div class="new-intro-open"></div>','<div class="content-block">').gsub('<div class="new-intro-close"></div>','</div>')
+          doc.css("body").inner_html.gsub('<div class="new-intro-open"></div>','<div>').gsub('<div class="new-intro-close"></div>','</div>')
         end
 
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
