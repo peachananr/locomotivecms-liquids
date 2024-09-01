@@ -85,7 +85,7 @@ module LocomotiveCMS
             end
           end
 
-          doc.css("body").inner_html.gsub('<div class="new-intro-open"></div>','<div>').gsub('<div class="new-intro-close"></div>','</div>')
+          doc.css("body").inner_html.gsub('<div class="new-intro-open"></div>','<div class="content-block">').gsub('<div class="new-intro-close"></div>','</div>')
         end
 
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
