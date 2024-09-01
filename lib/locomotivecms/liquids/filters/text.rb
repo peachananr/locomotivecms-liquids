@@ -61,7 +61,7 @@ module LocomotiveCMS
                 start = true
                 p_tag.add_previous_sibling('<div class="new-intro-open">')              
               end
-            else
+            end
           end
 
           if start == true
