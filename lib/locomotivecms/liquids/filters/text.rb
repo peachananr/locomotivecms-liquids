@@ -56,11 +56,11 @@ module LocomotiveCMS
 
             if p_tag.css(".lightbox-full").length > 0
               if start == true
-                p_tag.add_previous_sibling('<div class="new-intro-close">')          
+                p_tag.add_previous_sibling('<div class="new-intro-close"></div>')          
                 start = false
               else
                 start = true
-                p_tag.add_previous_sibling('<div class="new-intro-open">')              
+                p_tag.add_previous_sibling('<div class="new-intro-open"></div>')              
               end
             end
           end
@@ -70,7 +70,7 @@ module LocomotiveCMS
             last_element = elements.last
             last_element.remove if last_element
           end
-          doc.css("body").inner_html.gsub('<div class="new-intro-open">','<div>').gsub('<div class="new-intro-close">','</div>')
+          doc.css("body").inner_html.gsub('<div class="new-intro-open"></div>','<div>').gsub('<div class="new-intro-close"></div>','</div>')
         end
 
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
