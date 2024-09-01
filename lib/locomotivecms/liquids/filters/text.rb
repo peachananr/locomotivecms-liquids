@@ -52,24 +52,29 @@ module LocomotiveCMS
           
           p_tags = doc.css('body > p')
           counter = 0
+          inside_div = false
+
           p_tags.each do |p_tag|
             
 
             if p_tag.name == "p"              
               if counter == 0 
-                p_tag.add_previous_sibling('<div class="new-intro-open"></div>')          
+                p_tag.add_previous_sibling('<div class="new-intro-open"></div>')    
+                inside_div = true
+      
               end
               counter = counter + 1
               if counter == 5 
                 counter = 0
-                p_tag.add_previous_sibling('<div class="new-intro-close"></div>')     
-
+                p_tag.add_previous_sibling('<div class="new-intro-close"></div>')   
+                inside_div = false  
               end
               if p_tag.next_element.name == "p"
 
               else
                 p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>') 
                 counter = 0
+                inside_div = false
               end
             end
           end
