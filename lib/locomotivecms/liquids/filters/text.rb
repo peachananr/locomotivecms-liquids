@@ -44,51 +44,32 @@ module LocomotiveCMS
           e[att].to_s
         end
 
-        def add_blocks(input, p_num = '5')
+        def add_blocks(input)
           require 'nokogiri'
           doc = Nokogiri::HTML(html)
 
           # Select all <p> tags
-          p_tags = doc.css('body > p')
-
-          # Initialize a counter and a list to hold groups of <p> tags
-          counter = 0
-          p_group = []
+          p_tags = doc.css('p')
+          start = false
 
           p_tags.each do |p_tag|
-            # Add the current <p> tag to the group
-            p_group << p_tag
-            counter += 1
 
-            # If we have 5 <p> tags, wrap them in a <div>
-            if counter == 5
-              # Create a new <div> element
-              wrapper_div = Nokogiri::XML::Node.new("div", doc)
-
-              # Move each <p> tag into the <div>
-              p_group.each do |p|
-                wrapper_div.add_child(p)
+            if p['class'] == 'lightroom-full'
+              if start == true
+                p_tag.add_previous_sibling('<div class="new-intro-close">')          
+              else
+                start = true
+                p_tag.add_previous_sibling('<div class="new-intro-open">')              
               end
-
-              # Insert the <div> before the first <p> in the group
-              p_group.first.add_previous_sibling(wrapper_div)
-
-              # Reset the counter and group
-              counter = 0
-              p_group = []
-            end
+            else
           end
 
-          # Handle any remaining <p> tags (less than 5)
-          unless p_group.empty?
-            wrapper_div = Nokogiri::XML::Node.new("div", doc)
-            p_group.each do |p|
-              wrapper_div.add_child(p)
-            end
-            p_group.first.add_previous_sibling(wrapper_div)
+          if start == true
+            doc.css('.new-intro-open')
+            last_element = elements.last
+            last_element.remove if last_element
           end
-          doc.css("body").inner_html
-
+          doc.css("body").inner_html.gsub('<div class="new-intro-open">','<div>').gsub('<div class="new-intro-close">','</div>')
         end
 
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
