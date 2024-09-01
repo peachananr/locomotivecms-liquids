@@ -46,30 +46,34 @@ module LocomotiveCMS
 
         def add_blocks(input)
           require 'nokogiri'
+          #given this input = "<h2>xxx</h2><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><h2>yyy</h2><p></p><p></p>"
+
           doc = Nokogiri::HTML(input)
-
-          # Select all <p> tags
-          p_tags = doc.css('p')
-          start = false
-
+          
+          p_tags = doc.css('> p')
+          
           p_tags.each do |p_tag|
+            counter = 0
 
-            if p_tag.css(".lightbox-full").length > 0
-              if start == true
-                p_tag.add_previous_sibling('<div class="new-intro-close"></div>')          
-                start = false
+            if p_tag.name == "p"              
+              if counter == 0 
+                p_tag.add_previous_sibling('<div class="new-intro-open"></div>')          
+              end
+              counter = counter + 1
+              if counter == 5 
+                counter = 0
+                p_tag.add_previous_sibling('<div class="new-intro-close"></div>')     
+
+              end
+              if p_tag.next_element.name == "p"
+
               else
-                start = true
-                p_tag.add_previous_sibling('<div class="new-intro-open"></div>')              
+                p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>') 
+                counter = 0
               end
             end
           end
 
-          if start == true
-            doc.css('.new-intro-open')
-            last_element = elements.last
-            last_element.remove if last_element
-          end
           doc.css("body").inner_html.gsub('<div class="new-intro-open"></div>','<div>').gsub('<div class="new-intro-close"></div>','</div>')
         end
 
