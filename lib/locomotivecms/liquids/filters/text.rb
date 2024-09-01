@@ -45,7 +45,30 @@ module LocomotiveCMS
         end
 
         def add_blocks(input)
-          
+          require 'nokogiri'
+          doc = Nokogiri::HTML(input)
+
+          # Select all <p> tags
+          p_tags = doc.css('p')
+          start = false
+
+          p_tags.each do |p_tag|
+
+            if p['class'] == 'lightroom-full'
+              if start == true
+                p_tag.add_previous_sibling('<div class="new-intro-close">')          
+              else
+                start = true
+                p_tag.add_previous_sibling('<div class="new-intro-open">')              
+              end
+            end
+          end
+
+          if start == true
+            doc.css('.new-intro-open')
+            last_element = elements.last
+            last_element.remove if last_element
+          end
           doc.css("body").inner_html.gsub('<div class="new-intro-open">','<div>').gsub('<div class="new-intro-close">','</div>')
         end
 
