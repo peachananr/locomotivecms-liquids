@@ -54,7 +54,7 @@ module LocomotiveCMS
 
           p_tags.each do |p_tag|
 
-            if !p['class'].nil? and p['class'] == 'lightroom-full'
+            if !p_tag['class'].nil? and p_tag['class'] == 'lightroom-full'
               if start == true
                 p_tag.add_previous_sibling('<div class="new-intro-close">')          
               else
