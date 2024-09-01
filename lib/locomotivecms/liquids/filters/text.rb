@@ -46,31 +46,36 @@ module LocomotiveCMS
 
         def add_blocks(input, p_num = '5')
           require 'nokogiri'
-          doc = Nokogiri::HTML.fragment(input)
+          doc = Nokogiri::HTML.fragment(html)
 
-          # Find all <p> tags
-          p_tags = doc.css('p')
+# Find all <p> tags
+p_tags = doc.css('p')
 
-          # Create an empty array to hold the new structure
-          new_structure = []
+# Create a temporary array to hold the tags
+temp_array = []
 
-          # Iterate over p_tags in groups of 5
-          p_tags.each_slice(p_num) do |group|
-            # Create a new <div>
-            div = Nokogiri::XML::Node.new("div", doc)
-            
-            # Append each <p> tag to the new <div>
-            group.each { |p| div.add_child(p) }
-            
-            # Add the new <div> to the new structure
-            new_structure << div
-          end
+# Iterate over p_tags in groups of 5
+p_tags.each_slice(5) do |group|
+  # Create a new <div>
+  div = Nokogiri::XML::Node.new("div", doc)
+  
+  # Append each <p> tag to the new <div>
+  group.each { |p| div.add_child(p) }
+  
+  # Replace the group of <p> tags in the original document with the new <div>
+  temp_array << { div: div, after: group.last }
+end
 
-          # Replace the old structure with the new one
-          doc.children = new_structure
+# Now insert the wrapped divs back into the document
+temp_array.each do |item|
+  item[:after].add_next_sibling(item[:div])
+end
 
-          # Output the modified HTML
-          doc.to_html
+# Remove the original p tags as they have been wrapped into the divs
+doc.css('p').remove
+
+# Output the modified HTML
+ doc.to_html
         end
 
         def limit_ads(input, freq = '3', limit = '50', placeholder = '<div class="content_hint"></div>' )
