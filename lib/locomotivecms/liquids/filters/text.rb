@@ -74,7 +74,9 @@ module LocomotiveCMS
 
               counter = counter + 1
 
-              if p_tag.next_element.nil? or p_tag.next_element.name != "p"
+              if !p_tag.next_element.nil? and p_tag.next_element.name == "p"
+
+              else
                 if inside_div == true
                   p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>') 
                   counter = 0
