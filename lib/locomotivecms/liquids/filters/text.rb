@@ -56,8 +56,8 @@ module LocomotiveCMS
 
             if p_tag.css(".lightbox-full").length > 0
               if start == true
-                p_tag.add_previous_sibling('<div class="new-intro-close"></div>')          
-                start = false
+                p_tag.add_previous_sibling('<div class="new-intro-close"></div><div class="new-intro-open"></div>')          
+                
               else
                 start = true
                 p_tag.add_previous_sibling('<div class="new-intro-open"></div>')              
