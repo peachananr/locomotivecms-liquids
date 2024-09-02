@@ -64,7 +64,7 @@ module LocomotiveCMS
       
               elsif  counter == p_limit 
                 if p_tag.previous_element.text.length < 1
-                  p_tag.add_nexr_sibling("<div class=\"new-intro-close\"></div>")  
+                  p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                 else
                   #change to add_next_sibling to make it correct
                   p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
