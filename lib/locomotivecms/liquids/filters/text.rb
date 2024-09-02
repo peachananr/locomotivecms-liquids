@@ -64,7 +64,7 @@ module LocomotiveCMS
       
               elsif  counter == p_limit 
                 #change to add_next_sibling to make it correct
-                p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
+                p_tag.add_next_sibling("<div class=\"new-intro-close\"></div><p></p>")  
                 counter = 0
                 inside_div = false  
                 next
@@ -79,9 +79,9 @@ module LocomotiveCMS
               else
                 if inside_div == true
                   if !p_tag.next_element.nil?
-                    p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>') 
+                    p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div><p></p>') 
                   else
-                    p_tag.add_previous_sibling('<div class="new-intro-close"></div>') 
+                    p_tag.add_previous_sibling('<div class="new-intro-close"></div><p></p>') 
                   end
                   counter = 0
                   inside_div = false
