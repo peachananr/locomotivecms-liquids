@@ -49,11 +49,11 @@ module LocomotiveCMS
           #given this input = "<h2>xxx</h2><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><h2>yyy</h2><p></p><p></p>"
 
           doc = Nokogiri::HTML(input)
-          
+          doc.search('p.temp').remove
           p_tags = doc.css('body > p, body > ol, body > ul')
           counter = 0
           inside_div = false
-
+          
           p_tags.each do |p_tag|
             
 
