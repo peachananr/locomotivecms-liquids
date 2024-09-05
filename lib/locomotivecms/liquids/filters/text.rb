@@ -71,7 +71,7 @@ module LocomotiveCMS
       
               elsif counter == p_limit 
                 if !p_tag.next_element.nil? and !p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block"
-                  if !p_tag.next_element.next_element.nil? and (p_tag.next_element.next_element.css(".accommodation-block").length > 0  or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "accommodation-block"))
+                  if !p_tag.next_element.next_element.nil? and (p_tag.next_element.next_element.css(".accommodation-block").length > 0  or (!p_tag.next_element.next_element["class"].nil? and p_tag.next_element.next_element["class"] == "accommodation-block"))
                     p_tag.next_element.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                   else
                     p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
