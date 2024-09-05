@@ -123,8 +123,8 @@ module LocomotiveCMS
                 inside_div = false  
                 next
               end
+
               counter = counter + 1
-              
 
               if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol")
 
@@ -146,11 +146,6 @@ module LocomotiveCMS
                   counter = 0
                   inside_div = false
                 end
-              end
-
-              if p_tag.text.length > 0 and p_tag.text.length < 150  and counter != 0 and inside_div == true
-                counter = counter - 1              
-                
               end
             end
           end
