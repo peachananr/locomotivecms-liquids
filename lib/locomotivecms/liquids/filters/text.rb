@@ -72,21 +72,27 @@ module LocomotiveCMS
                 
       
               elsif counter == p_limit 
-                if p_tag.text.length < 1                  
-                  if !p_tag.next_element.nil?                    
-                    p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
-                  else
-                      p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
-                  end
+                if !p_tag.next_element.nil? and !p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block"
+
+                  p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                 else
-                  #change to add_next_sibling to make it correct
-                  if mode != "old"
-                    p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                  if p_tag.text.length < 1                  
+                    if !p_tag.next_element.nil?                    
+                      p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                    else
+                        p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
+                    end
                   else
-                    p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
+                    #change to add_next_sibling to make it correct
+                    if mode != "old"
+                      p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                    else
+                      p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
+                    end
                   end
                 end
                 
+
                 counter = 0
                 inside_div = false  
                 next
