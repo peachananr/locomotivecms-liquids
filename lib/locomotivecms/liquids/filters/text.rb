@@ -59,11 +59,11 @@ module LocomotiveCMS
 
             if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol"
               if counter == 0 
-                if p_tag.previous_element.name == "h2"
+                if !p_tag.previous_element.nil? and p_tag.previous_element.name == "h2"
                   p_tag.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
-                elsif p_tag.previous_element.name == "h3" and p_tag.previous_element["class"].include? "adj-header"
+                elsif !p_tag.previous_element.nil? and p_tag.previous_element.name == "h3" and p_tag.previous_element["class"].include? "adj-header"
                     p_tag.previous_element.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>")    
-                elsif p_tag.previous_element.name == "h4"
+                elsif !p_tag.previous_element.nil? and p_tag.previous_element.name == "h4"
                     p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")                     
                 else
                   p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
