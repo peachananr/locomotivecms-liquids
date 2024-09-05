@@ -79,7 +79,7 @@ module LocomotiveCMS
             
 
             if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol"
-              if p_tag.parent.name == "div" and p_tag.parent["class"].nil?
+              if p_tag.parent.name == "div" and p_tag.parent["class"].nil? and
                 p_tag = p_tag.parent
               end
               if counter == 0 
@@ -144,6 +144,7 @@ module LocomotiveCMS
                   end
                   counter = 0
                   inside_div = false
+                  next
                 end
               end
 
