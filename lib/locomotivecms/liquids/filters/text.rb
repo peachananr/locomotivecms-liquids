@@ -44,25 +44,35 @@ module LocomotiveCMS
           e[att].to_s
         end
 
-        def add_blocks(input, p_limit = 5, mode = "old")
+        def no_ad_before_summary(input)
           require 'nokogiri'
-          #given this input = "<h2>xxx</h2><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><h2>yyy</h2><p></p><p></p>"
-
           doc = Nokogiri::HTML(input)
-          doc.search('p.temp').remove
-          p_tags = doc.css('body > p, body > ol, body > ul')
-          counter = 0
-          inside_div = false
 
-          doc.at_css("#pinterest").remove()
           if doc.css(".itinerary-summary-wrapper").length > 0 
             if !doc.at_css(".itinerary-summary-wrapper").previous_element.nil? and !doc.at_css(".itinerary-summary-wrapper").previous_element["class"].nil?
               if doc.at_css(".itinerary-summary-wrapper").previous_element["class"] == "intro-close"
                 doc.at_css(".itinerary-summary-wrapper").previous_element.remove
                 doc.at_css(".itinerary-summary-wrapper").add_next_sibling("<div class=\"intro-close\"></div>")
+                
               end
             end
           end
+          doc.css("body").inner_html
+        end
+
+        def add_blocks(input, p_limit = 5, mode = "old")
+          require 'nokogiri'
+          #given this input = "<h2>xxx</h2><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><h2>yyy</h2><p></p><p></p>"
+
+          doc = Nokogiri::HTML(input)
+          
+          doc.at_css("#pinterest").remove()
+          doc.search('p.temp').remove
+          
+          p_tags = doc.css('body > p, body > ol, body > ul')
+          counter = 0
+          inside_div = false
+          
             
 
           p_tags.each do |p_tag|
