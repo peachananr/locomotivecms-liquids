@@ -53,7 +53,18 @@ module LocomotiveCMS
           p_tags = doc.css('body > p, body > ol, body > ul')
           counter = 0
           inside_div = false
-          
+
+          doc.at_css("#pinterest").remove()
+          if doc.css(".itinerary-summary-wrapper").length > 0 
+            if !doc.at_css(".itinerary-summary-wrapper").previous_element.nil? and !doc.at_css(".itinerary-summary-wrapper").previous_element["class"].nil?
+              if doc.at_css(".itinerary-summary-wrapper").previous_element["class"] == "intro-close"
+                doc.at_css(".itinerary-summary-wrapper").previous_element.remove
+                doc.at_css(".itinerary-summary-wrapper").add_next_sibling("<div class=\"intro-close\"></div>")
+              end
+            end
+          end
+            
+
           p_tags.each do |p_tag|
             
 
@@ -865,20 +876,20 @@ module LocomotiveCMS
           end
           
           if html.css('#pinterest').size > 0
+            
+            #target_p = 'body > h2 ~ p:not(:empty):not(:has(img)):not(.tips-block), body > h3 ~ p:not(:empty):not(:has(img)):not(.tips-block)'
+            #if !html.css(target_p).nil? and !html.css(target_p)[2].nil?
+            #  pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
+            #  html.at_css("#pinterest").remove()
+            #  html.css(target_p)[2].add_next_sibling(pinterest)
+            #end
 
-            target_p = 'body > h2 ~ p:not(:empty):not(:has(img)):not(.tips-block), body > h3 ~ p:not(:empty):not(:has(img)):not(.tips-block)'
-            if !html.css(target_p).nil? and !html.css(target_p)[2].nil?
-              pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
-              html.at_css("#pinterest").remove()
-              html.css(target_p)[2].add_next_sibling(pinterest)
-            end
-
-            target_p = 'body > h2 ~ p:not(:empty):not(:has(img)):not(.tips-block), body > h3 ~ p:not(:empty):not(:has(img)):not(.tips-block)'
-            if !html.css(target_p).nil? and !html.css(target_p)[2].nil?
-              pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
-              html.at_css("#pinterest").remove()
-              html.css(target_p)[2].add_next_sibling(pinterest)
-            end
+            #target_p = 'body > h2 ~ p:not(:empty):not(:has(img)):not(.tips-block), body > h3 ~ p:not(:empty):not(:has(img)):not(.tips-block)'
+            #if !html.css(target_p).nil? and !html.css(target_p)[2].nil?
+            #  pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
+            # html.at_css("#pinterest").remove()
+            #  html.css(target_p)[2].add_next_sibling(pinterest)
+            #end
           end
           
           if html.css('.accommodation-block:not(.dont-move)').size == 1
