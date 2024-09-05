@@ -103,12 +103,16 @@ module LocomotiveCMS
 
               counter = counter + 1
 
-              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol"  or p_tag.next_element.css(".accommodation-block").length > 0)
+              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol")
 
               else
                 if inside_div == true
                   if !p_tag.next_element.nil?
+                    if p_tag.next_element.css(".accommodation-block").length > 0
+                      p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')                       
+                    else
                       p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>')                       
+                    end
                   else
                       p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
                   end
