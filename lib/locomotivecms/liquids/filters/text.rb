@@ -69,7 +69,7 @@ module LocomotiveCMS
           doc.at_css("#pinterest").remove()
           doc.search('p.temp').remove
           
-          p_tags = doc.css('body > p, body > ol, body > ul, body > div > p')
+          p_tags = doc.css('body > p, body > ol, body > ul')
           counter = 0
           inside_div = false
           
@@ -80,9 +80,6 @@ module LocomotiveCMS
 
             if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol"
               if counter == 0 
-                if p_tag.parent.name == "div" and p_tag.parent["class"].nil?
-                  p_tag = p_tag.parent
-                end
                 if !p_tag.previous_element.nil? and (p_tag.previous_element.name == "h2" or p_tag.previous_element.name == "h3" or p_tag.previous_element.name == "h4")
                   if p_tag.previous_element.name == "h3" and !p_tag.previous_element["class"].nil? and p_tag.previous_element["class"].include? "adj-header"
                       p_tag.previous_element.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>")     
@@ -150,8 +147,6 @@ module LocomotiveCMS
                   inside_div = false
                 end
               end
-
-             
             end
           end
 
