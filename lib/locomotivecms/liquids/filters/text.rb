@@ -108,7 +108,7 @@ module LocomotiveCMS
                   p_tag.add_next_sibling("cc")
                   p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                 else
-                  p_tag.add_next_sibling("dd")
+                  p_tag.add_next_sibling("#{p_tag.text}:#{p_tag.text.length}")
                   if p_tag.text.length < 1                  
                     if !p_tag.next_element.nil?                    
                       p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
