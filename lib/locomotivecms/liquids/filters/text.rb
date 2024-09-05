@@ -81,9 +81,9 @@ module LocomotiveCMS
                     p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
                   end
                 end
+
                 counter = 0
-                inside_div = false  
-                next
+                inside_div = false                  
               end
 
               counter = counter + 1
