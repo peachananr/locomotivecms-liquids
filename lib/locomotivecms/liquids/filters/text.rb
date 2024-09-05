@@ -44,7 +44,7 @@ module LocomotiveCMS
           e[att].to_s
         end
 
-        def add_blocks(input, p_limit = 5)
+        def add_blocks(input, p_limit = 5, mode = "old")
           require 'nokogiri'
           #given this input = "<h2>xxx</h2><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><h2>yyy</h2><p></p><p></p>"
 
@@ -64,14 +64,22 @@ module LocomotiveCMS
       
               elsif  counter == p_limit 
                 if p_tag.text.length < 1                  
-                  if !p_tag.next_element.nil?
+                  if !p_tag.next_element.nil?                    
                     p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                   else
-                    p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                    if mode != "old"
+                      p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                    else
+                      p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
+                    end
                   end
                 else
                   #change to add_next_sibling to make it correct
-                  p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                  if mode != "old"
+                    p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                  else
+                    p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
+                  end
                 end
                 counter = 0
                 inside_div = false  
