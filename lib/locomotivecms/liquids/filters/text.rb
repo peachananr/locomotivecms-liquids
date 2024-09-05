@@ -151,9 +151,7 @@ module LocomotiveCMS
                 end
               end
 
-              if p_tag.text.length > 0 and p_tag.text.length < 150  and counter > 1 and inside_div == true
-                counter = counter - 1                              
-              end
+             
             end
           end
 
