@@ -93,18 +93,9 @@ module LocomotiveCMS
               else
                 if inside_div == true
                   if !p_tag.next_element.nil?
-                    if mode != "old"
-                      p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>') 
-                    else
-                      p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>') 
-                      
-                    end
+                      p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>')                       
                   else
-                    if mode != "old"
-                      p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
-                    else
-                      p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
-                    end
+                      p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
                   end
                   counter = 0
                   inside_div = false
