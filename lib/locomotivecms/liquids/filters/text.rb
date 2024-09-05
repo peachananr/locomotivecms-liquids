@@ -96,23 +96,23 @@ module LocomotiveCMS
                 
       
               elsif counter == p_limit 
-                p_tag.add_next_sibling("aa")
                 if !p_tag.next_element.nil? and !p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block"
-                  p_tag.add_next_sibling("bb")
                   if !p_tag.next_element.next_element.nil? and (p_tag.next_element.next_element.css(".accommodation-block").length > 0  or (!p_tag.next_element.next_element["class"].nil? and p_tag.next_element.next_element["class"] == "accommodation-block"))
                     p_tag.next_element.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                   else
                     p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                   end
                 elsif !p_tag.next_element.nil? and (p_tag.next_element.css(".accommodation-block").length > 0  or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "accommodation-block") or (!p_tag.next_element["class"].nil? and (p_tag.next_element["class"] == "readmore-block")))
-                  p_tag.add_next_sibling("cc")
                   p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                 else
-                  p_tag.add_next_sibling("#{p_tag.text}:#{p_tag.text.length}")
-                  if p_tag.text.length < 1                  
-                    if !p_tag.next_element.nil?                    
+                  if p_tag.text.length < 1             
+
+                    if !p_tag.next_element.nil?       
+                      p_tag.add_next_sibling("bb")
+             
                       p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                     else
+                      p_tag.add_next_sibling("cc")
                         p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
                     end
                   else                    
@@ -120,7 +120,6 @@ module LocomotiveCMS
                   end
                 end
                 
-                p_tag.add_next_sibling("xxx")
                 counter = 0
                 inside_div = false  
                 next
