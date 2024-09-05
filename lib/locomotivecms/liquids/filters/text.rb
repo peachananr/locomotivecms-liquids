@@ -85,9 +85,9 @@ module LocomotiveCMS
                 end
                 if !p_tag.previous_element.nil? and (p_tag.previous_element.name == "h2" or p_tag.previous_element.name == "h3" or p_tag.previous_element.name == "h4")
                   if p_tag.previous_element.name == "h3" and !p_tag.previous_element["class"].nil? and p_tag.previous_element["class"].include? "adj-header"
-                      p_tag.previous_element.previous_element.add_previous_sibling("z#{index}<div class=\"new-intro-open\"></div>")     
+                      p_tag.previous_element.previous_element.add_previous_sibling("#{index}<div class=\"new-intro-open\"></div>")     
                   else
-                    p_tag.previous_element.add_previous_sibling("y#{index}<div class=\"new-intro-open\"></div>") 
+                    p_tag.previous_element.add_previous_sibling("#{index}<div class=\"new-intro-open\"></div>") 
                   end
                 else
                   p_tag.add_previous_sibling("x#{index}<div class=\"new-intro-open\"></div>")                      
@@ -103,17 +103,17 @@ module LocomotiveCMS
                     p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                   end
                 elsif !p_tag.next_element.nil? and (p_tag.next_element.css(".accommodation-block").length > 0  or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "accommodation-block") or (!p_tag.next_element["class"].nil? and (p_tag.next_element["class"] == "readmore-block")))
-                  p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                  p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>x#{index}")  
                 else
                   if p_tag.text.length < 1             
 
                     if !p_tag.next_element.nil?                    
-                      p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                      p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>y#{index}")  
                     else
-                        p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
+                        p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>z#{index}")                      
                     end
                   else                    
-                    p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                    p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>zz#{index}")  
                   end
                 end
                 
