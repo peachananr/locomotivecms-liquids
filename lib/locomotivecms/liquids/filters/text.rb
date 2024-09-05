@@ -50,7 +50,7 @@ module LocomotiveCMS
 
           doc = Nokogiri::HTML(input)
           
-          p_tags = doc.css('.post_body > p,.post_body > ul,.post_body > ol')
+          p_tags = doc.css('body > p, body > ol, body > ul')
           counter = 0
           inside_div = false
 
