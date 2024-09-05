@@ -85,12 +85,12 @@ module LocomotiveCMS
                 end
                 if !p_tag.previous_element.nil? and (p_tag.previous_element.name == "h2" or p_tag.previous_element.name == "h3" or p_tag.previous_element.name == "h4")
                   if p_tag.previous_element.name == "h3" and !p_tag.previous_element["class"].nil? and p_tag.previous_element["class"].include? "adj-header"
-                      p_tag.previous_element.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>")     
+                      p_tag.previous_element.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>zz")     
                   else
-                    p_tag.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>") 
+                    p_tag.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>yy") 
                   end
                 else
-                  p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
+                  p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>xx")                      
                 end
                 inside_div = true
                 
@@ -148,7 +148,6 @@ module LocomotiveCMS
                   end
                   counter = 0
                   inside_div = false
-                  next
                 end
               end
 
