@@ -75,7 +75,7 @@ module LocomotiveCMS
           
             
 
-          p_tags.each do |p_tag|
+          p_tags.each_with_index do |p_tag,index|
             
 
             if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol"
@@ -85,12 +85,12 @@ module LocomotiveCMS
                 end
                 if !p_tag.previous_element.nil? and (p_tag.previous_element.name == "h2" or p_tag.previous_element.name == "h3" or p_tag.previous_element.name == "h4")
                   if p_tag.previous_element.name == "h3" and !p_tag.previous_element["class"].nil? and p_tag.previous_element["class"].include? "adj-header"
-                      p_tag.previous_element.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>")     
+                      p_tag.previous_element.previous_element.add_previous_sibling("#{index}<div class=\"new-intro-open\"></div>")     
                   else
-                    p_tag.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>") 
+                    p_tag.previous_element.add_previous_sibling("#{index}<div class=\"new-intro-open\"></div>") 
                   end
                 else
-                  p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
+                  p_tag.add_previous_sibling("#{index}<div class=\"new-intro-open\"></div>")                      
                 end
                 inside_div = true
                 
@@ -108,7 +108,7 @@ module LocomotiveCMS
                   if p_tag.text.length < 1             
 
                     if !p_tag.next_element.nil?                    
-                      p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>FFF")  
+                      p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                     else
                         p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
                     end
