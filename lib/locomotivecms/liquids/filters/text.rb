@@ -107,9 +107,9 @@ module LocomotiveCMS
                 else
                   if p_tag.text.length < 1                  
                     if !p_tag.next_element.nil?                    
-                      p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>yy")  
+                      p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")  
                     else
-                        p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>xx")                      
+                        p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
                     end
                   else
                     #change to add_next_sibling to make it correct
@@ -148,10 +148,13 @@ module LocomotiveCMS
                   end
                   counter = 0
                   inside_div = false
+                  next
                 end
               end
 
-             
+              if p_tag.text.length > 0 and p_tag.text.length < 150  and counter > 1 and inside_div == true
+                counter = counter - 1                              
+              end
             end
           end
 
