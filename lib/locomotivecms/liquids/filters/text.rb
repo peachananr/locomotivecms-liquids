@@ -103,7 +103,7 @@ module LocomotiveCMS
 
               counter = counter + 1
 
-              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol")
+              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol"  or p_tag.next_element.css(".accommodation-block").length > 0)
 
               else
                 if inside_div == true
