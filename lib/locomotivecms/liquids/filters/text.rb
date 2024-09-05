@@ -50,14 +50,14 @@ module LocomotiveCMS
 
           doc = Nokogiri::HTML(input)
           
-          p_tags = doc.css('body > p')
+          p_tags = doc.css('.post_body > p,.post_body > ul,.post_body > ol')
           counter = 0
           inside_div = false
 
           p_tags.each do |p_tag|
             
 
-            if p_tag.name == "p"              
+            if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol"
               if counter == 0 
                 p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")    
                 inside_div = true
@@ -93,9 +93,18 @@ module LocomotiveCMS
               else
                 if inside_div == true
                   if !p_tag.next_element.nil?
-                    p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>') 
+                    if mode != "old"
+                      p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>') 
+                    else
+                      p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>') 
+                      
+                    end
                   else
-                    p_tag.add_previous_sibling('<div class="new-intro-close"></div>') 
+                    if mode != "old"
+                      p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")  
+                    else
+                      p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")  
+                    end
                   end
                   counter = 0
                   inside_div = false
