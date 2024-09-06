@@ -125,7 +125,7 @@ module LocomotiveCMS
 
               counter = counter + 1
 
-              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol" or (p_tag.next_element.name == "div" and p_tag.next_element["class"].nil? and  p_tag.next_element.css("p").length > 0))
+              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol")
 
               else
                 if inside_div == true
