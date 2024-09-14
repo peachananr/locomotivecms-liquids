@@ -79,7 +79,7 @@ module LocomotiveCMS
             
 
             if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol"
-              if p_tag.parent.name == "div" and p_tag.parent["class"].nil? and p_tag.css("h2, h3").length == 0
+              if p_tag.parent.name == "div" and p_tag.parent["class"].nil?
                 p_tag = p_tag.parent
               end
               # Opening Block
@@ -1004,7 +1004,7 @@ module LocomotiveCMS
           if html.css('.table-of-contents-wrapper').size > 0
             html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
             string = html.css('body').first.to_s
-            string.gsub!("<body>", "<body><div>")
+            string.gsub!("<body>", "<body><div class='intro-block'>")
             string.gsub!("-xxx</div>", "</div></div>")
             html = Nokogiri.HTML(string)
           end
