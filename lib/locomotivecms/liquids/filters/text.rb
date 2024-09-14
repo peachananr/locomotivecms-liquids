@@ -69,7 +69,7 @@ module LocomotiveCMS
           doc.at_css("#pinterest").remove()
           doc.search('p.temp').remove
           
-          p_tags = doc.css('body > p, body > ol, body > ul, body > div > p')
+          p_tags = doc.css('body > p, body > ol, body > ul, body > div > p, body > .video-block, body > .audio-block')
           counter = 0
           inside_div = false
           
@@ -91,11 +91,7 @@ module LocomotiveCMS
                     p_tag.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>") 
                   end
                 else
-                  if !p_tag.previous_element.nil? and p_tag.previous_element.name == "div" and !p_tag.previous_element["class"].nil? and p_tag.previous_element["class"].include? "-block"
-                    p_tag.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
-                  else
-                    p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
-                  end
+                  p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
                 end
                 inside_div = true
                 
@@ -128,13 +124,13 @@ module LocomotiveCMS
               end
 
               counter = counter + 1
-              # If reach the end, close Block
+              # If reach limit, close Block
               if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol")
 
               else
                 if inside_div == true
                   if !p_tag.next_element.nil?
-                    if (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block") or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"].include? "-block" and p_tag.next_element.name == "div") or p_tag.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "accommodation-block")                      
+                    if (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block") or p_tag.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "accommodation-block")                      
                       if !p_tag.next_element.next_element.nil? and (p_tag.next_element.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element.next_element["class"].nil? and p_tag.next_element.next_element["class"] == "accommodation-block"))
                         p_tag.next_element.next_element.add_next_sibling('<div class="new-intro-close"></div>')
                       else
