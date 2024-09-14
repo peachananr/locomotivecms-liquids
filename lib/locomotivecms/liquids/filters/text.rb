@@ -78,7 +78,7 @@ module LocomotiveCMS
           p_tags.each_with_index do |p_tag,index|
             
 
-            if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol"
+            if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol" or (p_tag.name == "div" and !p_tag["class"].nil? and p_tag["class"].include? "-block")
               if p_tag.parent.name == "div" and p_tag.parent["class"].nil?
                 p_tag = p_tag.parent
               end
