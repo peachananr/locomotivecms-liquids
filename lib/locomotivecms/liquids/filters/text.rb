@@ -79,7 +79,7 @@ module LocomotiveCMS
             
 
             if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol"
-              if p_tag.parent.name == "div" and p_tag.parent["class"].nil? and
+              if p_tag.parent.name == "div" and p_tag.parent["class"].nil? and p_tag.css("h2, h3").length == 0
                 p_tag = p_tag.parent
               end
               # Opening Block
