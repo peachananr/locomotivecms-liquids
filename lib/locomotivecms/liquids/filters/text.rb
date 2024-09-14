@@ -127,7 +127,7 @@ module LocomotiveCMS
               # If next element is nil close Block
               if p_tag.next_element.nil?
                 if inside_div == true
-                  p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')
+                  p_tag.add_next_sibling('<div class="new-intro-close"></div>')
                   counter = 0
                   inside_div = false
                   next
