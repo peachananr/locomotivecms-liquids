@@ -91,7 +91,11 @@ module LocomotiveCMS
                     p_tag.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>") 
                   end
                 else
-                  p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
+                  if !p_tag.previous_element.nil? and p_tag.previous_element.name == "div" and !p_tag.previous_element["class"].nil? and p_tag.previous_element["class"].include? "-block"
+                    p_tag.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
+                  else
+                    p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
+                  end
                 end
                 inside_div = true
                 
