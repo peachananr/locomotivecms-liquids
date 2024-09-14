@@ -128,13 +128,13 @@ module LocomotiveCMS
               end
 
               counter = counter + 1
-              # If reach limit, close Block
+              # If reach the end, close Block
               if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol")
 
               else
                 if inside_div == true
                   if !p_tag.next_element.nil?
-                    if (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block") or p_tag.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "accommodation-block")                      
+                    if (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block") or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"].include? "-block" and p_tag.next_element.name == "div") or p_tag.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "accommodation-block")                      
                       if !p_tag.next_element.next_element.nil? and (p_tag.next_element.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element.next_element["class"].nil? and p_tag.next_element.next_element["class"] == "accommodation-block"))
                         p_tag.next_element.next_element.add_next_sibling('<div class="new-intro-close"></div>')
                       else
