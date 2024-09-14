@@ -82,8 +82,8 @@ module LocomotiveCMS
               if p_tag.parent.name == "div" and p_tag.parent["class"].nil? and
                 p_tag = p_tag.parent
               end
-              if counter == 0 
-                
+              # Opening Block
+              if counter == 0                 
                 if !p_tag.previous_element.nil? and (p_tag.previous_element.name == "h2" or p_tag.previous_element.name == "h3" or p_tag.previous_element.name == "h4")
                   if p_tag.previous_element.name == "h3" and !p_tag.previous_element["class"].nil? and p_tag.previous_element["class"].include? "adj-header"
                       p_tag.previous_element.previous_element.add_previous_sibling("<div class=\"new-intro-open\"></div>")     
@@ -95,7 +95,7 @@ module LocomotiveCMS
                 end
                 inside_div = true
                 
-      
+              # If reach limit, close Block
               elsif counter == p_limit 
                 if !p_tag.next_element.nil? and !p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block"
                   if !p_tag.next_element.next_element.nil? and (p_tag.next_element.next_element.css(".accommodation-block").length > 0  or (!p_tag.next_element.next_element["class"].nil? and p_tag.next_element.next_element["class"] == "accommodation-block"))
@@ -124,7 +124,16 @@ module LocomotiveCMS
               end
 
               counter = counter + 1
-
+              # If next element is nil close Block
+              if p_tag.next_element.nil?
+                if inside_div == true
+                  p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')
+                  counter = 0
+                  inside_div = false
+                  next
+                end
+              end
+              <<-DOC
               if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol")
 
               else
@@ -147,6 +156,7 @@ module LocomotiveCMS
                   next
                 end
               end
+              DOC
 
               if p_tag.text.length > 0 and p_tag.text.length < 150  and counter > 1 and inside_div == true
                 counter = counter - 1                              
