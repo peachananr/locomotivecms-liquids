@@ -124,16 +124,7 @@ module LocomotiveCMS
               end
 
               counter = counter + 1
-              # If next element is nil close Block
-              if p_tag.next_element.nil?
-                if inside_div == true
-                  p_tag.add_next_sibling('<div class="new-intro-close"></div>')
-                  counter = 0
-                  inside_div = false
-                  next
-                end
-              end
-              <<-DOC
+              # If reach limit, close Block
               if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol")
 
               else
@@ -156,7 +147,6 @@ module LocomotiveCMS
                   next
                 end
               end
-              DOC
 
               if p_tag.text.length > 0 and p_tag.text.length < 150  and counter > 1 and inside_div == true
                 counter = counter - 1                              
