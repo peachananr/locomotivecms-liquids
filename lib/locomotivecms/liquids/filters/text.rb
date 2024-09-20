@@ -77,11 +77,9 @@ module LocomotiveCMS
 
           p_tags.each_with_index do |p_tag,index|
             
+            if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol" or p_tag.name == "blockquote" or (p_tag.name == "div" and !p_tag["class"].nil? and (p_tag["class"].include? "-block" or p_tag["class"].include? "last-minute-section"))
               if p_tag.parent.name == "div" and p_tag.parent["class"].nil?
                 p_tag = p_tag.parent
-              end
-              if p_tag.text.length > 0 and p_tag.text.length < 150  and counter > 1 and inside_div == true
-                next                            
               end
               # Opening Block
               if counter == 0 and inside_div == false             
@@ -120,17 +118,45 @@ module LocomotiveCMS
                 inside_div = false  
                 next
               end
-              
+
               counter = counter + 1
-              if p_tag.next_element.next_element.nil? and inside_div == true
-                p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')
-                counter = 0
-                inside_div = false
-                next
+              # If not limit, but next element is not these, close Block
+              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "h3" or p_tag.next_element.name == "h4" or p_tag.next_element.name == "h2" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol" or p_tag.next_element.name == "blockquote" or (p_tag.next_element.name == "div" and p_tag.next_element["class"].nil?) or (p_tag.next_element.name == "div" and !p_tag.next_element["class"].nil? and (p_tag.next_element["class"].include? "-block")))
+
+
+                if p_tag.next_element.next_element.nil? and inside_div == true
+                  p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')
+                  counter = 0
+                  inside_div = false
+                  next
+                end
+
+                
+              else
+                if inside_div == true
+                  if !p_tag.next_element.nil?
+                    if (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block") or p_tag.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "accommodation-block")                      
+                      if !p_tag.next_element.next_element.nil? and (p_tag.next_element.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element.next_element["class"].nil? and p_tag.next_element.next_element["class"] == "accommodation-block"))
+                        p_tag.next_element.next_element.add_next_sibling('<div class="new-intro-close"></div>')
+                      else
+                        p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')
+                      end                    
+                    else
+                      p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>')                       
+                    end
+                  else
+                      p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
+                  end
+                  counter = 0
+                  inside_div = false
+                  next
+                end
               end
 
-             
-            
+              if p_tag.text.length > 0 and p_tag.text.length < 150  and counter > 1 and inside_div == true
+                counter = counter - 1                              
+              end
+            end
           end
 
           doc.css("body").inner_html.gsub('<div class="new-intro-open"></div>','<div class="content-block">').gsub('<div class="new-intro-close"></div>','</div>')
