@@ -86,12 +86,15 @@ module LocomotiveCMS
               p_tag.add_previous_sibling("<div class=\"new-intro-open\"></div>")                      
               inside_div = true              
             # If reach limit, close Block
-            elsif p_tag.name == "h2" or p_tag.name == "h3" or p_tag.name == "h4" or p_tag.text.strip.length < 150
+            elsif p_tag.name == "h2" or p_tag.name == "h3" or p_tag.name == "h4"
               next
             elsif counter == p_limit 
               if p_tag.css(".lightbox-full").length > 0 or (!p_tag["class"].nil? and p_tag.name != "p" and (p_tag["class"].include? "-block"))
                 next
+              elsif p_tag.text.strip.length < 150
+                next
               end
+
 
               if !p_tag.next_element.nil? and !p_tag.next_element["class"].nil? and p_tag.next_element["class"].include? "readmore-block"
                 p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")
