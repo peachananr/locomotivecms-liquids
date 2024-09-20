@@ -84,7 +84,7 @@ module LocomotiveCMS
               inside_div = true              
             # If reach limit, close Block
             elsif counter == p_limit 
-              if p_tag.name == "h2" or p_tag.name == "h3" or p_tag.name == "h4"
+              if p_tag.name == "h2" or p_tag.name == "h3" or p_tag.name == "h4" or p_tag.css(".lightbox-full").length > 0
                 next
               end
               p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")
@@ -92,10 +92,17 @@ module LocomotiveCMS
               inside_div = false  
               next
             end
-            if p_tag.name == "h2" or p_tag.name == "h3" or p_tag.name == "h4"
+            if p_tag.name == "h2" or p_tag.name == "h3" or p_tag.name == "h4" or p_tag.css(".lightbox-full").length > 0
               next
             end
             counter = counter + 1
+
+            if p_tag.next_element.nil? and inside_div == true
+              p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")
+              counter = 0
+              inside_div = false  
+            end
+            
           end
 
           doc.css("body").inner_html.gsub('<div class="new-intro-open"></div>','<div class="content-block">').gsub('<div class="new-intro-close"></div>','</div>')
