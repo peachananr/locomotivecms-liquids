@@ -84,7 +84,7 @@ module LocomotiveCMS
               inside_div = true              
             # If reach limit, close Block
             elsif counter == p_limit 
-              if p_tag.name == "h2" or p_tag.name == "h3" or p_tag.name == "h4" or p_tag.css(".lightbox-full").length > 0
+              if p_tag.name == "h2" or p_tag.name == "h3" or p_tag.name == "h4" or p_tag.text.length < 1
                 next
               end
               p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")
