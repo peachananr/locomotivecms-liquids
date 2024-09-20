@@ -105,7 +105,7 @@ module LocomotiveCMS
               counter = 0
               inside_div = false  
             elsif !p_tag.next_element.nil? and !p_tag.next_element["class"].nil? and p_tag.next_element["class"].include? "readmore-block"
-              p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")
+              p_tag.next_element.add_next_sibling("<div class=\"new-intro-close\"></div>")
               counter = 0
               inside_div = false  
               skip_next = true
