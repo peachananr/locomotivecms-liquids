@@ -119,7 +119,7 @@ module LocomotiveCMS
                 
                 counter = 0
                 inside_div = false  
-                
+                next
               end
 
               counter = counter + 1
