@@ -69,7 +69,7 @@ module LocomotiveCMS
           doc.at_css("#pinterest").remove()
           doc.search('p.temp').remove
           
-          p_tags = doc.css('body > p, body > ol, body > ul, body > div > p, body > .video-block, body > .audio-block')
+          p_tags = doc.css('body > p, body > ol, body > ul, body > div > p, body > .video-block, body > .audio-block, body > blockquote')
           counter = 0
           inside_div = false
           
@@ -78,7 +78,7 @@ module LocomotiveCMS
           p_tags.each_with_index do |p_tag,index|
             
 
-            if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol" or (p_tag.name == "div" and !p_tag["class"].nil? and p_tag["class"].include? "-block")
+            if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol" or p_tag.name == "blockquote" or (p_tag.name == "div" and !p_tag["class"].nil? and p_tag["class"].include? "-block")
               if p_tag.parent.name == "div" and p_tag.parent["class"].nil?
                 p_tag = p_tag.parent
               end
@@ -125,7 +125,7 @@ module LocomotiveCMS
 
               counter = counter + 1
               # If not limit, but next element is not these, close Block
-              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "h3" or p_tag.next_element.name == "h4" or p_tag.next_element.name == "h2" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol" or (p_tag.next_element.name == "div" and p_tag.next_element["class"].nil?) or (p_tag.next_element.name == "div" and !p_tag.next_element["class"].nil? and (p_tag.next_element["class"].include? "-block" or p_tag.next_element["class"].include? "last-minute-section")))
+              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "h3" or p_tag.next_element.name == "h4" or p_tag.next_element.name == "h2" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol" or p_tag.next_element.name == "blockquote" or (p_tag.next_element.name == "div" and p_tag.next_element["class"].nil?) or (p_tag.next_element.name == "div" and !p_tag.next_element["class"].nil? and (p_tag.next_element["class"].include? "-block" or p_tag.next_element["class"].include? "last-minute-section")))
 
 
                 if p_tag.next_element.next_element.nil? and inside_div == true
