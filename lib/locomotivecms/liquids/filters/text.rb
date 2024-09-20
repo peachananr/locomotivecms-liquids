@@ -125,7 +125,7 @@ module LocomotiveCMS
 
               counter = counter + 1
               # If not limit, but next element is not these, close Block
-              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "h3" or p_tag.next_element.name == "h4" or p_tag.next_element.name == "h2" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol" or p_tag.next_element.name == "blockquote" or (p_tag.next_element.name == "div" and p_tag.next_element["class"].nil?) or (p_tag.next_element.name == "div" and !p_tag.next_element["class"].nil? and (p_tag.next_element["class"].include? "-block" or p_tag.next_element["class"].include? "last-minute-section")))
+              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "h3" or p_tag.next_element.name == "h4" or p_tag.next_element.name == "h2" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol" or p_tag.next_element.name == "blockquote" or (p_tag.next_element.name == "div" and p_tag.next_element["class"].nil?) or (p_tag.next_element.name == "div" and !p_tag.next_element["class"].nil? and (p_tag.next_element["class"].include? "-block" or p_tag.next_element["class"].include? "last-minute-section" or p_tag.next_element["class"].include? "daily-budget" or p_tag.next_element["class"].include? "viator-extra")))
 
 
                 if p_tag.next_element.next_element.nil? and inside_div == true
