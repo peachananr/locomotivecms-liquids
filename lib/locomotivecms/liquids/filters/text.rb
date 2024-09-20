@@ -81,6 +81,9 @@ module LocomotiveCMS
               if p_tag.parent.name == "div" and p_tag.parent["class"].nil?
                 p_tag = p_tag.parent
               end
+              if p_tag.text.length > 0 and p_tag.text.length < 150  and counter > 1 and inside_div == true
+                next                            
+              end
               # Opening Block
               if counter == 0 and inside_div == false             
                 if !p_tag.previous_element.nil? and (p_tag.previous_element.name == "h2" or p_tag.previous_element.name == "h3" or p_tag.previous_element.name == "h4")
@@ -118,7 +121,7 @@ module LocomotiveCMS
                 inside_div = false  
                 next
               end
-
+              
               counter = counter + 1
               if p_tag.next_element.next_element.nil? and inside_div == true
                 p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')
@@ -127,9 +130,7 @@ module LocomotiveCMS
                 next
               end
 
-              if p_tag.text.length > 0 and p_tag.text.length < 150  and counter > 1 and inside_div == true
-                counter = counter - 1                              
-              end
+             
             end
           end
 
