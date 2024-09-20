@@ -72,11 +72,14 @@ module LocomotiveCMS
           p_tags = doc.css('body > *')
           counter = 0
           inside_div = false
-          
+          skip_next = false
           
 
           p_tags.each_with_index do |p_tag,index|
-            
+            if skip_next == true
+              skip_next = false
+              next
+            end
 
             # Opening Block
             if counter == 0 and inside_div == false            
@@ -101,6 +104,11 @@ module LocomotiveCMS
               p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")
               counter = 0
               inside_div = false  
+            elsif !p_tag.next_element.nil? and !p_tag.next_element["class"].nil? and p_tag.next_element["class"].include? "readmore-block"
+              p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")
+              counter = 0
+              inside_div = false  
+              skip_next = true
             end
 
           end
