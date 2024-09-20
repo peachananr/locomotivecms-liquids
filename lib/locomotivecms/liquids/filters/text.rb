@@ -87,7 +87,7 @@ module LocomotiveCMS
               if p_tag.name == "h2" or p_tag.name == "h3" or p_tag.name == "h4"
                 next
               end
-              p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")
+              p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")
               counter = 0
               inside_div = false  
               next
