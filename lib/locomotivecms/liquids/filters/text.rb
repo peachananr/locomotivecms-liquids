@@ -69,7 +69,7 @@ module LocomotiveCMS
           doc.at_css("#pinterest").remove()
           doc.search('p.temp').remove
           
-          p_tags = doc.css('body > p, body > .activity-block,body > .last-minute-section, body > ol, body > ul, body > div > p, body > .video-block, body > .audio-block, body > blockquote')
+          p_tags = doc.css('body > p, body > .activity-block, body > .last-minute-section, body > ol, body > ul, body > div > p, body > .video-block, body > .audio-block, body > blockquote')
           counter = 0
           inside_div = false
           
@@ -77,7 +77,7 @@ module LocomotiveCMS
 
           p_tags.each_with_index do |p_tag,index|
             
-            if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol" or p_tag.name == "blockquote" or (p_tag.name == "div" and !p_tag["class"].nil? and p_tag["class"].include? "-block")
+            if p_tag.name == "p" or p_tag.name == "ul" or p_tag.name == "ol" or p_tag.name == "blockquote" or (p_tag.name == "div" and !p_tag["class"].nil? and (p_tag["class"].include? "-block" orp_tag["class"].include? "last-minute-section"))
               if p_tag.parent.name == "div" and p_tag.parent["class"].nil?
                 p_tag = p_tag.parent
               end
