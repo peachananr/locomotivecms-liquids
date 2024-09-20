@@ -120,37 +120,11 @@ module LocomotiveCMS
               end
 
               counter = counter + 1
-              # If not limit, but next element is not these, close Block
-              if !p_tag.next_element.nil? and (p_tag.next_element.name == "p" or p_tag.next_element.name == "h3" or p_tag.next_element.name == "h4" or p_tag.next_element.name == "h2" or p_tag.next_element.name == "ul" or p_tag.next_element.name == "ol" or p_tag.next_element.name == "blockquote" or (p_tag.next_element.name == "div" and p_tag.next_element["class"].nil?) or (p_tag.next_element.name == "div" and !p_tag.next_element["class"].nil? and (p_tag.next_element["class"].include? "-block")))
-
-
-                if p_tag.next_element.next_element.nil? and inside_div == true
-                  p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')
-                  counter = 0
-                  inside_div = false
-                  next
-                end
-
-                
-              else
-                if inside_div == true
-                  if !p_tag.next_element.nil?
-                    if (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "readmore-block") or p_tag.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element["class"].nil? and p_tag.next_element["class"] == "accommodation-block")                      
-                      if !p_tag.next_element.next_element.nil? and (p_tag.next_element.next_element.css(".accommodation-block").length > 0 or (!p_tag.next_element.next_element["class"].nil? and p_tag.next_element.next_element["class"] == "accommodation-block"))
-                        p_tag.next_element.next_element.add_next_sibling('<div class="new-intro-close"></div>')
-                      else
-                        p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')
-                      end                    
-                    else
-                      p_tag.next_element.add_previous_sibling('<div class="new-intro-close"></div>')                       
-                    end
-                  else
-                      p_tag.add_previous_sibling("<div class=\"new-intro-close\"></div>")                      
-                  end
-                  counter = 0
-                  inside_div = false
-                  next
-                end
+              if p_tag.next_element.next_element.nil? and inside_div == true
+                p_tag.next_element.add_next_sibling('<div class="new-intro-close"></div>')
+                counter = 0
+                inside_div = false
+                next
               end
 
               if p_tag.text.length > 0 and p_tag.text.length < 150  and counter > 1 and inside_div == true
