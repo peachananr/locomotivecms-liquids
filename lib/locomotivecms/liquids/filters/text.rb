@@ -69,7 +69,7 @@ module LocomotiveCMS
           doc.at_css("#pinterest").remove()
           doc.search('p.temp').remove
           
-          p_tags = doc.css('body > p, body > ol, body > ul, body > div > p, body > .video-block, body > .audio-block, body > blockquote')
+          p_tags = doc.css('body > p:not([class]), body > p.tips-block body > ol, body > ul, body > div > p:not([class]), body > .video-block, body > .audio-block, body > blockquote')
           counter = 0
           inside_div = false
           
