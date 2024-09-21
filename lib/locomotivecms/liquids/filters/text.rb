@@ -110,6 +110,7 @@ module LocomotiveCMS
               next
             end
             if p_tag["class"].nil? and p_tag.text.strip.length < 200
+            else
               counter = counter + 1
             end
 
