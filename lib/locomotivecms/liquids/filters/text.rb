@@ -60,7 +60,7 @@ module LocomotiveCMS
           doc.css("body").inner_html
         end
 
-        def add_blocks(input, p_limit = 5, mode = "old")
+        def add_blocks(input, p_limit = 5)
           require 'nokogiri'
           #given this input = "<h2>xxx</h2><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><h2>yyy</h2><p></p><p></p>"
 
@@ -93,7 +93,7 @@ module LocomotiveCMS
 
             # If reach limit, close Block
             elsif counter == p_limit 
-              if p_tag.css(".lightbox-full").length > 0 or (!p_tag["class"].nil? and p_tag.name != "p" and (p_tag["class"].include? "-block"))
+              if p_tag.css(".lightbox-full, .image-block").length > 0 or (!p_tag["class"].nil? and p_tag.name != "p" and (p_tag["class"].include? "-block"))
                 next
               end
 
