@@ -5,15 +5,6 @@ module LocomotiveCMS
         def url_for(url)
           url.chomp '/'
         end
-        def request_env (name)
-          if name.blank?
-            return ""
-          else
-            env = "#{ENV.to_h.to_yaml}" || ''
-            return env
-          end
-        end
-
         def env_variables (name)
           if name.blank?
             return ""
