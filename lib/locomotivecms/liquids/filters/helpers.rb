@@ -5,6 +5,14 @@ module LocomotiveCMS
         def url_for(url)
           url.chomp '/'
         end
+        def request_env (name)
+          if name.blank?
+            return ""
+          else
+            env = request.env["#{name}"] || ''
+            return env
+          end
+        end
 
         def env_variables (name)
           if name.blank?
