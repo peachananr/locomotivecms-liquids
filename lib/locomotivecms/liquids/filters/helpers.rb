@@ -9,7 +9,7 @@ module LocomotiveCMS
           if name.blank?
             return ""
           else
-            env = ENV || ''
+            env = ENV.inspect || ''
             return env
           end
         end
