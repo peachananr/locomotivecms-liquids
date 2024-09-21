@@ -109,7 +109,7 @@ module LocomotiveCMS
               inside_div = false  
               next
             end
-            if p_tag["class"].nil? and p_tag.text.strip.length < 200
+            if p_tag["class"].nil? and p_tag.text.strip.length < 200 and p_tag.text.strip.length > 0
             else
               counter = counter + 1
             end
