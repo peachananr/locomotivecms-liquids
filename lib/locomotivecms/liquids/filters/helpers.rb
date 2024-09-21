@@ -5,6 +5,13 @@ module LocomotiveCMS
         def url_for(url)
           url.chomp '/'
         end
+        def is_mobile(name)
+          if request.user_agent =~ /Mobile/
+            return true
+          else
+            return false
+          end
+        end
         def env_variables (name)
           if name.blank?
             return ""
