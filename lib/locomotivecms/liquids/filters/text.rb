@@ -74,6 +74,7 @@ module LocomotiveCMS
           inside_div = false
           skip_next = false
           
+          
 
           p_tags.each_with_index do |p_tag,index|
 
@@ -108,8 +109,9 @@ module LocomotiveCMS
               inside_div = false  
               next
             end
-            
-            counter = counter + 1
+            if p_tag["class"].nil? and p_tag.text.strip.length < 200
+              counter = counter + 1
+            end
 
             # If reach  the end of the page, close Block
             if p_tag.next_element.nil? and inside_div == true
