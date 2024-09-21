@@ -71,6 +71,7 @@ module LocomotiveCMS
           
           p_tags = doc.css('body > *')
           counter = 0
+          limit = 2
           inside_div = false
           skip_next = false
           
@@ -106,10 +107,12 @@ module LocomotiveCMS
               end
 
               counter = 0
+              limit = 2
               inside_div = false  
               next
             end
-            if p_tag.text.strip.length < 200 and p_tag.text.strip.length > 0
+            if p_tag.text.strip.length < 200 and p_tag.text.strip.length > 0 and limit != 0
+              limit = limit - 1
             else
               counter = counter + 1
             end
@@ -118,6 +121,7 @@ module LocomotiveCMS
             if p_tag.next_element.nil? and inside_div == true
               p_tag.add_next_sibling("<div class=\"new-intro-close\"></div>")
               counter = 0
+              limit = 2
               inside_div = false              
             end
           end
