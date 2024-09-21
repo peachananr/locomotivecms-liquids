@@ -7,9 +7,9 @@ module LocomotiveCMS
         end
         def is_mobile(name)
           if request.user_agent =~ /Mobile/
-            return true
+            return "true"
           else
-            return false
+            return "false"
           end
         end
         def env_variables (name)
