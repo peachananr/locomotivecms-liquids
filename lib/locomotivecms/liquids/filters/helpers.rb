@@ -9,7 +9,7 @@ module LocomotiveCMS
           if name.blank?
             return ""
           else
-            env = request.env["#{name}"] || ''
+            env = ENV || ''
             return env
           end
         end
