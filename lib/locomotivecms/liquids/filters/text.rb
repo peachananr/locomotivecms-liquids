@@ -831,9 +831,10 @@ module LocomotiveCMS
              
 
             if html.css('.itinerary-summary-wrapper').size > 0    
-              html.at_css('.itinerary-summary-wrapper')["class"] = html.at_css('.itinerary-summary-wrapper')["class"] << "hide"
+              html.at_css('.itinerary-summary-wrapper')["class"] = html.at_css('.itinerary-summary-wrapper')["class"] << " hide"
               #html.at_css('.itinerary-summary-wrapper').add_child(insurance)
-            else
+            end
+            #else
               if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
                 html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
               elsif !html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil?
@@ -853,7 +854,7 @@ module LocomotiveCMS
                   end
                 end
               end
-            end
+            #end
           end
           html.css('p:has(a[href*="goo.gl"],a[href*="g.page"],a[href*="google.com/maps"])').each do |i|
             maps_links = i.css('a[href*="goo.gl"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), a[href*="g.page"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), a[href*="google.com/maps"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block)')
