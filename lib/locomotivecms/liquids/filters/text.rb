@@ -853,6 +853,8 @@ module LocomotiveCMS
             end
             
             # test removing quick summary start
+            html.at_css('.post-summary-wrapper.hide')["class"] = html.at_css('.post-summary-wrapper.hide')["class"].gsub("hide", "")  if html.css('.post-summary-wrapper.hide').size > 0
+            post-summary-wrapper
             if html.css('.itinerary-summary-wrapper').size > 0
               if html.css(".toc-list").size > 0
                 h2 = html.at_css('.itinerary-summary-wrapper h2')["id"]
