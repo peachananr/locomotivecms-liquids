@@ -831,7 +831,7 @@ module LocomotiveCMS
             # test removing quick summary start
             if html.css('.itinerary-summary-wrapper').size > 0
               if html.css(".toc-list").size > 0
-                h2 = html.at_css('.itinerary-summary-wrapper h2')["href"]
+                h2 = html.at_css('.itinerary-summary-wrapper h2')["id"]
                 html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']").remove
               end
 
