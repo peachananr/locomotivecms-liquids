@@ -828,14 +828,19 @@ module LocomotiveCMS
               end
             end
             
-          
+            # test removing quick summary start
+            if html.css('.itinerary-summary-wrapper').size > 0
+              if html.css(".toc-list").size > 0
+                h2 = html.at_css('.itinerary-summary-wrapper h2')["href"]
+                html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']").remove
+              end
 
-             
+              html.at_css('.itinerary-summary-wrapper').remove 
+            end
+            # test removing quick summary end
 
-            if html.css('.itinerary-summary-wrapper').size > 0    
-              #html.at_css('.itinerary-summary-wrapper')["class"] = html.at_css('.itinerary-summary-wrapper')["class"] << " hide"
-              html.at_css('.itinerary-summary-wrapper').add_child(insurance)
-            #end
+            if html.css('.itinerary-summary-wrapper').size > 0                
+              html.at_css('.itinerary-summary-wrapper').add_child(insurance)            
             else
               if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
                 html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
