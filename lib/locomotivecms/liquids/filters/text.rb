@@ -828,6 +828,21 @@ module LocomotiveCMS
             
             insurance = '<div id="insurance"></div>'
             
+            # test removing quick summary start
+            if html.css('.post-summary-wrapper.hide').size > 0
+              html.at_css('.post-summary-wrapper.hide')["class"] = html.at_css('.post-summary-wrapper.hide')["class"].gsub("hide", "")  
+            end
+            
+            if html.css('.itinerary-summary-wrapper').size > 0
+              if html.css(".toc-list").size > 0
+                h2 = html.at_css('.itinerary-summary-wrapper h2')["id"]
+                html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']").remove
+              end
+
+              html.at_css('.itinerary-summary-wrapper').remove 
+            end
+            # test removing quick summary end
+
 
             #remove unused html
             if html.css(".post-summary-wrapper.hide").size > 0
@@ -852,21 +867,7 @@ module LocomotiveCMS
               end
             end
             
-            # test removing quick summary start
-            if html.css('.post-summary-wrapper.hide').size > 0
-              html.at_css('.post-summary-wrapper.hide')["class"] = html.at_css('.post-summary-wrapper.hide')["class"].gsub("hide", "")  
-            end
             
-            if html.css('.itinerary-summary-wrapper').size > 0
-              if html.css(".toc-list").size > 0
-                h2 = html.at_css('.itinerary-summary-wrapper h2')["id"]
-                html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']").remove
-              end
-
-              html.at_css('.itinerary-summary-wrapper').remove 
-            end
-            # test removing quick summary end
-
             if html.css('.itinerary-summary-wrapper').size > 0                
               html.at_css('.itinerary-summary-wrapper').add_child(insurance)            
             else
