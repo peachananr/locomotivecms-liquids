@@ -1183,7 +1183,7 @@ module LocomotiveCMS
           end
 
 
-          html.css("body").inner_html.gsub("</source>","")
+          html.css("body").inner_html
         end
 
         def convert_to_article(input)
