@@ -1181,7 +1181,9 @@ module LocomotiveCMS
             i["srcset"] = "#{i["data-srcset"]}"  # testing lazyload native
             #i.remove_attribute('data-srcset') 
           end
-          html.css("body").inner_html
+
+
+          html.css("body").inner_html.gsub("</source>","")
         end
 
         def convert_to_article(input)
