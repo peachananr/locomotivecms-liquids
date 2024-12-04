@@ -1029,7 +1029,7 @@ module LocomotiveCMS
               h2_counter = 1
             
               html.css('h2').each do |h2|
-                unless h2.text.downcase.match?(/activities|further reading/)
+                unless h2.text.downcase.match?(/activities|further reading|travel video/)
                   unless h2.text.match?(/^\d+\./)
                     h2.inner_html = "#{h2_counter}. #{h2.inner_html.strip}"
                     h2_counter += 1
