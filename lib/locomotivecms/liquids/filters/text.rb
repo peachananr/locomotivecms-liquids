@@ -1026,13 +1026,13 @@ module LocomotiveCMS
             end
 
             if html.css('.header-placeholder.hide').size > 0
-              h3_counter = 1
+              h2_counter = 1
             
               html.css('h2').each do |h2|
                 unless h2.text.downcase.match?(/activities|further reading/)
                   unless h2.text.match?(/^\d+\./)
-                    h2.inner_html = "#{h3_counter}. #{h2.inner_html.strip}"
-                    h3_counter += 1
+                    h2.inner_html = "#{h2_counter}. #{h2.inner_html.strip}"
+                    h2_counter += 1
                   end
                 end
               end                        
