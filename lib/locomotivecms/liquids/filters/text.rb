@@ -1024,12 +1024,7 @@ module LocomotiveCMS
                 h3_counter = 1
               end
             end
-
-            
           end
-
-          
-
           if html.css('.post-summary.day-to-day').size > 0
             if html.css('.post-summary.day-to-day td:contains("Day ")').size > 0
               html.css('.post-summary.day-to-day tr:not(:empty)').each do |a|
