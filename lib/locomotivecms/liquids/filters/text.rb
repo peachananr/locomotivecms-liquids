@@ -671,7 +671,6 @@ module LocomotiveCMS
             </script>"
           end
           
-=begin
 
           selected_h2_elements = html.xpath('//h2[substring(., string-length(.) - 0) = "?"]')
           if selected_h2_elements.size > 1
@@ -737,7 +736,7 @@ module LocomotiveCMS
             end
           end
 
-=end
+
 
           result
         end
