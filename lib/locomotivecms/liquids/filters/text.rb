@@ -828,7 +828,7 @@ module LocomotiveCMS
             insurance = '<div id="insurance"></div>'
             
             # test removing quick summary start
-            if html.css('.post-summary-wrapper.hide').size > 0
+            if html.css('.post-summary-wrapper.hide:not(.things-to-do-summary)').size > 0
               html.at_css('.post-summary-wrapper.hide')["class"] = html.at_css('.post-summary-wrapper.hide')["class"].gsub("hide", "")  
             end
             
@@ -840,6 +840,8 @@ module LocomotiveCMS
 
               html.at_css('.itinerary-summary-wrapper').remove 
             end
+
+            
             # test removing quick summary end
 
 
