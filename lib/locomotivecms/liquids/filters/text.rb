@@ -920,7 +920,7 @@ module LocomotiveCMS
           if html.css('.accommodation-block:not(.dont-move)').size == 1
             el = html.at_css('.accommodation-block:not(.dont-move)')
             h2 = el.at_css('h2')["id"]
-            if html.css(".pin-img-tag a img").length > 0 and (html.at_css(".pin-img-tag a img")["alt"].downcase.include? "things to do" or html.at_css(".pin-img-tag a img")["alt"].downcase.include? "itinerary") and html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2)").length > 0 and html.css(".product-summary.accommodation").length == 1   
+            if html.css(".pin-img-tag a img").length > 0 and (html.at_css(".pin-img-tag a img")["src"].downcase.include? "things-to-do" or html.at_css(".pin-img-tag a img")["src"].downcase.include? "itinerary") and html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2)").length > 0 and html.css(".product-summary.accommodation").length == 1   
               html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2)").add_previous_sibling(el)     
               h2 = html.at_css('.accommodation-block h2')
               new_h2 = "<h4 id='#{h2["id"]}'>#{h2.inner_html}</h4>"
@@ -950,7 +950,7 @@ module LocomotiveCMS
 
           if html.css('.activity-block').size == 1
             
-            if html.css(".pin-img-tag a img").length > 0 and (html.at_css(".pin-img-tag a img")["alt"].downcase.include? "things to do" or html.at_css(".pin-img-tag a img")["alt"].downcase.include? "itinerary")
+            if html.css(".pin-img-tag a img").length > 0 and (html.at_css(".pin-img-tag a img")["src"].downcase.include? "things-to-do" or html.at_css(".pin-img-tag a img")["src"].downcase.include? "itinerary")
 
                 
                 
