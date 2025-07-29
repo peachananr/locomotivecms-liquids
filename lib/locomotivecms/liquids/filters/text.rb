@@ -1173,7 +1173,7 @@ module LocomotiveCMS
                 extra_class = "dark"
               end
               if i["height"].to_f > i["width"].to_f
-                extra_class = "landscape #{extra_class}"
+                extra_class = "portrait #{extra_class}"
               end
               i.replace "<span class=\"img-wrapper loading #{extra_class}\"><i class=\"img-sizer\" style=\"padding-top: #{padding_top}%;\"></i>#{i.to_s}</span>"
 
