@@ -1132,7 +1132,8 @@ module LocomotiveCMS
 
             if !i.parent.nil? and i.parent.name == "a"
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
-                i.parent["aria-label"] = "View larger image"
+                i.parent["aria-label"] = "View larger image"                
+                i.parent["data-google-interstitial"] = "false"
               end
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "itinerary"
                 i.parent["aria-label"] = "View itinerary on Google Maps"
@@ -1229,6 +1230,7 @@ module LocomotiveCMS
             if !i.parent.nil? and i.parent.name == "a"
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
                 i.parent["aria-label"] = "View larger image"
+                i.parent["data-google-interstitial"] = "false"
               end
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "itinerary"
                 i.parent["aria-label"] = "View itinerary on Google Maps"
