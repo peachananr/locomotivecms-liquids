@@ -1198,6 +1198,10 @@ module LocomotiveCMS
             #i.remove_attribute('data-srcset') 
           end
 
+          html.css('a[href*="#"]').each do |link|
+            link["data-google-interstitial"] = "false"
+          end
+
 
           html.css("body").inner_html
         end
