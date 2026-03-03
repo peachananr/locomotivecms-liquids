@@ -867,10 +867,7 @@ module LocomotiveCMS
         def remove_placeholder_img(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
-          # test removing quick summary start
-          if html.css('.post-summary-wrapper.hide:not(.things-to-do-summary)').size > 0
-            html.at_css('.post-summary-wrapper.hide')["class"] = html.at_css('.post-summary-wrapper.hide')["class"].gsub("hide", "")  
-          end
+          
 
           if html.css('.product-summary.itinerary-summary').size > 0          
             html.css('.product-summary.itinerary-summary').each do |i|
@@ -897,7 +894,10 @@ module LocomotiveCMS
                     html.at_css(id_el).add_child(" #{iduplicate.to_html}")
                   end
                 end
-
+                # test removing quick summary start
+                if html.css('.post-summary-wrapper.hide:not(.things-to-do-summary)').size > 0
+                  html.at_css('.post-summary-wrapper.hide')["class"] = html.at_css('.post-summary-wrapper.hide')["class"].gsub("hide", "")  
+                end
                 if fix_required == "true" and html.css(".itinerary").length > 0
                   html.at_css(".itinerary").add_next_sibling(summary_table)
                 end
