@@ -824,11 +824,7 @@ module LocomotiveCMS
                   id_el = i.xpath('ancestor::a').first["href"]
                   
                   if html.css(id_el).size > 0
-                    fix_required = "true"
-                    label = i.text 
-                    value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
-                    summary_table << "<tr><td>#{label}:</td><td>#{value}</td></tr>"
-
+                    
 
                     iduplicate = i.dup
                     iduplicate["aria-hidden"] = "true"
