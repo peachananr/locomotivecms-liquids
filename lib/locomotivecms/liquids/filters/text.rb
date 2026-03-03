@@ -382,15 +382,16 @@ module LocomotiveCMS
                 l_desc = desc_node ? desc_node.text.strip : ""
 
 
-                list_items << " {                  
+                list_items << "{
                   \"@type\": \"ListItem\",
                   \"position\": #{l_pos},
                   \"item\": {
                     \"@type\": \"Place\",
                     \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
                     \"url\": \"#{l_url}\",
-                    \"description\": \"#{l_desc}\"
-                  },"
+                    \"description\": \"#{l_desc.gsub('"','\"')}\"
+                  }
+                },"
               end
 
               if list_items != ""
