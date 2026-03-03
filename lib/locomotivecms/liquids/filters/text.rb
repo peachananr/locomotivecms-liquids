@@ -351,7 +351,7 @@ module LocomotiveCMS
 
               if list_items != ""
                 list_final = "[#{list_items.chomp(',')}]"
-                result = "\"mainEntity\": [
+                result = "\"mainEntity\": 
                 {
                   \"@context\": \"http://schema.org\",
                   \"@type\": \"ItemList\",
@@ -361,7 +361,7 @@ module LocomotiveCMS
                   \"numberOfItems\": \"#{list_count}\",
                   \"itemListElement\": #{list_final}
                 }
-                ],"
+                ,"
 
                 return result
               end
