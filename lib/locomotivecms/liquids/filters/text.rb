@@ -300,7 +300,7 @@ module LocomotiveCMS
 
               return result
             end
-          end
+          
         end
 
         def about_metadata(input, title, desc, slug, location)
