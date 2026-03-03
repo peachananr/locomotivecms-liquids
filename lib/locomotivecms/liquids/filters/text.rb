@@ -870,50 +870,43 @@ module LocomotiveCMS
           
 
           if html.css('.product-summary.itinerary-summary').size > 0          
-            html.css('.product-summary.itinerary-summary').each do |summary_section|
-              
-              if summary_section.css(".editor-choice").size > 0
-                # Create the fragment
-                table_frag = Nokogiri::HTML::DocumentFragment.parse(
-                  '<div class="post-summary-wrapper hide things-to-do-summary"><table class="post-summary"><tbody></tbody></table></div>'
-                )
-                tbody = table_frag.at_css('tbody')
-                fix_required = false
+            html.css('.product-summary.itinerary-summary').each do |i|
+              if i.css(".editor-choice").size > 0
+                summary_table_html = '<div class="post-summary-wrapper hide things-to-do-summary"><table class="post-summary"><tbody></tbody></table></div>'
+                summary_table = Nokogiri::HTML::DocumentFragment.parse(summary_table_html)
+                tbody = summary_table.at_css('tbody')
+                fix_required = "false"
 
-                summary_section.css(".editor-choice").each do |choice_icon|
-                  anchor = choice_icon.xpath('ancestor::a').first
-                  next unless anchor && anchor["href"]
-                  
-                  id_el = anchor["href"]
+                i.css(".editor-choice").each do |i|
+                  id_el = i.xpath('ancestor::a').first["href"]
                   
                   if html.css(id_el).size > 0
-                    fix_required = true
-                    
-                    # Build the Row
-                    label = choice_icon.text 
-                    value = "<a href='#{id_el}'>#{anchor.text}</a>"
-                    tbody.add_child("<tr><td>#{label}:</td><td>#{value}</td></tr>")
+                    fix_required = "true"
+                    label = i.text 
+                    value = "<a href='#{id_el}'>#{i.xpath('ancestor::a').first.text}</a>"
+                    new_row = "<tr><td>#{label}:</td><td>#{value}</td></tr>"
+                    tbody.add_child(new_row)
 
-                    # Handle the Duplicate Icon for the heading
-                    iduplicate = choice_icon.dup
+
+                    iduplicate = i.dup
                     iduplicate["aria-hidden"] = "true"
-                    
-                    # Add icon to the actual section heading in the post
-                    target_heading = html.at_css(id_el)
-                    target_heading.add_child(" #{iduplicate.to_html}") if target_heading
+
+                    html.at_css(id_el).add_child(" #{iduplicate.to_html}")
                   end
                 end
-
-                # Unhide and Placement
-                if fix_required
-                  # Remove "hide" specifically from our new fragment
-                  table_frag.at_css('.post-summary-wrapper').classes.delete('hide')
-                  
-                  if html.at_css(".itinerary")
-                    html.at_css(".itinerary").add_next_sibling(table_frag)
-                  end
+                
+                if fix_required == "true" and html.css(".itinerary").length > 0
+                  html.at_css(".itinerary").add_next_sibling(summary_table)
                 end
               end
+              
+          #    items = i.css(".ps-row")
+          #    midpoint = (items.size / 2.0).ceil
+          #    items[midpoint - 1].add_next_sibling('<div id="xxxxx"></div>')
+              
+          #    string = html.css('body').first.to_s
+          #    string.gsub!('<div id="xxxxx"></div>', '</div><div class="mod product-summary itinerary-summary">')
+          #    html = Nokogiri.HTML(string)
             end
           end
           
