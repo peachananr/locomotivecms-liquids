@@ -353,11 +353,11 @@ module LocomotiveCMS
                 list_final = "[#{list_items.chomp(',')}]"
                 result = "\"mainEntity\": 
                 {
-                  \"@context\": \"http://schema.org\",
+                  \"@context\": \"https://schema.org\",
                   \"@type\": \"ItemList\",
                   \"name\": \"#{title.gsub('"', '\"')}\",
                   \"description\": \"#{desc.gsub('"', '\"')}\",
-                  \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
+                  \"itemListOrder\": \"https://schema.org/ItemListOrderAscending\",
                   \"numberOfItems\": \"#{list_count}\",
                   \"itemListElement\": #{list_final}
                 }
