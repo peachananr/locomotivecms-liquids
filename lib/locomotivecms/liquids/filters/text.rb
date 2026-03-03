@@ -328,6 +328,7 @@ module LocomotiveCMS
               list = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
               list_count = list.size
               list_items = ""
+
               list.each_with_index do |i, index| 
                 l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
                 l_image = i.at_css(".ps-image img")["data-original"]
@@ -339,7 +340,7 @@ module LocomotiveCMS
                 l_pos = index + 1
                 l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
 
-                list_items << " {
+                list_items << "{
                   \"@type\": \"ListItem\",
                   \"position\": #{l_pos},
                   \"name\": \"#{l_name.gsub('"', '\"')}\",
@@ -360,7 +361,7 @@ module LocomotiveCMS
                   \"numberOfItems\": \"#{list_count}\",
                   \"itemListElement\": #{list_final}
                 }
-              ],"
+                ],"
 
                 return result
               end
@@ -369,14 +370,16 @@ module LocomotiveCMS
             if html.css(".post-summary.day-to-day").size == 1
               list = html.css(".post-summary.day-to-day tr:not(:empty)")
               list_count = list.size
-              l_pos = index + 1
+              
               list_items = ""
+
               list.each_with_index do |i, index| 
-                
-                l_name = "#{i.at_css("td")[0].text.sub(/\b\d+\.\s*/, '').strip}: #{i.at_css("td")[1].text.sub(/\b\d+\.\s*/, '').strip}"
+                l_pos = index + 1
+                l_name = "#{i.css("td")[0].text.sub(/\b\d+\.\s*/, '').strip}: #{i.css("td")[1].text.sub(/\b\d+\.\s*/, '').strip}"
                 l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
                 link_id = i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")                
-                l_desc = html.at_css("#{link_id} ~ p").find { |p| p.text.strip.length > 0 }
+                desc_node = html.css("#{link_id} ~ p").find { |p| p.text.strip.length > 0 }
+                l_desc = desc_node ? desc_node.text.strip : ""
 
 
                 list_items << " {                  
@@ -398,13 +401,13 @@ module LocomotiveCMS
                 }
                 "
                 result = "\"mainEntity\": [
-                {
-                  \"@type\": \"Trip\",
-                  \"name\": \"#{title.gsub('"', '\"')}\",
-                  \"description\": \"#{desc.gsub('"', '\"')}\",
-                  \"itinerary\": #{list_final}
-                }
-              ],"
+                  {
+                    \"@type\": \"Trip\",
+                    \"name\": \"#{title.gsub('"', '\"')}\",
+                    \"description\": \"#{desc.gsub('"', '\"')}\",
+                    \"itinerary\": #{list_final}
+                  }
+                ],"
 
                 return result
               end
