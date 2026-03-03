@@ -320,87 +320,94 @@ module LocomotiveCMS
           result_hash.to_json
         end
 
-        def about_metadata(input, title, desc, slug, location)
+        def about_metadata(input, title, desc, slug, location, type_of_post)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
+          if type_of_post == "things to do"
+            if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
+              list = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
+              list_count = list.size
+              list_items = ""
+              list.each_with_index do |i, index| 
+                l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+                l_image = i.at_css(".ps-image img")["data-original"]
+                l_image_full = ""
+                if !l_image.include? "data:image/svg+xml;base6"
+                  l_image_full = "\"image\": \"#{l_image}\","
+                end
+                
+                l_pos = index + 1
+                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
 
-          if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
-            list = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
-            list_count = list.size
-            list_items = ""
-            list.each_with_index do |i, index| 
-              l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
-              l_image = i.at_css(".ps-image img")["data-original"]
-              l_image_full = ""
-              if !l_image.include? "data:image/svg+xml;base6"
-                l_image_full = "\"image\": \"#{l_image}\","
+                list_items << " {
+                  \"@type\": \"ListItem\",
+                  \"position\": #{l_pos},
+                  \"name\": \"#{l_name.gsub('"', '\"')}\",
+                  #{l_image_full}                
+                  \"url\": \"#{l_url}\"
+                  },"
+              end
+
+              if list_items != ""
+                list_final = "[#{list_items.chomp(',')}]"
+                result = "\"mainEntity\": [
+                {
+                  \"@context\": \"http://schema.org\",
+                  \"@type\": \"ItemList\",
+                  \"name\": \"#{title.gsub('"', '\"')}\",
+                  \"description\": \"#{desc.gsub('"', '\"')}\",
+                  \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
+                  \"numberOfItems\": \"#{list_count}\",
+                  \"itemListElement\": #{list_final}
+                }
+              ],"
+
+                return result
               end
               
+          elsif type_of_post == "itinerary"
+            if html.css(".post-summary.day-to-day").size == 1
+              list = html.css(".post-summary.day-to-day tr:not(:empty)")
+              list_count = list.size
               l_pos = index + 1
-              l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
+              list_items = ""
+              list.each_with_index do |i, index| 
+                
+                l_name = "#{i.at_css("td")[0].text.sub(/\b\d+\.\s*/, '').strip}: #{i.at_css("td")[1].text.sub(/\b\d+\.\s*/, '').strip}"
+                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
+                link_id = i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")                
+                l_desc = html.at_css("#{link_id} ~ p").find { |p| p.text.strip.length > 0 }
 
-              list_items << " {
-                \"@type\": \"ListItem\",
-                \"position\": #{l_pos},
-                \"name\": \"#{l_name.gsub('"', '\"')}\",
-                #{l_image_full}                
-                \"url\": \"#{l_url}\"
-                },"
-            end
 
-            if list_items != ""
-              list_final = "[#{list_items.chomp(',')}]"
-              result = "\"about\": [
-              {
-                \"@context\": \"http://schema.org\",
-                \"@type\": \"ItemList\",
-                \"name\": \"#{title.gsub('"', '\"')}\",
-                \"description\": \"#{desc.gsub('"', '\"')}\",
-                \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
-                \"numberOfItems\": \"#{list_count}\",
-                \"itemListElement\": #{list_final}
-              }
-            ],"
-
-              return result
-            end
-            
-          elsif html.css(".product-summary.itinerary-summary.day-to-day").size == 1
-            list = html.css(".product-summary.itinerary-summary.day-to-day .ps-row:not(:empty) > a:not(.small-link)")
-            list_items = ""
-            list.each_with_index do |i, index| 
-              l_country = location.split(",").last.strip
-              l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
-              l_image = i.at_css(".ps-image img")["data-original"]
-              l_image_full = ""
-              if !l_image.include? "data:image/svg+xml;base6"
-                l_image_full = "\"image\": \"#{l_image}\","
+                list_items << " {                  
+                  \"@type\": \"ListItem\",
+                  \"position\": #{l_pos},
+                  \"item\": {
+                    \"@type\": "Place",
+                    \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
+                    \"url\": \"#{l_url}\",
+                    \"description\": \"#{l_desc}\"
+                  },"
               end
-              l_description = i.at_css(".ps-desc").text
-              l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
 
-              list_items << " {
-                \"@type\": \"TouristAttraction\",
-                \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
-                \"url\": \"#{l_url}\",
-                #{l_image_full}                
-                \"description\": \"#{l_description.gsub('"', '\"')}\",
-                \"address\": \"#{l_name.sub(/.*?:\s*/, '')}, #{l_country}\"
-                },"
-            end
+              if list_items != ""
+                list_final = "{
+                  \"@type\": \"ItemList\",
+                  \"numberOfItems\": #{list_count},
+                  \"itemListElement\": [#{list_items.chomp(',')}]
+                }
+                "
+                result = "\"mainEntity\": [
+                {
+                  \"@type\": \"Trip\",
+                  \"name\": \"#{title.gsub('"', '\"')}\",
+                  \"description\": \"#{desc.gsub('"', '\"')}\",
+                  \"itinerary\": #{list_final}
+                }
+              ],"
 
-            if list_items != ""
-              list_final = "[#{list_items.chomp(',')}]"
-              result = "\"about\": [
-              {
-                \"@type\": \"Trip\",
-                \"name\": \"#{title.gsub('"', '\"')}\",
-                \"description\": \"#{desc.gsub('"', '\"')}\",
-                \"itinerary\": #{list_final}
-              }
-            ],"
-
-              return result
+                return result
+              end
             end
           end
         end
