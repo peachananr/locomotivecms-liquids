@@ -322,93 +322,89 @@ module LocomotiveCMS
 
         def about_metadata(input, title, desc, slug, location, type_of_post)
           require 'nokogiri'
+          require 'json'
+          
           html = Nokogiri.HTML(input)
-          if type_of_post == "things to do"
-            if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
-              list = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
-              list_count = list.size
-              list_items = ""
-              list.each_with_index do |i, index| 
-                l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
-                l_image = i.at_css(".ps-image img")["data-original"]
-                l_image_full = ""
-                if !l_image.include? "data:image/svg+xml;base6"
-                  l_image_full = "\"image\": \"#{l_image}\","
-                end
-                
-                l_pos = index + 1
-                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
+          main_entity = nil
 
-                list_items << " {
-                  \"@type\": \"ListItem\",
-                  \"position\": #{l_pos},
-                  \"name\": \"#{l_name.gsub('"', '\"')}\",
-                  #{l_image_full}                
-                  \"url\": \"#{l_url}\"
-                  },"
-              end
+          case type_of_post
+          when "things to do"
+            rows = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
+            if rows.any?
+              list_elements = rows.each_with_index.map do |row, index|
+                l_name = row.at_css(".ps-title")&.text&.sub(/\b\d+\.\s*/, '')&.strip
+                l_image = row.at_css(".ps-image img")&.[]("data-original")
+                # Build URL
+                href = row["href"] || ""
+                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{href.gsub("https://www.bucketlistly.blog/posts/#{slug}", "")}"
 
-              if list_items != ""
-                list_final = "[#{list_items.chomp(',')}]"
-                result = "\"mainEntity\": [
-                {
-                  \"@context\": \"http://schema.org\",
-                  \"@type\": \"ItemList\",
-                  \"name\": \"#{title.gsub('"', '\"')}\",
-                  \"description\": \"#{desc.gsub('"', '\"')}\",
-                  \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
-                  \"numberOfItems\": \"#{list_count}\",
-                  \"itemListElement\": #{list_final}
+                item = {
+                  "@type": "ListItem",
+                  "position": index + 1,
+                  "name": l_name,
+                  "url": l_url
                 }
-              ],"
-
-                return result
-              end
-              
-          elsif type_of_post == "itinerary"
-            if html.css(".post-summary.day-to-day").size == 1
-              list = html.css(".post-summary.day-to-day tr:not(:empty)")
-              list_count = list.size
-              l_pos = index + 1
-              list_items = ""
-              list.each_with_index do |i, index| 
-                
-                l_name = "#{i.at_css("td")[0].text.sub(/\b\d+\.\s*/, '').strip}: #{i.at_css("td")[1].text.sub(/\b\d+\.\s*/, '').strip}"
-                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
-                link_id = i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")                
-                l_desc = html.at_css("#{link_id} ~ p").find { |p| p.text.strip.length > 0 }
-
-
-                list_items << " {                  
-                  \"@type\": \"ListItem\",
-                  \"position\": #{l_pos},
-                  \"item\": {
-                    \"@type\": \"Place\",
-                    \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
-                    \"url\": \"#{l_url}\",
-                    \"description\": \"#{l_desc}\"
-                  },"
+                item["image"] = l_image if l_image && !l_image.include?("data:image/svg+xml")
+                item
               end
 
-              if list_items != ""
-                list_final = "{
-                  \"@type\": \"ItemList\",
-                  \"numberOfItems\": #{list_count},
-                  \"itemListElement\": [#{list_items.chomp(',')}]
-                }
-                "
-                result = "\"mainEntity\": [
-                {
-                  \"@type\": \"Trip\",
-                  \"name\": \"#{title.gsub('"', '\"')}\",
-                  \"description\": \"#{desc.gsub('"', '\"')}\",
-                  \"itinerary\": #{list_final}
-                }
-              ],"
-
-                return result
-              end
+              main_entity = {
+                "@type": "ItemList",
+                "name": title,
+                "description": desc,
+                "itemListOrder": "https://schema.org/ItemListOrderAscending",
+                "numberOfItems": list_elements.size,
+                "itemListElement": list_elements
+              }
             end
+
+          when "itinerary"
+            rows = html.css(".post-summary.day-to-day tr:not(:empty)")
+            if rows.any?
+              list_elements = rows.each_with_index.map do |row, index|
+                cells = row.css("td")
+                next if cells.size < 2
+
+                day_label = cells[0].text.strip # e.g., "Day 1"
+                location_name = cells[1].text.strip # e.g., "Macau"
+                
+                link = cells[1].at_css("a")
+                href = link ? link["href"] : ""
+                link_id = href.gsub("https://www.bucketlistly.blog/posts/#{slug}", "")
+                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{link_id}"
+
+                # Use your logic to find the next paragraph with text
+                l_desc = html.css("#{link_id} ~ p").find { |p| p.text.strip.length > 0 }&.text&.strip
+
+                {
+                  "@type": "ListItem",
+                  "position": index + 1,
+                  "item": {
+                    "@type": "Place",
+                    "name": location_name,
+                    "url": l_url,
+                    "description": l_desc || ""
+                  }
+                }
+              end.compact
+
+              main_entity = {
+                "@type": "Trip",
+                "name": title,
+                "description": desc,
+                "itinerary": {
+                  "@type": "ItemList",
+                  "numberOfItems": list_elements.size,
+                  "itemListElement": list_elements
+                }
+              }
+            end
+          end
+
+          # Return the JSON-ready string fragment
+          if main_entity
+            # We return it as a partial JSON string to fit your existing template
+            return "\"mainEntity\": #{main_entity.to_json},"
           end
         end
 
