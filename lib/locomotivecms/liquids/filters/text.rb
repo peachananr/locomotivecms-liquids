@@ -262,64 +262,7 @@ module LocomotiveCMS
           return tags
         end
 
-        def things_to_do_metadata(input, slug)
-          require 'nokogiri'
-          require 'json' # Ensure JSON library is loaded
-
-          html = Nokogiri.HTML(input)
-          # Target the summary block
-          summary_block = html.css(".product-summary.itinerary-summary:not(.day-to-day)").first
-          
-          return nil unless summary_block
-
-          rows = summary_block.css(".ps-row:not(:empty)")
-          return nil if rows.empty?
-
-          item_list_elements = rows.each_with_index.map do |row, index|
-            # Extract and clean text
-            l_name = row.at_css(".ps-title")&.text&.sub(/\b\d+\.\s*/, '')&.strip || ""
-            l_desc = row.at_css(".ps-desc")&.text&.sub(/\b\d+\.\s*/, '')&.strip || ""
-            
-            # Handle Image
-            img_node = row.at_css(".ps-image img")
-            l_image = img_node ? img_node["data-original"] : nil
-            
-            # Build the URL (ensuring it doesn't double-up the slug)
-            href = row["href"] || ""
-            clean_href = href.gsub("https://www.bucketlistly.blog/posts/#{slug}", "")
-            l_url = "https://www.bucketlistly.blog/posts/#{slug}#{clean_href}"
-
-            # Construct the individual List Item as a Ruby Hash
-            item_hash = {
-              "@type": "ListItem",
-              "position": index + 1,
-              "item": {
-                "@type": "Thing", # Or "Place" if you know they are all locations
-                "name": l_name,
-                "url": l_url,
-                "description": l_desc
-              }
-            }
-            
-            # Add image only if it's not a placeholder SVG
-            if l_image && !l_image.include?("data:image/svg+xml")
-              item_hash[:item][:image] = l_image
-            end
-
-            item_hash
-          end
-
-          # Wrap in the main ItemList structure
-          result_hash = {
-            "@type": "ItemList",
-            "numberOfItems": item_list_elements.size,
-            "itemListElement": item_list_elements
-          }
-
-          # Return as a clean JSON string (or just the hash if your view handles conversion)
-          result_hash.to_json
-        end
-
+        
         def about_metadata(input, title, desc, slug, location, type_of_post)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
@@ -890,13 +833,15 @@ module LocomotiveCMS
                     iduplicate = i.dup
                     iduplicate["aria-hidden"] = "true"
 
-                    html.at_css(id_el).add_child(" #{iduplicate.to_html}")
+                    html.at_css(id_el).add_child("xxxx #{iduplicate.to_html}")
                   end
                 end
                 
-                 summary_table_html = "<div class=\"post-summary-wrapper hide things-to-do-summary\"><table class=\"post-summary\"><tbody>#{summary_table}</tbody></table></div>"
+                if fix_required == "true" and html.css(".itinerary").size > 0
+                  summary_table_html = "<div class=\"post-summary-wrapper hide things-to-do-summary\"><table class=\"post-summary\"><tbody>#{summary_table}</tbody></table></div>"
 
                   html.at_css(".itinerary").add_next_sibling(summary_table_html)
+                end
               end
               
           #    items = i.css(".ps-row")
