@@ -812,8 +812,8 @@ module LocomotiveCMS
           html = Nokogiri.HTML(input)
           
 
-          if html.css('.product-summary.itinerary-summary').size > 0          
-            html.css('.product-summary.itinerary-summary').each do |i|
+          if html.css('.product-summary.itinerary-summary:not(".newly-added)').size > 0          
+            html.css('.product-summary.itinerary-summary:not(".newly-added)').each do |i|
               if i.css(".editor-choice").size > 0
                
                 summary_table = ""
@@ -838,7 +838,7 @@ module LocomotiveCMS
                 end
                 
                 if fix_required == "true" and  i.css(".editor-choice").size > 1
-                  summary_table_html = "<div class=\"post-summary-wrapper hide things-to-do-summary\"><table class=\"post-summary\"><tbody>#{summary_table}</tbody></table></div>"
+                  summary_table_html = "<div class=\"post-summary-wrapper hide newly-added things-to-do-summary\"><table class=\"post-summary\"><tbody>#{summary_table}</tbody></table></div>"
                   html.at_css(".itinerary").add_next_sibling(summary_table_html)
                 end
               end
