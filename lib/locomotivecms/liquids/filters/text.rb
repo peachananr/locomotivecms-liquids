@@ -364,7 +364,7 @@ module LocomotiveCMS
 
                 return result
               end
-              
+            end  
           elsif type_of_post == "itinerary"
             if html.css(".post-summary.day-to-day").size == 1
               list = html.css(".post-summary.day-to-day tr:not(:empty)")
@@ -393,7 +393,7 @@ module LocomotiveCMS
               if list_items != ""
                 list_final = "{
                   \"@type\": \"ItemList\",
-                  \"numberOfItems\": #{list_count},
+                  \"numberOfItems\": \"#{list_count}\",
                   \"itemListElement\": [#{list_items.chomp(',')}]
                 }
                 "
