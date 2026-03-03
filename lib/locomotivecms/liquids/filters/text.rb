@@ -269,87 +269,97 @@ module LocomotiveCMS
           require 'json'
           
           html = Nokogiri.HTML(input)
-          main_entity = nil
+          items_string = ""
+          list_count = 0
 
-          case type_of_post
+          case type_of_post.to_s.downcase
           when "things to do"
             rows = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
-            if rows.any?
-              list_elements = rows.each_with_index.map do |row, index|
-                l_name = row.at_css(".ps-title")&.text&.sub(/\b\d+\.\s*/, '')&.strip
-                l_image = row.at_css(".ps-image img")&.[]("data-original")
-                # Build URL
-                href = row["href"] || ""
-                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{href.gsub("https://www.bucketlistly.blog/posts/#{slug}", "")}"
+            list_count = rows.size
+            
+            rows.each_with_index do |row, index|
+              l_name = row.at_css(".ps-title")&.text&.sub(/\b\d+\.\s*/, '')&.strip || ""
+              l_image = row.at_css(".ps-image img")&.[]("data-original")
+              href = row["href"] || ""
+              l_url = "https://www.bucketlistly.blog/posts/#{slug}#{href.gsub("https://www.bucketlistly.blog/posts/#{slug}", "")}"
+              
+              img_part = l_image && !l_image.include?("data:image/svg+xml") ? "\"image\": #{l_image.to_json}," : ""
 
-                item = {
+              items_string << %Q(
+                {
                   "@type": "ListItem",
-                  "position": index + 1,
-                  "name": l_name,
-                  "url": l_url
-                }
-                item["image"] = l_image if l_image && !l_image.include?("data:image/svg+xml")
-                item
-              end
+                  "position": #{index + 1},
+                  "name": #{l_name.to_json},
+                  #{img_part}
+                  "url": "#{l_url}"
+                },)
+            end
 
-              main_entity = {
+            if items_string != ""
+              return %Q("mainEntity": {
                 "@type": "ItemList",
-                "name": title,
-                "description": desc,
-                "itemListOrder": "https://schema.org/ItemListOrderAscending",
-                "numberOfItems": list_elements.size,
-                "itemListElement": list_elements
-              }
+                "name": #{title.to_json},
+                "description": #{desc.to_json},
+                "numberOfItems": #{list_count},
+                "itemListElement": [#{items_string.chomp(',')}]
+              })
             end
 
           when "itinerary"
             rows = html.css(".post-summary.day-to-day tr:not(:empty)")
-            if rows.any?
-              list_elements = rows.each_with_index.map do |row, index|
-                cells = row.css("td")
-                next if cells.size < 2
+            list_count = rows.size
+            
+            rows.each_with_index do |row, index|
+              cells = row.css("td")
+              next if cells.size < 2
 
-                day_label = cells[0].text.strip # e.g., "Day 1"
-                location_name = cells[1].text.strip # e.g., "Macau"
-                
-                link = cells[1].at_css("a")
-                href = link ? link["href"] : ""
-                link_id = href.gsub("https://www.bucketlistly.blog/posts/#{slug}", "")
-                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{link_id}"
+              location_name = cells[1].text.strip
+              link = cells[1].at_css("a")
+              link_id = link ? link["href"].split('#').last : ""
+              l_url = "https://www.bucketlistly.blog/posts/#{slug}##{link_id}"
 
-                # Use your logic to find the next paragraph with text
-                l_desc = html.css("#{link_id} ~ p").find { |p| p.text.strip.length > 0 }&.text&.strip
+              # Find description
+              l_desc = ""
+              anchor = html.at_css("##{link_id}") || html.at_name(link_id)
+              if anchor
+                sibling = anchor.next_sibling
+                while sibling
+                  if sibling.name == 'p' && !sibling.text.strip.empty?
+                    l_desc = sibling.text.strip
+                    break
+                  end
+                  sibling = sibling.next_sibling
+                end
+              end
 
+              items_string << %Q(
                 {
                   "@type": "ListItem",
-                  "position": index + 1,
+                  "position": #{index + 1},
                   "item": {
                     "@type": "Place",
-                    "name": location_name,
-                    "url": l_url,
-                    "description": l_desc || ""
+                    "name": #{location_name.to_json},
+                    "url": "#{l_url}",
+                    "description": #{l_desc.to_json}
                   }
-                }
-              end.compact
+                },)
+            end
 
-              main_entity = {
+            if items_string != ""
+              return %Q("mainEntity": {
                 "@type": "Trip",
-                "name": title,
-                "description": desc,
+                "name": #{title.to_json},
+                "description": #{desc.to_json},
                 "itinerary": {
                   "@type": "ItemList",
-                  "numberOfItems": list_elements.size,
-                  "itemListElement": list_elements
+                  "numberOfItems": #{list_count},
+                  "itemListElement": [#{items_string.chomp(',')}]
                 }
-              }
+              })
             end
           end
 
-          # Return the JSON-ready string fragment
-          if main_entity
-            # We return it as a partial JSON string to fit your existing template
-            return "\"mainEntity\": #{main_entity},"
-          end
+          return "" # Return empty string if nothing matches
         end
 
         def amp_story(input, slug = '') 
