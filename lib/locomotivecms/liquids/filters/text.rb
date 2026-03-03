@@ -387,7 +387,7 @@ module LocomotiveCMS
                   \"position\": #{l_pos},
                   \"item\": {
                     \"@type\": \"Place\",
-                    \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
+                    \"name\": \"#{l_name}\",
                     \"url\": \"#{l_url}\",
                     \"description\": \"#{l_desc.gsub('"','\"')}\"
                   }
