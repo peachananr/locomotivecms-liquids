@@ -1068,7 +1068,7 @@ module LocomotiveCMS
             end
           end
           if html.css('.post-summary.day-to-day').size > 0
-            if html.css('.post-summary.day-to-day td:contains("Day ")').size > 0
+            if html.css('.post-summary.day-to-day td:contains("Day "), .post-summary.day-to-day th:contains("Day ")').size > 0
               html.css('.post-summary.day-to-day tr:not(:empty)').each do |a|
                 label = a.at_css("th:first-child").text.strip
                 name = a.at_css("td:last-child").text.strip
