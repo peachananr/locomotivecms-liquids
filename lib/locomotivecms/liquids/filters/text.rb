@@ -383,7 +383,7 @@ module LocomotiveCMS
                   \"@type\": \"ListItem\",
                   \"position\": #{l_pos},
                   \"item\": {
-                    \"@type\": "Place",
+                    \"@type\": \"Place\",
                     \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
                     \"url\": \"#{l_url}\",
                     \"description\": \"#{l_desc}\"
