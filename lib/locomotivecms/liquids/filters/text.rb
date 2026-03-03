@@ -817,7 +817,7 @@ module LocomotiveCMS
               if i.css(".editor-choice").size > 0
                
                 summary_table = ""
-
+                tr_count = 0 # Added to track the number of rows
                 fix_required = "false"
 
                 i.css(".editor-choice").each do |i|
@@ -825,6 +825,7 @@ module LocomotiveCMS
                   
                   if html.css(id_el).size > 0
                     fix_required = "true"
+                    tr_count += 1 # Added count increment
                     label = i.text 
                     value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
                     summary_table << "<tr><td>#{label}:</td><td>#{value}</td></tr>"
@@ -836,11 +837,11 @@ module LocomotiveCMS
                     html.at_css(id_el).add_child(" #{iduplicate.to_html}")
                   end
                 end
-                
+                # Added: check if odd and append placeholder
+                if tr_count > 0 && tr_count.odd?
+                  summary_table << "<tr class=\"placeholder\"><td>&nbsp;</td><td>&nbsp;</td></tr>"
+                end
                 if fix_required == "true" and  i.css(".editor-choice").size > 1
-                  if i.css(".editor-choice").size > 0 && row_count % 2 != 0
-                    summary_table << "<tr><tr>"
-                  end
                   summary_table_html = "<div class=\"post-summary-wrapper things-to-do-summary\"><table class=\"post-summary\"><tbody>#{summary_table}</tbody></table></div>"
                   html.at_css(".itinerary").add_next_sibling(summary_table_html)
                 end
