@@ -838,6 +838,9 @@ module LocomotiveCMS
                 end
                 
                 if fix_required == "true" and  i.css(".editor-choice").size > 1
+                  if i.css(".editor-choice").size > 0 && row_count % 2 != 0
+                    summary_table << "<tr><tr>"
+                  end
                   summary_table_html = "<div class=\"post-summary-wrapper things-to-do-summary\"><table class=\"post-summary\"><tbody>#{summary_table}</tbody></table></div>"
                   html.at_css(".itinerary").add_next_sibling(summary_table_html)
                 end
