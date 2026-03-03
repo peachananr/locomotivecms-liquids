@@ -318,7 +318,7 @@ module LocomotiveCMS
 
               list.each_with_index do |i, index| 
                 l_pos = index + 1
-                l_name = "#{i.css("td")[0].text.strip} #{i.css("td")[1].text.sub(/\b\d+\.\s*/, '').strip}"
+                l_name = "#{i.css("th")[0].text.strip} #{i.css("td")[0].text.sub(/\b\d+\.\s*/, '').strip}"
                 l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
                 link_id = i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")                
                 desc_node = html.css("#{link_id} ~ p").find { |p| p.text.strip.length > 0 }
@@ -826,7 +826,7 @@ module LocomotiveCMS
                     fix_required = "true"
                     label = i.text 
                     value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
-                    summary_table << "<tr><td>#{label}:</td><td>#{value}</td></tr>"
+                    summary_table << "<tr><th>#{label}:</th><td>#{value}</td></tr>"
 
 
                     iduplicate = i.dup
@@ -1070,7 +1070,7 @@ module LocomotiveCMS
           if html.css('.post-summary.day-to-day').size > 0
             if html.css('.post-summary.day-to-day td:contains("Day ")').size > 0
               html.css('.post-summary.day-to-day tr:not(:empty)').each do |a|
-                label = a.at_css("td:first-child").text.strip
+                label = a.at_css("th:first-child").text.strip
                 name = a.at_css("td:last-child").text.strip
                 
                 if html.css("h3:contains(\"#{name}\")").length > 0 and !html.at_css("h3:contains(\"#{name}\")").text.match(/Day (\d+)/i)
