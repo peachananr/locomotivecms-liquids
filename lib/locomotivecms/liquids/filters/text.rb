@@ -833,13 +833,12 @@ module LocomotiveCMS
                     iduplicate = i.dup
                     iduplicate["aria-hidden"] = "true"
 
-                    html.at_css(id_el).add_child("xxxx #{iduplicate.to_html}")
+                    html.at_css(id_el).add_child(" #{iduplicate.to_html}")
                   end
                 end
                 
                 if fix_required == "true" and html.css(".itinerary").size > 0
-                  summary_table_html = "<div class=\"post-summary-wrapper hide things-to-do-summary\"><table class=\"post-summary\"><tbody>#{summary_table}</tbody></table></div>"
-
+                  summary_table_html = "<div class=\"post-summary-wrapper\"><table class=\"post-summary day-to-day\"><tbody>#{summary_table}</tbody></table></div>"
                   html.at_css(".itinerary").add_next_sibling(summary_table_html)
                 end
               end
