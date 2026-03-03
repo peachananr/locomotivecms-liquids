@@ -826,7 +826,7 @@ module LocomotiveCMS
                   if html.css(id_el).size > 0
                     fix_required = "true"
                     label = i.text 
-                    value = "<a href='#{id_el}'>#{i.xpath('ancestor::a').first.text}</a>"
+                    value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
                     summary_table << "<tr><td>#{label}:</td><td>#{value}</td></tr>"
 
 
@@ -839,7 +839,7 @@ module LocomotiveCMS
                 
                 if fix_required == "true"
                   summary_table_html = "<div class=\"post-summary-wrapper\"><table class=\"post-summary day-to-day\"><tbody>#{summary_table}</tbody></table></div>"
-                  html.at_css(".itinerary").add_next_sibling("xxx#{summary_table_html}")
+                  html.at_css(".itinerary").add_next_sibling(summary_table_html)
                 end
               end
               
