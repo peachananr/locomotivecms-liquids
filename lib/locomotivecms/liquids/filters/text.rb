@@ -261,6 +261,48 @@ module LocomotiveCMS
 
           return tags
         end
+
+        def things_to_do_metadata(input)
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+           if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
+            list = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
+            list_count = list.size
+            list_items = ""
+            list.each_with_index do |i, index| 
+              l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+              l_image = i.at_css(".ps-image img")["data-original"]
+              l_desc = i.at_css(".ps-desc").text.sub(/\b\d+\.\s*/, '').strip
+              l_image_full = ""
+              if !l_image.include? "data:image/svg+xml;base6"
+                l_image_full = "\"image\": \"#{l_image}\","
+              end
+              
+              l_pos = index + 1
+              l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
+
+              list_items << " {
+                \"@type\": \"ListItem\",
+                \"position\": #{l_pos},
+                \"item\": {
+                  \"@type\": \"Thing\",
+                  \"name\": \"#{l_name.gsub('"', '\"')}\",
+                  #{l_image_full}                
+                  \"url\": \"#{l_url}\",
+                  \"description\": \"#{l_desc}\"
+                },"
+            end
+            if list_items != ""
+              list_final = "[#{list_items.chomp(',')}]"
+              result = "\"@type\": \"ItemList\",
+              \"numberOfItems\": #{list_count},
+              \"itemListElement\": #{list_final},"
+
+              return result
+            end
+          end
+        end
+
         def about_metadata(input, title, desc, slug, location)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
