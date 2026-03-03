@@ -401,14 +401,13 @@ module LocomotiveCMS
                   \"itemListElement\": [#{list_items.chomp(',')}]
                 }
                 "
-                result = "\"mainEntity\": [
+                result = "\"mainEntity\": 
                   {
                     \"@type\": \"Trip\",
                     \"name\": \"#{title.gsub('"', '\"')}\",
                     \"description\": \"#{desc.gsub('"', '\"')}\",
                     \"itinerary\": #{list_final}
-                  }
-                ],"
+                  },"
 
                 return result
               end
