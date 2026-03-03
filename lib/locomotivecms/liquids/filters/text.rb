@@ -872,9 +872,9 @@ module LocomotiveCMS
           if html.css('.product-summary.itinerary-summary').size > 0          
             html.css('.product-summary.itinerary-summary').each do |i|
               if i.css(".editor-choice").size > 0
-                summary_table_html = '<div class="post-summary-wrapper hide things-to-do-summary"><table class="post-summary"><tbody></tbody></table></div>'
-                summary_table = Nokogiri::HTML::DocumentFragment.parse(summary_table_html)
-                tbody = summary_table.at_css('tbody')
+               
+                summary_table = ""
+
                 fix_required = "false"
 
                 i.css(".editor-choice").each do |i|
@@ -884,8 +884,7 @@ module LocomotiveCMS
                     fix_required = "true"
                     label = i.text 
                     value = "<a href='#{id_el}'>#{i.xpath('ancestor::a').first.text}</a>"
-                    new_row = "<tr><td>#{label}:</td><td>#{value}</td></tr>"
-                    tbody.add_child(new_row)
+                    summary_table << "<tr><td>#{label}:</td><td>#{value}</td></tr>"
 
 
                     iduplicate = i.dup
@@ -896,7 +895,9 @@ module LocomotiveCMS
                 end
                 
                 if fix_required == "true" and html.css(".itinerary").length > 0
-                  html.at_css(".itinerary").add_next_sibling(summary_table)
+                  summary_table_html = "<div class=\"post-summary-wrapper hide things-to-do-summary\"><table class=\"post-summary\"><tbody>#{summary_table}</tbody></table></div>"
+
+                  html.at_css(".itinerary").add_next_sibling(summary_table_html)
                 end
               end
               
