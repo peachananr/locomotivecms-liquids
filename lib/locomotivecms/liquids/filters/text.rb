@@ -262,104 +262,154 @@ module LocomotiveCMS
           return tags
         end
 
-        
+        def things_to_do_metadata(input, slug)
+          require 'nokogiri'
+          require 'json' # Ensure JSON library is loaded
+
+          html = Nokogiri.HTML(input)
+          # Target the summary block
+          summary_block = html.css(".product-summary.itinerary-summary:not(.day-to-day)").first
+          
+          return nil unless summary_block
+
+          rows = summary_block.css(".ps-row:not(:empty)")
+          return nil if rows.empty?
+
+          item_list_elements = rows.each_with_index.map do |row, index|
+            # Extract and clean text
+            l_name = row.at_css(".ps-title")&.text&.sub(/\b\d+\.\s*/, '')&.strip || ""
+            l_desc = row.at_css(".ps-desc")&.text&.sub(/\b\d+\.\s*/, '')&.strip || ""
+            
+            # Handle Image
+            img_node = row.at_css(".ps-image img")
+            l_image = img_node ? img_node["data-original"] : nil
+            
+            # Build the URL (ensuring it doesn't double-up the slug)
+            href = row["href"] || ""
+            clean_href = href.gsub("https://www.bucketlistly.blog/posts/#{slug}", "")
+            l_url = "https://www.bucketlistly.blog/posts/#{slug}#{clean_href}"
+
+            # Construct the individual List Item as a Ruby Hash
+            item_hash = {
+              "@type": "ListItem",
+              "position": index + 1,
+              "item": {
+                "@type": "Thing", # Or "Place" if you know they are all locations
+                "name": l_name,
+                "url": l_url,
+                "description": l_desc
+              }
+            }
+            
+            # Add image only if it's not a placeholder SVG
+            if l_image && !l_image.include?("data:image/svg+xml")
+              item_hash[:item][:image] = l_image
+            end
+
+            item_hash
+          end
+
+          # Wrap in the main ItemList structure
+          result_hash = {
+            "@type": "ItemList",
+            "numberOfItems": item_list_elements.size,
+            "itemListElement": item_list_elements
+          }
+
+          # Return as a clean JSON string (or just the hash if your view handles conversion)
+          result_hash.to_json
+        end
 
         def about_metadata(input, title, desc, slug, location, type_of_post)
           require 'nokogiri'
-          require 'json'
-          
           html = Nokogiri.HTML(input)
-          items_string = ""
-          list_count = 0
-
-          case type_of_post.to_s.downcase
-          when "things to do"
-            rows = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
-            list_count = rows.size
-            
-            rows.each_with_index do |row, index|
-              l_name = row.at_css(".ps-title")&.text&.sub(/\b\d+\.\s*/, '')&.strip || ""
-              l_image = row.at_css(".ps-image img")&.[]("data-original")
-              href = row["href"] || ""
-              l_url = "https://www.bucketlistly.blog/posts/#{slug}#{href.gsub("https://www.bucketlistly.blog/posts/#{slug}", "")}"
-              
-              img_part = l_image && !l_image.include?("data:image/svg+xml") ? "\"image\": #{l_image.to_json}," : ""
-
-              items_string << %Q(
-                {
-                  "@type": "ListItem",
-                  "position": #{index + 1},
-                  "name": #{l_name.to_json},
-                  #{img_part}
-                  "url": "#{l_url}"
-                },)
-            end
-
-            if items_string != ""
-              return %Q("mainEntity": {
-                "@type": "ItemList",
-                "name": #{title.to_json},
-                "description": #{desc.to_json},
-                "numberOfItems": #{list_count},
-                "itemListElement": [#{items_string.chomp(',')}]
-              })
-            end
-
-          when "itinerary"
-            rows = html.css(".post-summary.day-to-day tr:not(:empty)")
-            list_count = rows.size
-            
-            rows.each_with_index do |row, index|
-              cells = row.css("td")
-              next if cells.size < 2
-
-              location_name = cells[1].text.strip
-              link = cells[1].at_css("a")
-              link_id = link ? link["href"].split('#').last : ""
-              l_url = "https://www.bucketlistly.blog/posts/#{slug}##{link_id}"
-
-              # Find description
-              l_desc = ""
-              anchor = html.at_css("##{link_id}") || html.at_name(link_id)
-              if anchor
-                sibling = anchor.next_sibling
-                while sibling
-                  if sibling.name == 'p' && !sibling.text.strip.empty?
-                    l_desc = sibling.text.strip
-                    break
-                  end
-                  sibling = sibling.next_sibling
+          if type_of_post == "things to do"
+            if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
+              list = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
+              list_count = list.size
+              list_items = ""
+              list.each_with_index do |i, index| 
+                l_name = i.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+                l_image = i.at_css(".ps-image img")["data-original"]
+                l_image_full = ""
+                if !l_image.include? "data:image/svg+xml;base6"
+                  l_image_full = "\"image\": \"#{l_image}\","
                 end
+                
+                l_pos = index + 1
+                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
+
+                list_items << " {
+                  \"@type\": \"ListItem\",
+                  \"position\": #{l_pos},
+                  \"name\": \"#{l_name.gsub('"', '\"')}\",
+                  #{l_image_full}                
+                  \"url\": \"#{l_url}\"
+                  },"
               end
 
-              items_string << %Q(
+              if list_items != ""
+                list_final = "[#{list_items.chomp(',')}]"
+                result = "\"mainEntity\": [
                 {
-                  "@type": "ListItem",
-                  "position": #{index + 1},
-                  "item": {
-                    "@type": "Place",
-                    "name": #{location_name.to_json},
-                    "url": "#{l_url}",
-                    "description": #{l_desc.to_json}
-                  }
-                },)
-            end
-
-            if items_string != ""
-              return %Q("mainEntity": {
-                "@type": "Trip",
-                "name": #{title.to_json},
-                "description": #{desc.to_json},
-                "itinerary": {
-                  "@type": "ItemList",
-                  "numberOfItems": #{list_count},
-                  "itemListElement": [#{items_string.chomp(',')}]
+                  \"@context\": \"http://schema.org\",
+                  \"@type\": \"ItemList\",
+                  \"name\": \"#{title.gsub('"', '\"')}\",
+                  \"description\": \"#{desc.gsub('"', '\"')}\",
+                  \"itemListOrder\": \"http://schema.org/ItemListOrderAscending\",
+                  \"numberOfItems\": \"#{list_count}\",
+                  \"itemListElement\": #{list_final}
                 }
-              })
+              ],"
+
+                return result
+              end
+              
+          elsif type_of_post == "itinerary"
+            if html.css(".post-summary.day-to-day").size == 1
+              list = html.css(".post-summary.day-to-day tr:not(:empty)")
+              list_count = list.size
+              l_pos = index + 1
+              list_items = ""
+              list.each_with_index do |i, index| 
+                
+                l_name = "#{i.at_css("td")[0].text.sub(/\b\d+\.\s*/, '').strip}: #{i.at_css("td")[1].text.sub(/\b\d+\.\s*/, '').strip}"
+                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
+                link_id = i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")                
+                l_desc = html.at_css("#{link_id} ~ p").find { |p| p.text.strip.length > 0 }
+
+
+                list_items << " {                  
+                  \"@type\": \"ListItem\",
+                  \"position\": #{l_pos},
+                  \"item\": {
+                    \"@type\": \"Place\",
+                    \"name\": \"#{l_name.sub(/.*?:\s*/, '')}\",
+                    \"url\": \"#{l_url}\",
+                    \"description\": \"#{l_desc}\"
+                  },"
+              end
+
+              if list_items != ""
+                list_final = "{
+                  \"@type\": \"ItemList\",
+                  \"numberOfItems\": #{list_count},
+                  \"itemListElement\": [#{list_items.chomp(',')}]
+                }
+                "
+                result = "\"mainEntity\": [
+                {
+                  \"@type\": \"Trip\",
+                  \"name\": \"#{title.gsub('"', '\"')}\",
+                  \"description\": \"#{desc.gsub('"', '\"')}\",
+                  \"itinerary\": #{list_final}
+                }
+              ],"
+
+                return result
+              end
             end
           end
-
-          return "" # Return empty string if nothing matches
         end
 
         def amp_story(input, slug = '') 
