@@ -375,7 +375,7 @@ module LocomotiveCMS
 
               list.each_with_index do |i, index| 
                 l_pos = index + 1
-                l_name = "#{i.css("td")[1].text.strip}: #{i.css("td")[1].text.sub(/\b\d+\.\s*/, '').strip}"
+                l_name = "#{i.css("td")[0].text.strip}: #{i.css("td")[1].text.sub(/\b\d+\.\s*/, '').strip}"
                 l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
                 link_id = i.at_css("td a")["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")                
                 desc_node = html.css("#{link_id} ~ p").find { |p| p.text.strip.length > 0 }
