@@ -824,7 +824,11 @@ module LocomotiveCMS
                   id_el = i.xpath('ancestor::a').first["href"]
                   
                   if html.css(id_el).size > 0
-                    
+                    fix_required = "true"
+                    label = i.text 
+                    value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
+                    summary_table << "<tr><td>#{label}:</td><td>#{value}</td></tr>"
+
 
                     iduplicate = i.dup
                     iduplicate["aria-hidden"] = "true"
@@ -834,7 +838,7 @@ module LocomotiveCMS
                 end
                 
                 if fix_required == "true" and  i.css(".editor-choice").size > 1
-                  summary_table_html = "<div class=\"post-summary-wrapper\"><table class=\"post-summary day-to-day\"><tbody>#{summary_table}</tbody></table></div>"
+                  summary_table_html = "<div class=\"post-summary-wrapper hide things-to-do-summary\"><table class=\"post-summary\"><tbody>#{summary_table}</tbody></table></div>"
                   html.at_css(".itinerary").add_next_sibling(summary_table_html)
                 end
               end
