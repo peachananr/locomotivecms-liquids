@@ -65,8 +65,17 @@ module LocomotiveCMS
           #given this input = "<h2>xxx</h2><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><h2>yyy</h2><p></p><p></p>"
 
           doc = Nokogiri::HTML(input)
+
+          pinterest_node = doc.at_css('#pinterest')
+          target_wrapper = doc.at_css('.table-of-contents-wrapper')
+
+          # 2. Check if both exist before moving to avoid errors
+          if pinterest_node && target_wrapper
+            # This removes it from its current location and adds it as the last child
+            target_wrapper.add_child(pinterest_node)
+          end
           
-          doc.at_css("#pinterest").remove()
+          #doc.at_css("#pinterest").remove()
           doc.search('p.temp').remove
           
           p_tags = doc.css('body > *')
