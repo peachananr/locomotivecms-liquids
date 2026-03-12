@@ -990,8 +990,8 @@ module LocomotiveCMS
             end
           end
 
-          if html.css('.activity-block').size == 1
-            
+          if html.css('.activity-block').size == 1     
+            html.at_css("body.posts").add_previous_sibling(html.at_css("body.posts")["class"].downcase)
             if html.css("body.posts").length > 0 and (html.at_css("body.posts")["class"].downcase.include? "things-to-do" or html.at_css("body.posts")["class"].downcase.include? "itinerary")
 
                 
