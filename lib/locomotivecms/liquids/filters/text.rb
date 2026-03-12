@@ -960,7 +960,6 @@ module LocomotiveCMS
           end
           
           if html.css('.accommodation-block:not(.dont-move)').size == 1
-            html.at_css("body.posts").add_previous_sibling(html.at_css("body.posts")["class"].downcase)
             el = html.at_css('.accommodation-block:not(.dont-move)')
             h2 = el.at_css('h2')["id"]
             if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "itinerary") and html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2)").length > 0 and html.css(".product-summary.accommodation").length == 1   
