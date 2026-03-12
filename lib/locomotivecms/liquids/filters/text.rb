@@ -963,7 +963,7 @@ module LocomotiveCMS
             html.at_css("body.posts").add_previous_sibling(html.at_css("body.posts")["class"].downcase)
             el = html.at_css('.accommodation-block:not(.dont-move)')
             h2 = el.at_css('h2')["id"]
-            if html.css("body.posts").length > 0 and (html.at_css("body.posts")["class"].downcase.include? "things-to-do" or html.at_css("body.posts")["class"].downcase.include? "itinerary") and html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2)").length > 0 and html.css(".product-summary.accommodation").length == 1   
+            if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "itinerary") and html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2)").length > 0 and html.css(".product-summary.accommodation").length == 1   
               html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2)").add_previous_sibling(el)     
               h2 = html.at_css('.accommodation-block h2')
               new_h2 = "<h4 id='#{h2["id"]}'>#{h2.inner_html}</h4>"
@@ -992,7 +992,7 @@ module LocomotiveCMS
           end
 
           if html.css('.activity-block').size == 1                 
-            if html.css("body.posts").length > 0 and (html.at_css("body.posts")["class"].downcase.include? "things-to-do" or html.at_css("body.posts")["class"].downcase.include? "itinerary")
+            if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "itinerary")
 
                 
                 
