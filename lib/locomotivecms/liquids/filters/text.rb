@@ -276,41 +276,35 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
 
-          table_items = ""
-          # Locate your summary box (adjust selector if yours is different)
-          post_summary = html.css('.post-summary')
-          if post_summary.length > 0
-            summary_rows = html.css('.post-summary tr')
-            
-            summary_rows.each do |row|
-              cols = row.css('td, th')
-              if cols.size >= 2
-                label = cols[0].text.strip.gsub(':', '').gsub('"', '\"')
-                value = cols[1].text.strip.gsub('"', '\"')
-                
-                table_items_string << "{
-                  \"@type\": \"PropertyValue\",
-                  \"name\": \"#{label}\",
-                  \"value\": \"#{value}\"
-                },"
-              end
-            end
-            table_json_string = ""
-            if table_items_string != ""
-              table_json_string = "{
-                \"@type\": \"Table\",
-                \"name\": \"Quick Summary\",
-                \"hasPart\": [#{table_items_string.chomp(',')}]
-              }"
+
+          table_items_string = ""
+          summary_rows = html.css('.post-summary tr')
+          
+          summary_rows.each do |row|
+            cols = row.css('td, th')
+            if cols.size >= 2
+              label = cols[0].text.strip.gsub(':', '').gsub('"', '\"')
+              value = cols[1].text.strip.gsub('"', '\"')
+              
+              table_items_string << "{
+                \"@type\": \"PropertyValue\",
+                \"name\": \"#{label}\",
+                \"value\": \"#{value}\"
+              },"
             end
           end
           
-          subject_line = ""
-          if table_json_string != ""
-            puts "xxxxxxxx #{table_json_string}"
-            subject_line = "\"subjectOf\": #{table_json_string},"
-          end
+          subject_line = table_json_string != "" ? "\"subjectOf\": #{table_json_string}," : ""
 
+
+          table_json_string = ""
+          if table_items_string != ""
+            table_json_string = "{
+              \"@type\": \"Table\",
+              \"name\": \"Quick Summary\",
+              \"hasPart\": [#{table_items_string.chomp(',')}]
+            }"            
+          end
           if type_of_post == "things to do"
             if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
               list = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
@@ -339,7 +333,6 @@ module LocomotiveCMS
 
               if list_items != ""
                 list_final = "[#{list_items.chomp(',')}]"
-                
                 result = "\"mainEntity\": 
                 {
                   \"@context\": \"https://schema.org\",
@@ -396,8 +389,8 @@ module LocomotiveCMS
                     \"@type\": \"Trip\",
                     \"name\": \"#{title.gsub('"', '\"')}\",
                     \"description\": \"#{desc.gsub('"', '\"')}\",
-                    \"itinerary\": #{list_final},
                     #{subject_line}
+                    \"itinerary\": #{list_final}
                   },"
 
                 return result
