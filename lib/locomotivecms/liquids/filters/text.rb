@@ -276,7 +276,7 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
 
-          table_items = []
+          table_items = ""
           # Locate your summary box (adjust selector if yours is different)
           post_summary = html.css('.post-summary')
           if post_summary.length > 0
@@ -304,9 +304,10 @@ module LocomotiveCMS
               }"
             end
           end
-
+          
           subject_line = ""
           if table_json_string != ""
+            puts "xxxxxxxx #{table_json_string}"
             subject_line = "\"subjectOf\": #{table_json_string},"
           end
 
