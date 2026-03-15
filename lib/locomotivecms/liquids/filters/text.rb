@@ -294,7 +294,6 @@ module LocomotiveCMS
             end
           end
           
-          subject_line = table_json_string != "" ? "\"subjectOf\": #{table_json_string}," : ""
 
 
           table_json_string = ""
@@ -305,6 +304,9 @@ module LocomotiveCMS
               \"hasPart\": [#{table_items_string.chomp(',')}]
             }"            
           end
+
+          subject_line = table_json_string != "" ? "\"subjectOf\": #{table_json_string}," : ""
+
           if type_of_post == "things to do"
             if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
               list = html.css(".product-summary.itinerary-summary:not(.day-to-day) .ps-row:not(:empty)")
