@@ -307,8 +307,8 @@ module LocomotiveCMS
 
           subject_line = ""
           if table_json_string != ""
-            subject_line = table_json_string != "" ? "\"subjectOf\": #{table_json_string}," : ""
-            end
+            subject_line = "\"subjectOf\": #{table_json_string}," : ""
+          end
 
           if type_of_post == "things to do"
             if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
