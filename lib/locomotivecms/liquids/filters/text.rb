@@ -307,7 +307,7 @@ module LocomotiveCMS
 
           subject_line = ""
           if table_json_string != ""
-            subject_line = "\"subjectOf\": #{table_json_string}," : ""
+            subject_line = "\"subjectOf\": #{table_json_string},"
           end
 
           if type_of_post == "things to do"
