@@ -281,10 +281,8 @@ module LocomotiveCMS
           summary_rows = html.css('.post-summary tr')
           
           summary_rows.each do |row|
-            puts "xxxxxxx"
             cols = row.css('td, th')
             if cols.size >= 2
-              puts "xxxxxxxxxxx"
               label = cols[0].text.strip.gsub(':', '').gsub('"', '\"')
               value = cols[1].text.strip.gsub('"', '\"')
                   
@@ -296,7 +294,6 @@ module LocomotiveCMS
             end
           end
           
-          puts "xxx#{table_items_string}"
 
 
           table_json_string = ""
@@ -307,8 +304,13 @@ module LocomotiveCMS
               \"hasPart\": [#{table_items_string.chomp(',')}]
             }"            
           end
-
-          subject_line = table_json_string != "" ? "\"subjectOf\": #{table_json_string}," : ""
+          puts "xxxx#{table_json_string}"
+          subject_line = ""
+          
+          if table_json_string != ""
+            subject_line = "\"subjectOf\": #{table_json_string},"
+          end
+                    puts "yyyyy#{subject_line}"
 
           if type_of_post == "things to do"
             if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
