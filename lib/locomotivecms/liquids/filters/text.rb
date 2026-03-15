@@ -276,7 +276,7 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
 
-
+          puts "xxxx#{input}"
           table_items_string = ""
           summary_rows = html.css('.post-summary tr')
           
