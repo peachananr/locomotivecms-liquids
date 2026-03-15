@@ -888,7 +888,7 @@ module LocomotiveCMS
                 end
                 
                 if fix_required == "true" and  i.css(".editor-choice").size > 1
-                  if html.css('.accommodation-block').size == 1
+                  if html.css('.accommodation-button').size == 1
                      if html.css('.accommodation-block .editor-choice').size > 0
                       hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
                       hotel_link = hotel["href"]
