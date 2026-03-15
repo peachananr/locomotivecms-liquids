@@ -1082,6 +1082,7 @@ module LocomotiveCMS
             end
           end
           if html.css('.post-summary.day-to-day').size > 0
+            html.at_css('.post-summary.day-to-day').before('<h3>Quick Summary</h3>')
             if html.css('.post-summary.day-to-day td:contains("Day "), .post-summary.day-to-day th:contains("Day ")').size > 0
               html.css('.post-summary.day-to-day tr:not(:empty)').each do |a|
                 label = a.at_css("th:first-child, td:first-child").text.strip
