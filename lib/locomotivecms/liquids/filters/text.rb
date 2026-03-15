@@ -271,8 +271,8 @@ module LocomotiveCMS
           return tags
         end
 
-        
-        def about_metadata(input, title, desc, slug, location, type_of_post)
+
+        def pre_about_metadata(input)
           require 'nokogiri'
           html = Nokogiri.HTML(input)
 
@@ -293,9 +293,6 @@ module LocomotiveCMS
               },"
             end
           end
-          
-
-
           table_json_string = ""
           if table_items_string != ""
             table_json_string = "{
@@ -304,13 +301,22 @@ module LocomotiveCMS
               \"hasPart\": [#{table_items_string.chomp(',')}]
             }"            
           end
-          puts "xxxx#{table_json_string}"
           subject_line = ""
           
           if table_json_string != ""
             subject_line = "\"subjectOf\": #{table_json_string},"
           end
-                    puts "yyyyy#{subject_line}"
+          return subject_line
+        end
+        
+        def about_metadata(input, title, desc, slug, location, type_of_post, extra)
+          require 'nokogiri'
+          html = Nokogiri.HTML(input)
+
+          subject_line = ""
+          if extra != ""
+            subject_line = extra
+          end
 
           if type_of_post == "things to do"
             if html.css(".product-summary.itinerary-summary:not(.day-to-day)").size == 1
