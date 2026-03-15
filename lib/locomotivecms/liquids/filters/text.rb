@@ -300,7 +300,7 @@ module LocomotiveCMS
               \"name\": \"Quick Summary\",
               \"hasPart\": [#{table_items_string.chomp(',')}]
             }"            
-            puts "xxxx#{table_json_string}"
+          puts "yyyy#{subject_line}"
           end
           
           subject_line = ""
@@ -308,7 +308,6 @@ module LocomotiveCMS
           if table_json_string != ""
             subject_line = "\"subjectOf\": #{table_json_string},"
           end
-          puts "yyyy#{subject_line}"
           return subject_line
         end
         
