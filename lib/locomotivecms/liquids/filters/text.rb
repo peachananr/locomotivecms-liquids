@@ -300,12 +300,15 @@ module LocomotiveCMS
               \"name\": \"Quick Summary\",
               \"hasPart\": [#{table_items_string.chomp(',')}]
             }"            
+            puts "xxxx#{table_json_string}"
           end
+          
           subject_line = ""
           
           if table_json_string != ""
             subject_line = "\"subjectOf\": #{table_json_string},"
           end
+          puts "yyyy#{subject_line}"
           return subject_line
         end
         
