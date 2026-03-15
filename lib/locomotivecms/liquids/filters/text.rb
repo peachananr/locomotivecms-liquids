@@ -869,7 +869,7 @@ module LocomotiveCMS
                
                 summary_table = ""
                 fix_required = "false"
-
+                row_count = 0
                 i.css(".editor-choice").each do |i|
                   id_el = i.xpath('ancestor::a').first["href"]
                   
@@ -878,7 +878,7 @@ module LocomotiveCMS
                     label = i.text 
                     value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
                     summary_table << "<tr><th>#{label}:</th><td>#{value}</td></tr>"
-
+                    row_count = row_count + 1
 
                     iduplicate = i.dup
                     iduplicate["aria-hidden"] = "true"
@@ -899,7 +899,12 @@ module LocomotiveCMS
                       hotel_name = hotel.at_css(".ps-name").text
                      end
                     summary_table << "<tr><th>🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
+                    row_count = row_count + 1
                   end
+                  if row_count.odd?
+                    summary_table << "<tr></tr>"
+                  end
+                  
                   summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}</tbody></table></div>"
 
                   if html.at_css(".itinerary")
