@@ -273,42 +273,37 @@ module LocomotiveCMS
 
 
         def pre_about_metadata(input)
+          return "" if input.blank? # Safety first
           require 'nokogiri'
           html = Nokogiri.HTML(input)
 
-
           table_items_string = ""
+          # Ensure we only target the specific summary table
           summary_rows = html.css('.post-summary tr')
           
           summary_rows.each do |row|
             cols = row.css('td, th')
-            if cols.size >= 2
-              label = cols[0].text.strip.gsub(':', '').gsub('"', '\"')
-              value = cols[1].text.strip.gsub('"', '\"')
+            next unless cols.size >= 2 # Use next instead of nesting if
+            
+            label = cols[0].text.strip.gsub(':', '').gsub('"', '\"')
+            value = cols[1].text.strip.gsub('"', '\"')
                   
-              table_items_string << "{
-                \"@type\": \"PropertyValue\",
-                \"name\": \"#{label}\",
-                \"value\": \"#{value}\"
-              },"
-            end
+            table_items_string << "{
+              \"@type\": \"PropertyValue\",
+              \"name\": \"#{label}\",
+              \"value\": \"#{value}\"
+            },"
           end
-          table_json_string = ""
-          if table_items_string != ""
-            table_json_string = "{
-              \"@type\": \"Table\",
-              \"name\": \"Quick Summary\",
-              \"hasPart\": [#{table_items_string.chomp(',')}]
-            }"            
-          puts "yyyy#{subject_line}"
-          end
+
+          return "" if table_items_string.empty?
+
+          table_json_string = "{
+            \"@type\": \"Table\",
+            \"name\": \"Quick Summary\",
+            \"hasPart\": [#{table_items_string.chomp(',')}]
+          }"            
           
-          subject_line = ""
-          
-          if table_json_string != ""
-            subject_line = "\"subjectOf\": #{table_json_string},"
-          end
-          return subject_line
+          return "\"subjectOf\": #{table_json_string},"
         end
         
         def about_metadata(input, title, desc, slug, location, type_of_post, extra)
