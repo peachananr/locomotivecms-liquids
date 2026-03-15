@@ -888,6 +888,18 @@ module LocomotiveCMS
                 end
                 
                 if fix_required == "true" and  i.css(".editor-choice").size > 1
+                  if html.css('.accommodation-block').size == 1
+                     if html.css('.accommodation-block .editor-choice').size > 0
+                      hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
+                      hotel_link = hotel["href"]
+                      hotel_name = hotel.at_css(".ps-name").text
+                     else
+                      hotel = html.css('.accommodation-block a')[1]
+                      hotel_link = hotel["href"]
+                      hotel_name = hotel.at_css(".ps-name").text
+                     end
+                    summary_table << "<tr><th>🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
+                  end
                   summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}</tbody></table></div>"
 
                   if html.at_css(".itinerary")
