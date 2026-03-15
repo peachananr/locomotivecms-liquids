@@ -276,16 +276,18 @@ module LocomotiveCMS
           require 'nokogiri'
           html = Nokogiri.HTML(input)
 
-          puts "xxxx#{input}"
+
           table_items_string = ""
           summary_rows = html.css('.post-summary tr')
           
           summary_rows.each do |row|
+            puts "xxxxxxx"
             cols = row.css('td, th')
             if cols.size >= 2
+              puts "xxxxxxxxxxx"
               label = cols[0].text.strip.gsub(':', '').gsub('"', '\"')
               value = cols[1].text.strip.gsub('"', '\"')
-              
+                  
               table_items_string << "{
                 \"@type\": \"PropertyValue\",
                 \"name\": \"#{label}\",
@@ -294,6 +296,7 @@ module LocomotiveCMS
             end
           end
           
+          puts "xxx#{table_items_string}"
 
 
           table_json_string = ""
