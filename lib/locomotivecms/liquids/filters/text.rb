@@ -866,32 +866,34 @@ module LocomotiveCMS
           if html.css('.product-summary.itinerary-summary').size > 0          
             html.css('.product-summary.itinerary-summary').each do |i|
               rows = []
-              summary_elements = html.xpath('.//*[any-at(starts-with(name(), "data-summary-"))]')
-              if !summary_elements.empty?
-                # Search for any element that has an attribute starting with 'data-summary-'
+              summary_elements = html.xpath('.//@*[starts-with(name(), "data-summary-")]/..').uniq
+              if summary_elements.any?
                 summary_elements.each do |el|
                   el.attributes.each do |name, attr|
                     next unless name.start_with?('data-summary-')
 
                     # 1. Extract and Unslugify the label
-                    # Removes 'data-summary-', replaces hyphens with spaces, and capitalizes
-                    label = name.sub('data-summary-', '').gsub('-', ' ').capitalize
+                    raw_label = name.sub('data-summary-', '').gsub('-', ' ')
+                    label = raw_label.capitalize
+                    
+                    # 2. Assign Emoji
                     emoji = case raw_label.downcase
-                    when /when to visit/
-                      "🌤️ "
-                    when /getting around/
-                      "🏃‍♂️ "
-                    else
-                      ""
-                    end
-                    # 2. Get the value (the text you typed in the rake task)
+                            when /when to visit/
+                              "🌤️ "
+                            when /getting around/
+                              "🏃‍♂️ "
+                            else
+                              ""
+                            end
+                    
+                    # 3. Get the value
                     value_text = attr.value
                     
-                    # 3. Get the ID for the anchor link
-                    # If the H2 doesn't have an ID, we might want to use the slugified label as a fallback
-                    element_id = el['id'] || "#"
+                    # 4. Get the ID
+                    # Fallback to a parameterized version of the header text if ID is missing
+                    element_id = el['id'] || el.text.to_s.parameterize
 
-                    # 4. Construct the HTML row
+                    # 5. Construct the HTML row
                     rows << "<tr><th>#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
                   end
                 end
