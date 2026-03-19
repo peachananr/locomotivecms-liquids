@@ -937,7 +937,7 @@ module LocomotiveCMS
                     summary_table << "<tr></tr>"
                   end
                   
-                  summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}#{rows.to_html}</tbody></table></div>"
+                  summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}#{rows.join("\n")}</tbody></table></div>"
 
                   if html.at_css(".itinerary")
                     html.at_css(".itinerary").add_next_sibling(summary_table_html)
