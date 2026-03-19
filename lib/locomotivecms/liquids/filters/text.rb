@@ -876,7 +876,14 @@ module LocomotiveCMS
                     # 1. Extract and Unslugify the label
                     # Removes 'data-summary-', replaces hyphens with spaces, and capitalizes
                     label = name.sub('data-summary-', '').gsub('-', ' ').capitalize
-                    
+                    emoji = case raw_label.downcase
+                    when /when to visit/
+                      "🌤️ "
+                    when /getting around/
+                      "🏃‍♂️ "
+                    else
+                      ""
+                    end
                     # 2. Get the value (the text you typed in the rake task)
                     value_text = attr.value
                     
@@ -885,7 +892,7 @@ module LocomotiveCMS
                     element_id = el['id'] || "#"
 
                     # 4. Construct the HTML row
-                    rows << "<tr><th>#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
+                    rows << "<tr><th>#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
                   end
                 end
               end
@@ -901,16 +908,8 @@ module LocomotiveCMS
                   if html.css(id_el).size > 0
                     fix_required = "true"
                     label = i.text 
-                    emoji = case label.downcase
-                    when /when to visit/
-                      "🌤️ "
-                    when /getting around/
-                      "🏃‍♂️ "
-                    else
-                      ""
-                    end
                     value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
-                    summary_table << "<tr><th>#{emoji}#{label}:</th><td>#{value}</td></tr>"
+                    summary_table << "<tr><th>#{label}:</th><td>#{value}</td></tr>"
                     row_count = row_count + 1
 
                     iduplicate = i.dup
