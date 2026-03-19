@@ -864,7 +864,7 @@ module LocomotiveCMS
           
 
           if html.css('.product-summary.itinerary-summary').size > 0          
-            html.css('.product-summary.itinerary-summary').each do |i|
+            html.css('.product-summary.itinerary-summary').each do |i|              
               if i.css(".editor-choice").size > 0
                
                 summary_table = ""
@@ -925,6 +925,35 @@ module LocomotiveCMS
           #    html = Nokogiri.HTML(string)
             end
           end
+
+
+          rows = []
+          summary_elements = html.xpath('.//*[any-at(starts-with(name(), "data-summary-"))]')
+          if !summary_elements.empty?
+            summary_table = html.at_css('table.post-summary')
+            if summary_table
+              container = summary_table.at_css('tbody') || summary_table
+              # 3. Iterate and build rows (in reverse to maintain order when prepending)
+              summary_elements.reverse_each do |el|
+                el.attributes.each do |attr_name, attr_value|
+                  next unless attr_name.start_with?('data-summary-')
+
+                  # Formatting the label and value
+                  label = attr_name.sub('data-summary-', '').gsub('-', ' ').capitalize
+                  display_value = attr_value.value
+                  anchor_id = el['id'] || el.text.to_s.parameterize
+                  
+                  # Create the row HTML
+                  row_html = "<tr><th>#{label}:</th><td><a href=\"##{anchor_id}\">#{display_value}</a></td></tr>"
+                  
+                  # 4. Prepend to the top of the table/tbody
+                  container.prepend_child(row_html)
+                end
+              end
+            end            
+          end
+          
+
           
           if html.css('#insurance').size > 0
             html.at_css("#insurance").remove()
