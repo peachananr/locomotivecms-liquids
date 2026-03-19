@@ -864,7 +864,32 @@ module LocomotiveCMS
           
 
           if html.css('.product-summary.itinerary-summary').size > 0          
-            html.css('.product-summary.itinerary-summary').each do |i|              
+            html.css('.product-summary.itinerary-summary').each do |i|
+              rows = []
+              summary_elements = doc.xpath('.//*[any-at(starts-with(name(), "data-summary-"))]')
+              if !summary_elements.empty?
+                # Search for any element that has an attribute starting with 'data-summary-'
+                summary_elements.each do |el|
+                  el.attributes.each do |name, attr|
+                    next unless name.start_with?('data-summary-')
+
+                    # 1. Extract and Unslugify the label
+                    # Removes 'data-summary-', replaces hyphens with spaces, and capitalizes
+                    label = name.sub('data-summary-', '').gsub('-', ' ').capitalize
+                    
+                    # 2. Get the value (the text you typed in the rake task)
+                    value_text = attr.value
+                    
+                    # 3. Get the ID for the anchor link
+                    # If the H2 doesn't have an ID, we might want to use the slugified label as a fallback
+                    element_id = el['id'] || "#"
+
+                    # 4. Construct the HTML row
+                    rows << "<tr><th>#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
+                  end
+                end
+              end
+
               if i.css(".editor-choice").size > 0
                
                 summary_table = ""
@@ -876,8 +901,16 @@ module LocomotiveCMS
                   if html.css(id_el).size > 0
                     fix_required = "true"
                     label = i.text 
+                    emoji = case label.downcase
+                    when /when to visit/
+                      "🌤️ "
+                    when /getting around/
+                      "🏃‍♂️ "
+                    else
+                      ""
+                    end
                     value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
-                    summary_table << "<tr><th>#{label}:</th><td>#{value}</td></tr>"
+                    summary_table << "<tr><th>#{emoji}#{label}:</th><td>#{value}</td></tr>"
                     row_count = row_count + 1
 
                     iduplicate = i.dup
@@ -905,7 +938,7 @@ module LocomotiveCMS
                     summary_table << "<tr></tr>"
                   end
                   
-                  summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}</tbody></table></div>"
+                  summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}#{rows.to_html}</tbody></table></div>"
 
                   if html.at_css(".itinerary")
                     html.at_css(".itinerary").add_next_sibling(summary_table_html)
@@ -925,50 +958,6 @@ module LocomotiveCMS
           #    html = Nokogiri.HTML(string)
             end
           end
-
-
-          rows = []
-          summary_elements = html.xpath('.//*[any-at(starts-with(name(), "data-summary-"))]')
-          if !summary_elements.empty?
-            summary_table = html.at_css('table.post-summary')
-            if summary_table
-              container = summary_table.at_css('tbody') || summary_table
-              existing_headers = container.css('th').map { |th| th.text.strip.downcase }
-              # 3. Iterate and build rows (in reverse to maintain order when prepending)
-              summary_elements.reverse_each do |el|
-                el.attributes.each do |attr_name, attr_value|
-                  next unless attr_name.start_with?('data-summary-')
-
-                  # Format label (e.g., "When to visit")
-                  label_text = attr_name.sub('data-summary-', '').gsub('-', ' ').capitalize
-                  
-                  # CHECK: Skip if this label is already in the table
-                  next if existing_headers.include?(label_text.downcase)
-
-                  emoji = case label_text.downcase
-                  when /when to visit|best time/
-                    "🌤️ "
-                  when /getting around/
-                    "🏃‍♂️ "
-                  else
-                    ""
-                  end
-
-                  display_value = attr_value.value
-                  anchor_id = el['id'] || el.text.to_s.parameterize
-                  
-                  row_html = "<tr><th>#{label_text}:</th><td><a href=\"##{anchor_id}\">#{display_value}</a></td></tr>"
-                  
-                  container.prepend_child(row_html)
-                  
-                  # Add to our local list so we don't add the same one twice in one run
-                  existing_headers << label_text.downcase
-                end
-              end
-            end            
-          end
-          
-
           
           if html.css('#insurance').size > 0
             html.at_css("#insurance").remove()
