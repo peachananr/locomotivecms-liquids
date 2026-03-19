@@ -866,7 +866,7 @@ module LocomotiveCMS
           if html.css('.product-summary.itinerary-summary').size > 0          
             html.css('.product-summary.itinerary-summary').each do |i|
               rows = []
-              summary_elements = doc.xpath('.//*[any-at(starts-with(name(), "data-summary-"))]')
+              summary_elements = html.xpath('.//*[any-at(starts-with(name(), "data-summary-"))]')
               if !summary_elements.empty?
                 # Search for any element that has an attribute starting with 'data-summary-'
                 summary_elements.each do |el|
