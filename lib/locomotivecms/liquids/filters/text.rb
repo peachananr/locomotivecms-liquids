@@ -866,6 +866,7 @@ module LocomotiveCMS
           if html.css('.product-summary.itinerary-summary').size > 0          
             html.css('.product-summary.itinerary-summary').each do |i|
               rows = []
+              row_count = 0
               summary_elements = html.xpath('.//@*[starts-with(name(), "data-summary-")]/..').uniq
               if summary_elements.any?
                 summary_elements.each do |el|
@@ -895,6 +896,7 @@ module LocomotiveCMS
 
                     # 5. Construct the HTML row
                     rows << "<tr><th>#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
+                    row_count = row_count + 1
                   end
                 end
               end
@@ -903,7 +905,7 @@ module LocomotiveCMS
                
                 summary_table = ""
                 fix_required = "false"
-                row_count = 0
+                
                 i.css(".editor-choice").each do |i|
                   id_el = i.xpath('ancestor::a').first["href"]
                   
