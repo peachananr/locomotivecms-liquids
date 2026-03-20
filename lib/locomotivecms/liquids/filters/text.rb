@@ -330,11 +330,38 @@ module LocomotiveCMS
                 end
                 
                 l_pos = index + 1
-                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")}"
+                anchor = i["href"].gsub("https://www.bucketlistly.blog/posts/#{slug}","")
+                l_url = "https://www.bucketlistly.blog/posts/#{slug}#{anchor}"
+
+                target_id = anchor.delete('#')
+                section_element = html.at_css("##{target_id}")
+                info_box = section_element&.xpath("following-sibling::div[contains(@class, 'key-info-box')]")&.first
+                l_location_text = ""
+                l_map_url = ""
+                if info_box
+                # Find the <li> that contains the word "Location"
+                  location_li = info_box.css("li").find { |li| li.text.include?("📍 Location") }
+                  if location_li
+                    # Extract the text and the link next to it
+                    l_location_text = location_li.text.gsub("📍 Location:", "").strip
+                    l_map_url = location_li.at_css("a")["href"] if location_li.at_css("a")
+                  end
+                end
+                # Build the TouristAttraction item
+                item_details = "
+                  \"item\": {
+                    \"@type\": \"TouristAttraction\",
+                    \"name\": \"#{l_name.gsub('"', '\"')}\",
+                    #{l_image_full}
+                    \"url\": \"#{l_url}\",
+                    \"address\": \"#{l_location_text.gsub('"', '\"')}\",
+                    \"hasMap\": \"#{l_map_url}\"
+                  },"
 
                 list_items << "{
                   \"@type\": \"ListItem\",
                   \"position\": #{l_pos},
+                  #{item_details}
                   \"name\": \"#{l_name.gsub('"', '\"')}\",
                   #{l_image_full}                
                   \"url\": \"#{l_url}\"
