@@ -335,7 +335,7 @@ module LocomotiveCMS
 
                 target_id = anchor.delete('#')
                 section_element = html.at_css("##{target_id}")
-                info_box = section_element&.xpath("following-sibling::div[contains(@class, 'key-info-box')]")&.first
+                info_box = html.xpath("//*[@id='#{target_id}']/following::ul[contains(@class, 'key-info-box')]").first
                 l_location_text = ""
                 l_map_url = ""
                 if info_box
@@ -354,7 +354,7 @@ module LocomotiveCMS
                 item_details = "
                   \"item\": {
                     \"@type\": \"TouristAttraction\",
-                    \"name\": \"#{l_name.gsub('"', '\"')}\",
+                    \"name\": \"#{l_location_text.gsub('"', '\"')}\",
                     #{l_image_full}
                     \"url\": \"#{l_url}\",
                     \"address\": \"#{l_location_text.gsub('"', '\"')}\",
