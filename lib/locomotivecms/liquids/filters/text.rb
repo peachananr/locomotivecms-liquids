@@ -340,11 +340,14 @@ module LocomotiveCMS
                 l_map_url = ""
                 if info_box
                 # Find the <li> that contains the word "Location"
-                  location_li = info_box.css("li").find { |li| li.text.include?("📍 Location") }
-                  if location_li
-                    # Extract the text and the link next to it
-                    l_location_text = location_li.text.gsub("📍 Location:", "").strip
-                    l_map_url = location_li.at_css("a")["href"] if location_li.at_css("a")
+                  # 3. Extract the link specifically
+                  map_link_element = location_li.at_css("a")
+                  if map_link_element
+                    l_map_url = map_link_element["href"]
+                    
+                    # 4. Clean the Location Name
+                    # Remove "[Map Link]", "Location:", and strip whitespace/emojis
+                    l_location_text = map_link_element.text.gsub(/\[.*?\]/, "").strip
                   end
                 end
                 # Build the TouristAttraction item
