@@ -1101,6 +1101,43 @@ module LocomotiveCMS
             end
 
           end
+          if html.css('#join-activity').size > 0
+            # 1. Detect if id="join-activity" exists
+            join_activity_div = html.at_css('#join-activity')
+
+            if join_activity_div
+              # 2. Find the ancestor element with the class 'activity-block'
+              activity_block = join_activity_div.ancestors('.activity-block').first
+
+              if activity_block
+                # 3. Find the header inside this block to get the ID for the TOC
+                # This targets the <h2 id="more-matera-activities">
+                header_node = activity_block.at_css('h1, h2, h3, h4, h5, h6')
+                
+                if header_node && header_node['id']
+                  header_id = header_node['id']
+                  
+                  # Find the corresponding TOC link and remove its parent <li>
+                  toc_link = html.at_css("a[href='##{header_id}']")
+                  
+                  if toc_link && toc_link.parent.name == 'li'
+                    toc_link.parent.remove
+                  end
+                else
+                  # Fallback just in case there is no ID on the header: 
+                  # Find and remove any TOC item containing "More [Anything] Activities"
+                  html.css('.toc-text').each do |span|
+                    if span.text.match?(/More .* Activities/i)
+                      span.ancestors('li').first&.remove
+                    end
+                  end
+                end
+                
+                # 4. Remove the entire activity-block (which includes the header and the #join-activity div)
+                activity_block.remove
+              end
+            end
+          end
           
           if html.css('.accommodation-block:not(.dont-move)').size == 1
             el = html.at_css('.accommodation-block:not(.dont-move)')
