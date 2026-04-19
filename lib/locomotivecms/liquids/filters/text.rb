@@ -1099,8 +1099,37 @@ module LocomotiveCMS
               # 5. Finally, remove the #packing div
               packing_div.remove
             end
-
           end
+
+          header = html.at_css('h2[id^="further-reading"]')
+
+          if header
+            # 2. Create a new <aside> element
+            aside = Nokogiri::XML::Node.new('aside', html)
+            
+            # 3. Insert the empty <aside> right before the header in the DOM
+            header.add_previous_sibling(aside)
+
+            # 4. Iterate through the header and its subsequent siblings,
+            # moving them inside the <aside> tag.
+            current_node = header
+            
+            while current_node
+              # Keep track of the next sibling before we move the current one
+              next_node = current_node.next_sibling
+              
+              # Stop grabbing elements if we hit another major heading (h1 or h2)
+              # Assuming that would mark the start of an entirely new section.
+              break if next_node && next_node.name.match?(/^h[1-2]$/i)
+              
+              # Move the current element inside the <aside>
+              aside.add_child(current_node)
+              
+              # Advance to the next element
+              current_node = next_node
+            end
+          end
+
           if html.css('#join-activity').size > 0
             # 1. Detect if id="join-activity" exists
             join_activity_div = html.at_css('#join-activity')
