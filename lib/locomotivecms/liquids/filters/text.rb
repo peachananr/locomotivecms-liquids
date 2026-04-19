@@ -1071,21 +1071,35 @@ module LocomotiveCMS
             end
           end
           
-          if html.css('#pinterest').size > 0
-            
-            #target_p = 'body > h2 ~ p:not(:empty):not(:has(img)):not(.tips-block), body > h3 ~ p:not(:empty):not(:has(img)):not(.tips-block)'
-            #if !html.css(target_p).nil? and !html.css(target_p)[2].nil?
-            #  pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
-            #  html.at_css("#pinterest").remove()
-            #  html.css(target_p)[2].add_next_sibling(pinterest)
-            #end
+          if html.css('#packing').size > 0
+            packing_div = html.at_css('#packing')
 
-            #target_p = 'body > h2 ~ p:not(:empty):not(:has(img)):not(.tips-block), body > h3 ~ p:not(:empty):not(:has(img)):not(.tips-block)'
-            #if !html.css(target_p).nil? and !html.css(target_p)[2].nil?
-            #  pinterest = "<div class=\"pin-it-section\" id=\"pinterest\">#{html.at_css("#pinterest").inner_html}</div>"
-            # html.at_css("#pinterest").remove()
-            #  html.css(target_p)[2].add_next_sibling(pinterest)
-            #end
+            if packing_div
+              # 2. Find the header immediately preceding the packing div
+              header_node = packing_div.previous_element
+
+              if header_node && header_node.name.match?(/^h[1-6]$/i)
+                # Grab the ID of the header (e.g., "what-to-pack-for-new-york-city")
+                header_id = header_node['id']
+
+                if header_id
+                  # 3. Find the TOC link that matches this header's ID and remove its parent <li>
+                  toc_link = html.at_css("a[href='##{header_id}']")
+                  
+                  # Ensure we are removing the <li> wrapper
+                  if toc_link && toc_link.parent.name == 'li'
+                    toc_link.parent.remove
+                  end
+                end
+
+                # 4. Remove the header itself
+                header_node.remove
+              end
+
+              # 5. Finally, remove the #packing div
+              packing_div.remove
+            end
+
           end
           
           if html.css('.accommodation-block:not(.dont-move)').size == 1
