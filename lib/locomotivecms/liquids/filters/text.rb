@@ -1130,6 +1130,25 @@ module LocomotiveCMS
             end
           end
 
+          toc_wrapper = html.at_css('div.table-of-contents-wrapper')
+
+          if toc_wrapper
+            # 2. Create a new <nav> element
+            nav_node = Nokogiri::XML::Node.new('nav', html)
+            
+            # 3. Copy the attributes (like class="table-of-contents-wrapper") 
+            # from the old div to the new nav
+            toc_wrapper.attributes.each do |name, attr|
+              nav_node[name] = attr.value
+            end
+
+            # 4. Move all the children (the inner TOC structure) into the new nav
+            nav_node.children = toc_wrapper.children
+
+            # 5. Replace the old div node with the new nav node
+            toc_wrapper.replace(nav_node)
+          end
+
           if html.css('#join-activity').size > 0
             # 1. Detect if id="join-activity" exists
             join_activity_div = html.at_css('#join-activity')
