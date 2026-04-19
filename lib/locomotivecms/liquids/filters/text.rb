@@ -1253,7 +1253,7 @@ module LocomotiveCMS
             html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
             string = html.css('body').first.to_s
             string.gsub!("<body>", '<body><div>')
-            string.gsub!("-xxx</div>", "</div></div>")
+            string.gsub!("-xxx</nav>", "</div></nav>") # change back to </div> if revert from using nav
             html = Nokogiri.HTML(string)
           end
 
