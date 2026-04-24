@@ -1071,6 +1071,7 @@ module LocomotiveCMS
             end
           end
           
+          # remove packing section
           if html.css('#packing').size > 0
             packing_div = html.at_css('#packing')
 
@@ -1101,6 +1102,8 @@ module LocomotiveCMS
             end
           end
 
+
+          # add aside to further link
           header = html.at_css('h2[id^="further-reading"]')
 
           if header
@@ -1130,6 +1133,7 @@ module LocomotiveCMS
             end
           end
 
+          # turn toc into nav
           toc_wrapper = html.at_css('div.table-of-contents-wrapper')
 
           if toc_wrapper
@@ -1147,6 +1151,47 @@ module LocomotiveCMS
 
             # 5. Replace the old div node with the new nav node
             toc_wrapper.replace(nav_node)
+          end
+
+          # minimize further links
+          header = html.at_css('h2[id^="further-reading"]')
+
+          if header
+            # 2. Find the <ul> following this header
+            ul = header.next_element
+            # Skip potential paragraphs or whitespace to find the <ul>
+            while ul && ul.name != 'ul'
+              ul = ul.next_element
+            end
+
+            if ul && ul.name == 'ul'
+              list_items = ul.css('li')
+
+              # 3. Identify where the "footer" links start
+              # We look for the first <li> containing "For more articles about"
+              footer_index = list_items.find_index do |li| 
+                li.text.strip.start_with?("For more articles about")
+              end
+
+              if footer_index
+                # Standard links are everything before the footer
+                standard_links = list_items[0...footer_index]
+                # Footer links are everything from that point to the end
+                footer_links = list_items[footer_index..-1]
+              else
+                # If the phrase isn't found, treat all as standard links
+                standard_links = list_items
+                footer_links = []
+              end
+
+              # 4. If we have more than 5 standard links, we need to prune
+              if standard_links.length > 5
+                # Identify the items to remove (from index 5 up to the footer)
+                to_remove = standard_links[5..-1]
+                
+                to_remove.each(&:remove)
+              end
+            end
           end
 
           if html.css('#join-activity').size > 0
