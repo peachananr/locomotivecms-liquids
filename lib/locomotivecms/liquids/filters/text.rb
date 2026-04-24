@@ -1169,8 +1169,10 @@ module LocomotiveCMS
 
               # 3. Identify where the "footer" links start
               # We look for the first <li> containing "For more articles about"
+              footer_pattern = /For more articles about|Looking for more travel guides for/i
+
               footer_index = list_items.find_index do |li| 
-                li.text.strip.start_with?("For more articles about")
+                li.text.strip.match?(footer_pattern)
               end
 
               if footer_index
