@@ -1152,7 +1152,7 @@ module LocomotiveCMS
             # 5. Replace the old div node with the new nav node
             toc_wrapper.replace(nav_node)
           end
-
+          
           # minimize further links
           header = html.at_css('h2[id^="further-reading"]')
 
@@ -1187,9 +1187,9 @@ module LocomotiveCMS
               end
 
               # 4. If we have more than 5 standard links, we need to prune
-              if standard_links.length > 5
+              if standard_links.length > 12
                 # Identify the items to remove (from index 5 up to the footer)
-                to_remove = standard_links[5..-1]
+                to_remove = standard_links[12..-1]
                 
                 to_remove.each(&:remove)
               end
