@@ -1187,7 +1187,7 @@ module LocomotiveCMS
               end
 
               # 4. If we have more than 5 standard links, we need to prune
-              if standard_links.length > 12
+              if standard_links.length > 20
                 # Identify the items to remove (from index 5 up to the footer)
                 to_remove = standard_links[12..-1]
                 
