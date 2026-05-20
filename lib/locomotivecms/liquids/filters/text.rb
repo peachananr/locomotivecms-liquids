@@ -996,8 +996,8 @@ module LocomotiveCMS
             end
           end
           
-          if html.css('#insurance').size > 0
-            html.at_css("#insurance").remove()
+          if html.css('#insurance:not(.dont-move)').size > 0
+            html.at_css("#insurance:not(.dont-move)").remove()
             
             insurance = '<div id="insurance"></div>'
             
