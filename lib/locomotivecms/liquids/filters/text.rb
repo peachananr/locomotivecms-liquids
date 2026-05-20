@@ -1045,7 +1045,7 @@ module LocomotiveCMS
             else
               if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
                 html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
-              elsif !html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil?
+              elsif !html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
                 html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
               else
                 if html.css(".table-of-contents-wrapper").size > 0
