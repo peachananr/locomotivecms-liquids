@@ -996,8 +996,8 @@ module LocomotiveCMS
             end
           end
           
-          if html.css('#insurance:not(.dont-move)').size > 0
-            html.at_css("#insurance:not(.dont-move)").remove()
+          if html.css('#insurance').size > 0
+            html.at_css("#insurance").remove()
             
             insurance = '<div id="insurance"></div>'
             
@@ -1237,8 +1237,8 @@ module LocomotiveCMS
           if html.css('.accommodation-block:not(.dont-move)').size == 1
             el = html.at_css('.accommodation-block:not(.dont-move)')
             h2 = el.at_css('h2')["id"]
-            if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "itinerary") and html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2)").length > 0 and html.css(".product-summary.accommodation").length == 1   
-              html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2)").add_previous_sibling(el)     
+            if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "itinerary" or html.at_css(".post-slug").text.downcase.include? "experiences-i-think-are-worth-it") and html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(2)").length > 0 and html.css(".product-summary.accommodation").length == 1   
+              html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(2)").add_previous_sibling(el)     
               h2 = html.at_css('.accommodation-block h2')
               new_h2 = "<h4 id='#{h2["id"]}'>#{h2.inner_html}</h4>"
               h2.replace(new_h2)
@@ -1266,16 +1266,16 @@ module LocomotiveCMS
           end
 
           if html.css('.activity-block').size == 1                 
-            if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "itinerary")
+            if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "experiences-i-think-are-worth-it" or html.at_css(".post-slug").text.downcase.include? "itinerary")
 
                 
                 
-                if html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(4)").length > 0
+                if html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(4), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(4)").length > 0
                   el = html.at_css('.activity-block')
                   h2 = html.at_css('.activity-block h2')
                   new_h2 = "<h4 id='#{h2["id"]}'>Tours & Tickets You Might Like</h4>"
                   h2.replace(new_h2)
-                  html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(4)").add_previous_sibling(el)
+                  html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(4), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(4)").add_previous_sibling(el)
                 end
               
             end
