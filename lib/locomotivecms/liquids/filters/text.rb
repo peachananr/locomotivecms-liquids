@@ -629,7 +629,7 @@ module LocomotiveCMS
                 # Iterate through the h2 elements
                 h2_elements.each do |h2|
                   # Check if the h2 text starts with a number
-                  if h2.text.strip.match?(/^\d/i) or h2.text.strip.match?(/^(?![0-9])(?!.*\bmap\b)(?=.*(?:things to do|best places to|itinerary)).*$/i)
+                  if h2.text.strip.match?(/^\d/i) or h2.text.strip.match?(/^(?![0-9])(?!.*\bmap\b)(?=.*(?:things to do|experiences i think are worth it|best places to|itinerary)).*$/i)
                     # Find adjacent h3 elements until the next h2 is encountered
                     next_element = h2.next_element
 
@@ -1315,10 +1315,10 @@ module LocomotiveCMS
             h2_elements.each do |h2|
               # Check if the h2 text starts with a number
               edit = false
-              if h2.text.strip.match?(/^\d(?!.*itinerary)/i) or h2.text.strip.match?(/^(?![0-9])(?!.*\bmap\b)(?=.*(?:things to do|what to eat|best places to)).*$/i)
+              if h2.text.strip.match?(/^\d(?!.*itinerary)/i) or h2.text.strip.match?(/^(?![0-9])(?!.*\bmap\b)(?=.*(?:things to do|experiences i think are worth it|what to eat|best places to)).*$/i)
                 edit = true
               else
-                if h2.text.downcase.include? "things to do"
+                if h2.text.downcase.include? "things to do" or  h2.text.downcase.include? "experiences i think are worth it"
                   edit = true
                 end
               end
