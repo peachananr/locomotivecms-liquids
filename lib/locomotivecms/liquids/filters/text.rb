@@ -885,7 +885,13 @@ module LocomotiveCMS
             link.replace("<strong>#{link.text}</strong>")
           end
 
-          html.css("body").inner_html.gsub(/[\p{Emoji}\u200D\uFE0F]/, '')
+          html.css("body").traverse do |node|
+            next unless node.text?
+
+            node.content = node.content.gsub(/\X/) do |grapheme|
+              grapheme.match?(/\p{Emoji}/) ? '' : grapheme
+            end
+          end
         end
 
 
