@@ -885,7 +885,7 @@ module LocomotiveCMS
             link.replace("<strong>#{link.text}</strong>")
           end
 
-          html.css("body").inner_html.gsub(/\p{Emoji_Presentation}/, '')
+          html.css("body").inner_html.gsub(/[\p{Emoji}\u200D\uFE0F]/, '')
         end
 
 
