@@ -961,7 +961,7 @@ module LocomotiveCMS
                       hotel_link = hotel["href"]
                       hotel_name = hotel.at_css(".ps-name").text
                      else
-                      hotel = html.css('.accommodation-block a')[1]
+                      hotel = html.css('.accommodation-block .accommodation-button a')[1]
                       hotel_link = hotel["href"]
                       hotel_name = hotel.at_css(".ps-name").text
                      end
