@@ -869,7 +869,7 @@ module LocomotiveCMS
           html = Nokogiri.HTML(input)
           if html.css('.product-summary.accommodation').size > 0
             html.css('.product-summary.accommodation a').each do |a|
-              new_a = "<a class='btn btn-primary' style='display: block;olor: inherit;background: #f0c029;' href='#{a["href"]}' rel='#{a["rel"]}' target='#{a["target"]}'>#{a.at_css(".ps-price span").inner_html}</a>"
+              new_a = "<a class='btn btn-primary' style='display: block;background: linear-gradient(to bottom, #ffc300 0%, #ff9000 100%);color: #000;' href='#{a["href"]}' rel='#{a["rel"]}' target='#{a["target"]}'>#{a.at_css(".ps-price span").inner_html}</a>"
 
               a.at_css(".ps-price span").replace(new_a)
 
