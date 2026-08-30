@@ -933,11 +933,15 @@ module LocomotiveCMS
               end
 
               if i.css(".editor-choice").size > 0
-               
+              
                 summary_table = ""
                 fix_required = "false"
                 
-                i.css(".editor-choice").each do |i|
+                # Calculate available slots to ensure total table rows do not exceed 4
+                has_hotel = html.css('.accommodation-button').size == 1 ? 1 : 0
+                max_editor_choices = [4 - rows.size - has_hotel, 0].max
+
+                i.css(".editor-choice").take(max_editor_choices).each do |i|
                   id_el = i.xpath('ancestor::a').first["href"]
                   
                   if html.css(id_el).size > 0
@@ -956,15 +960,15 @@ module LocomotiveCMS
                 
                 if fix_required == "true" and  i.css(".editor-choice").size > 1
                   if html.css('.accommodation-button').size == 1
-                     if html.css('.accommodation-block .editor-choice').size > 0
+                    if html.css('.accommodation-block .editor-choice').size > 0
                       hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
                       hotel_link = hotel["href"]
                       hotel_name = hotel.at_css(".ps-name").text
-                     else
+                    else
                       hotel = html.css('.accommodation-block .accommodation-button a')[1]
                       hotel_link = hotel["href"]
                       hotel_name = hotel.at_css(".ps-name").text
-                     end
+                    end
                     summary_table << "<tr><th>🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
                     row_count = row_count + 1
                   end
