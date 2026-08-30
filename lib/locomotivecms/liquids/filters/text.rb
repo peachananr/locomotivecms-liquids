@@ -907,6 +907,7 @@ module LocomotiveCMS
           # 1. Extract and Unslugify the label
           raw_label = name.sub('data-summary-', '').gsub('-', ' ')
           label = raw_label.capitalize
+          th_class = "th-#{raw_label.parameterize}"
           
           # 2. Assign Emoji
           emoji = case raw_label.downcase
@@ -924,14 +925,14 @@ module LocomotiveCMS
           # 4. Get the ID
           element_id = el['id'] || el.text.to_s.parameterize
 
-          # 5. Construct the HTML row
-          rows << "<tr><th>#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
+          # 5. Construct the HTML row (ADDED th_class HERE)
+          rows << "<tr><th class=\"#{th_class}\">#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
         end
       end
     end
 
     if i.css(".editor-choice").size > 0
-     
+    
       summary_table = ""
       fix_required = "false"
       added_editor_choices = 0
@@ -960,8 +961,11 @@ module LocomotiveCMS
         if html.css(id_el).size > 0
           fix_required = "true"
           label = i.text 
+          th_class = "th-#{label.parameterize}"
           value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
-          summary_table << "<tr><th>#{label}:</th><td>#{value}</td></tr>"
+          
+          # ADDED th_class HERE
+          summary_table << "<tr><th class=\"#{th_class}\">#{label}:</th><td>#{value}</td></tr>"
           row_count += 1
           added_editor_choices += 1
 
@@ -977,16 +981,18 @@ module LocomotiveCMS
         
         # Add hotel only if editor-choice items didn't already fill 4 slots
         if html.css('.accommodation-button').size == 1 && added_editor_choices < 4
-           if html.css('.accommodation-block .editor-choice').size > 0
+          if html.css('.accommodation-block .editor-choice').size > 0
             hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
             hotel_link = hotel["href"]
             hotel_name = hotel.at_css(".ps-name").text
-           else
+          else
             hotel = html.css('.accommodation-block .accommodation-button a')[1]
             hotel_link = hotel["href"]
             hotel_name = hotel.at_css(".ps-name").text
-           end
-          summary_table << "<tr><th>🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
+          end
+          
+          # ADDED th class HERE
+          summary_table << "<tr><th class=\"th-place-to-stay\">🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
           row_count += 1
           hotel_added = 1
         end
