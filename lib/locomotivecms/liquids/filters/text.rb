@@ -927,7 +927,6 @@ module LocomotiveCMS
 
           # 5. Construct the HTML row
           rows << "<tr><th>#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
-          row_count = row_count + 1
         end
       end
     end
@@ -936,10 +935,10 @@ module LocomotiveCMS
      
       summary_table = ""
       fix_required = "false"
+      added_editor_choices = 0
       
-      # Calculate available slots to ensure total table rows do not exceed 4
       has_hotel = html.css('.accommodation-button').size == 1 ? 1 : 0
-      max_editor_choices = [4 - rows.size - has_hotel, 0].max
+      max_editor_choices = 4 - has_hotel
 
       # Explicit priority list for ordering editor choices
       priority_order = [
@@ -951,13 +950,15 @@ module LocomotiveCMS
         /Great Day Trip/i
       ]
 
-      # Sort editor choice nodes by priority order, preserving original relative order for any unmatched items
+      # Sort editor choice nodes by priority order
       sorted_editor_choices = i.css(".editor-choice").to_a.sort_by.with_index do |choice, idx|
         p_idx = priority_order.index { |pattern| choice.text =~ pattern } || 999
         [p_idx, idx]
       end
 
-      sorted_editor_choices.take(max_editor_choices).each do |i|
+      sorted_editor_choices.each do |i|
+        break if added_editor_choices >= max_editor_choices
+
         id_el = i.xpath('ancestor::a').first["href"]
         
         if html.css(id_el).size > 0
@@ -965,7 +966,8 @@ module LocomotiveCMS
           label = i.text 
           value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
           summary_table << "<tr><th>#{label}:</th><td>#{value}</td></tr>"
-          row_count = row_count + 1
+          row_count += 1
+          added_editor_choices += 1
 
           iduplicate = i.dup
           iduplicate["aria-hidden"] = "true"
@@ -986,11 +988,16 @@ module LocomotiveCMS
             hotel_name = hotel.at_css(".ps-name").text
            end
           summary_table << "<tr><th>🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
-          row_count = row_count + 1
+          row_count += 1
         end
-        if !rows.empty?
-          summary_table = "#{summary_table}#{rows.join("\n")}"
+
+        # Calculate remaining available slots for data-summary rows to reach a 4-row ceiling
+        remaining_slots = [4 - added_editor_choices - has_hotel, 0].max
+
+        if !rows.empty? && remaining_slots > 0
+          summary_table = "#{summary_table}#{rows.take(remaining_slots).join("\n")}"
         end
+
         if row_count.odd?
           summary_table << "<tr></tr>"
         end
@@ -1001,18 +1008,9 @@ module LocomotiveCMS
           html.at_css(".itinerary").add_next_sibling(summary_table_html)
         else
           html.at_css(".itinerary-summary-wrapper").add_previous_sibling(summary_table_html)
-          
         end
       end
     end
-    
-#    items = i.css(".ps-row")
-#    midpoint = (items.size / 2.0).ceil
-#    items[midpoint - 1].add_next_sibling('<div id="xxxxx"></div>')
-    
-#    string = html.css('body').first.to_s
-#    string.gsub!('<div id="xxxxx"></div>', '</div><div class="mod product-summary itinerary-summary">')
-#    html = Nokogiri.HTML(string)
   end
 end
           
