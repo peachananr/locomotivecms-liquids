@@ -943,6 +943,7 @@ module LocomotiveCMS
       priority_order = [
         /Must Visit/i,
         /Must See/i,
+        /Must Do/i,
         /Best Museum/i,
         /Hidden Gem/i,
         /Place to Eat/i,
