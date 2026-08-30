@@ -943,11 +943,7 @@ module LocomotiveCMS
       priority_order = [
         /Must Visit/i,
         /Must See/i,
-        /Must Do/i,
-        /Best Museum/i,
-        /Hidden Gem/i,
-        /Place to Eat/i,
-        /Great Day Trip/i
+        /Must Do/i
       ]
 
       # Sort editor choice nodes by priority order
