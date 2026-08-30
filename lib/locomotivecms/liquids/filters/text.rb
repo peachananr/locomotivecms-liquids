@@ -922,7 +922,6 @@ module LocomotiveCMS
           value_text = attr.value
           
           # 4. Get the ID
-          # Fallback to a parameterized version of the header text if ID is missing
           element_id = el['id'] || el.text.to_s.parameterize
 
           # 5. Construct the HTML row
@@ -937,8 +936,8 @@ module LocomotiveCMS
       fix_required = "false"
       added_editor_choices = 0
       
-      has_hotel = html.css('.accommodation-button').size == 1 ? 1 : 0
-      max_editor_choices = 4 - has_hotel
+      # Allow editor-choice to use up to all 4 available slots
+      max_editor_choices = 4
 
       # Explicit priority list for ordering editor choices
       priority_order = [
@@ -976,8 +975,11 @@ module LocomotiveCMS
         end
       end
       
-      if fix_required == "true" and  i.css(".editor-choice").size > 1
-        if html.css('.accommodation-button').size == 1
+      if fix_required == "true" and i.css(".editor-choice").size > 1
+        hotel_added = 0
+        
+        # Add hotel only if editor-choice items didn't already fill 4 slots
+        if html.css('.accommodation-button').size == 1 && added_editor_choices < 4
            if html.css('.accommodation-block .editor-choice').size > 0
             hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
             hotel_link = hotel["href"]
@@ -989,10 +991,11 @@ module LocomotiveCMS
            end
           summary_table << "<tr><th>🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
           row_count += 1
+          hotel_added = 1
         end
 
-        # Calculate remaining available slots for data-summary rows to reach a 4-row ceiling
-        remaining_slots = [4 - added_editor_choices - has_hotel, 0].max
+        # Fill remaining room with data-summary rows up to 4 max
+        remaining_slots = [4 - added_editor_choices - hotel_added, 0].max
 
         if !rows.empty? && remaining_slots > 0
           summary_table = "#{summary_table}#{rows.take(remaining_slots).join("\n")}"
