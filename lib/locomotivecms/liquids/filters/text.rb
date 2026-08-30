@@ -895,7 +895,6 @@ module LocomotiveCMS
           
 
           if html.css('.product-summary.itinerary-summary').size > 0          
-  if html.css('.product-summary.itinerary-summary').size > 0          
   html.css('.product-summary.itinerary-summary').each do |i|
     rows = []
     row_count = 0
