@@ -895,110 +895,127 @@ module LocomotiveCMS
           
 
           if html.css('.product-summary.itinerary-summary').size > 0          
-            html.css('.product-summary.itinerary-summary').each do |i|
-              rows = []
-              row_count = 0
-              summary_elements = html.xpath('.//@*[starts-with(name(), "data-summary-")]/..').uniq
-              if summary_elements.any?
-                summary_elements.each do |el|
-                  el.attributes.each do |name, attr|
-                    next unless name.start_with?('data-summary-')
+  if html.css('.product-summary.itinerary-summary').size > 0          
+  html.css('.product-summary.itinerary-summary').each do |i|
+    rows = []
+    row_count = 0
+    summary_elements = html.xpath('.//@*[starts-with(name(), "data-summary-")]/..').uniq
+    if summary_elements.any?
+      summary_elements.each do |el|
+        el.attributes.each do |name, attr|
+          next unless name.start_with?('data-summary-')
 
-                    # 1. Extract and Unslugify the label
-                    raw_label = name.sub('data-summary-', '').gsub('-', ' ')
-                    label = raw_label.capitalize
-                    
-                    # 2. Assign Emoji
-                    emoji = case raw_label.downcase
-                            when /when to visit/
-                              "🌤️ "
-                            when /getting around/
-                              "🏃‍♂️ "
-                            else
-                              ""
-                            end
-                    
-                    # 3. Get the value
-                    value_text = attr.value
-                    
-                    # 4. Get the ID
-                    # Fallback to a parameterized version of the header text if ID is missing
-                    element_id = el['id'] || el.text.to_s.parameterize
-
-                    # 5. Construct the HTML row
-                    rows << "<tr><th>#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
-                    row_count = row_count + 1
-                  end
-                end
-              end
-
-              if i.css(".editor-choice").size > 0
-              
-                summary_table = ""
-                fix_required = "false"
-                
-                # Calculate available slots to ensure total table rows do not exceed 4
-                has_hotel = html.css('.accommodation-button').size == 1 ? 1 : 0
-                max_editor_choices = [4 - rows.size - has_hotel, 0].max
-
-                i.css(".editor-choice").take(max_editor_choices).each do |i|
-                  id_el = i.xpath('ancestor::a').first["href"]
-                  
-                  if html.css(id_el).size > 0
-                    fix_required = "true"
-                    label = i.text 
-                    value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
-                    summary_table << "<tr><th>#{label}:</th><td>#{value}</td></tr>"
-                    row_count = row_count + 1
-
-                    iduplicate = i.dup
-                    iduplicate["aria-hidden"] = "true"
-
-                    html.at_css(id_el).add_child(" #{iduplicate.to_html}")
-                  end
-                end
-                
-                if fix_required == "true" and  i.css(".editor-choice").size > 1
-                  if html.css('.accommodation-button').size == 1
-                    if html.css('.accommodation-block .editor-choice').size > 0
-                      hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
-                      hotel_link = hotel["href"]
-                      hotel_name = hotel.at_css(".ps-name").text
-                    else
-                      hotel = html.css('.accommodation-block .accommodation-button a')[1]
-                      hotel_link = hotel["href"]
-                      hotel_name = hotel.at_css(".ps-name").text
-                    end
-                    summary_table << "<tr><th>🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
-                    row_count = row_count + 1
-                  end
-                  if !rows.empty?
-                    summary_table = "#{summary_table}#{rows.join("\n")}"
-                  end
-                  if row_count.odd?
-                    summary_table << "<tr></tr>"
-                  end
-                  
-                  summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}</tbody></table></div>"
-
-                  if html.at_css(".itinerary")
-                    html.at_css(".itinerary").add_next_sibling(summary_table_html)
+          # 1. Extract and Unslugify the label
+          raw_label = name.sub('data-summary-', '').gsub('-', ' ')
+          label = raw_label.capitalize
+          
+          # 2. Assign Emoji
+          emoji = case raw_label.downcase
+                  when /when to visit/
+                    "🌤️ "
+                  when /getting around/
+                    "🏃‍♂️ "
                   else
-                    html.at_css(".itinerary-summary-wrapper").add_previous_sibling(summary_table_html)
-                    
+                    ""
                   end
-                end
-              end
-              
-          #    items = i.css(".ps-row")
-          #    midpoint = (items.size / 2.0).ceil
-          #    items[midpoint - 1].add_next_sibling('<div id="xxxxx"></div>')
-              
-          #    string = html.css('body').first.to_s
-          #    string.gsub!('<div id="xxxxx"></div>', '</div><div class="mod product-summary itinerary-summary">')
-          #    html = Nokogiri.HTML(string)
-            end
-          end
+          
+          # 3. Get the value
+          value_text = attr.value
+          
+          # 4. Get the ID
+          # Fallback to a parameterized version of the header text if ID is missing
+          element_id = el['id'] || el.text.to_s.parameterize
+
+          # 5. Construct the HTML row
+          rows << "<tr><th>#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
+          row_count = row_count + 1
+        end
+      end
+    end
+
+    if i.css(".editor-choice").size > 0
+     
+      summary_table = ""
+      fix_required = "false"
+      
+      # Calculate available slots to ensure total table rows do not exceed 4
+      has_hotel = html.css('.accommodation-button').size == 1 ? 1 : 0
+      max_editor_choices = [4 - rows.size - has_hotel, 0].max
+
+      # Explicit priority list for ordering editor choices
+      priority_order = [
+        /Must Visit/i,
+        /Must See/i,
+        /Best Museum/i,
+        /Hidden Gem/i,
+        /Place to Eat/i,
+        /Great Day Trip/i
+      ]
+
+      # Sort editor choice nodes by priority order, preserving original relative order for any unmatched items
+      sorted_editor_choices = i.css(".editor-choice").to_a.sort_by.with_index do |choice, idx|
+        p_idx = priority_order.index { |pattern| choice.text =~ pattern } || 999
+        [p_idx, idx]
+      end
+
+      sorted_editor_choices.take(max_editor_choices).each do |i|
+        id_el = i.xpath('ancestor::a').first["href"]
+        
+        if html.css(id_el).size > 0
+          fix_required = "true"
+          label = i.text 
+          value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
+          summary_table << "<tr><th>#{label}:</th><td>#{value}</td></tr>"
+          row_count = row_count + 1
+
+          iduplicate = i.dup
+          iduplicate["aria-hidden"] = "true"
+
+          html.at_css(id_el).add_child(" #{iduplicate.to_html}")
+        end
+      end
+      
+      if fix_required == "true" and  i.css(".editor-choice").size > 1
+        if html.css('.accommodation-button').size == 1
+           if html.css('.accommodation-block .editor-choice').size > 0
+            hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
+            hotel_link = hotel["href"]
+            hotel_name = hotel.at_css(".ps-name").text
+           else
+            hotel = html.css('.accommodation-block .accommodation-button a')[1]
+            hotel_link = hotel["href"]
+            hotel_name = hotel.at_css(".ps-name").text
+           end
+          summary_table << "<tr><th>🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
+          row_count = row_count + 1
+        end
+        if !rows.empty?
+          summary_table = "#{summary_table}#{rows.join("\n")}"
+        end
+        if row_count.odd?
+          summary_table << "<tr></tr>"
+        end
+        
+        summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}</tbody></table></div>"
+
+        if html.at_css(".itinerary")
+          html.at_css(".itinerary").add_next_sibling(summary_table_html)
+        else
+          html.at_css(".itinerary-summary-wrapper").add_previous_sibling(summary_table_html)
+          
+        end
+      end
+    end
+    
+#    items = i.css(".ps-row")
+#    midpoint = (items.size / 2.0).ceil
+#    items[midpoint - 1].add_next_sibling('<div id="xxxxx"></div>')
+    
+#    string = html.css('body').first.to_s
+#    string.gsub!('<div id="xxxxx"></div>', '</div><div class="mod product-summary itinerary-summary">')
+#    html = Nokogiri.HTML(string)
+  end
+end
           
           if html.css('#insurance').size > 0
             html.at_css("#insurance").remove()
