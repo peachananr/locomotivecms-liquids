@@ -957,12 +957,32 @@ module LocomotiveCMS
         break if added_editor_choices >= max_editor_choices
 
         id_el = i.xpath('ancestor::a').first["href"]
+        target_el = html.at_css(id_el)
         
-        if html.css(id_el).size > 0
+        if target_el
           fix_required = "true"
           label = i.text 
           th_class = "th-#{label.parameterize}"
-          value = "<a href='#{id_el}'>#{i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '')}</a>"
+
+          # Default fallback title
+          display_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+
+          # Check next element for key-info-wrapper
+          next_el = target_el.next_element
+          if next_el && next_el.classes.include?("key-info-wrapper")
+            loc_li = next_el.css(".key-info-box li").find { |li| li.text.include?("Location:") }
+            
+            if loc_li
+              # Extract location text from anchor tag if present, otherwise from the list item
+              raw_loc = loc_li.at_css("a") ? loc_li.at_css("a").text : loc_li.text.sub(/.*Location:\s*/i, "")
+              
+              # Strip out "[Map Link]" and trailing/leading spaces
+              clean_loc = raw_loc.sub(/\[\s*Map Link\s*\]/i, "").strip
+              display_title = clean_loc unless clean_loc.empty?
+            end
+          end
+
+          value = "<a href='#{id_el}'>#{display_title}</a>"
           
           # ADDED th_class HERE
           summary_table << "<tr><th class=\"#{th_class}\">#{label}:</th><td>#{value}</td></tr>"
@@ -972,7 +992,7 @@ module LocomotiveCMS
           iduplicate = i.dup
           iduplicate["aria-hidden"] = "true"
 
-          html.at_css(id_el).add_child(" #{iduplicate.to_html}")
+          target_el.add_child(" #{iduplicate.to_html}")
         end
       end
       
