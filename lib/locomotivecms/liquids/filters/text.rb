@@ -953,6 +953,8 @@ module LocomotiveCMS
         [p_idx, idx]
       end
 
+      used_titles = []
+
       sorted_editor_choices.each do |i|
         break if added_editor_choices >= max_editor_choices
 
@@ -964,8 +966,9 @@ module LocomotiveCMS
           label = i.text 
           th_class = "th-#{label.parameterize}"
 
-          # Default fallback title
-          display_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+          # Original title fallback
+          fallback_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+          display_title = fallback_title
 
           # Check next element for key-info-wrapper
           next_el = target_el.next_element
@@ -973,14 +976,18 @@ module LocomotiveCMS
             loc_li = next_el.css(".key-info-box li").find { |li| li.text.include?("Location:") }
             
             if loc_li
-              # Extract location text from anchor tag if present, otherwise from the list item
               raw_loc = loc_li.at_css("a") ? loc_li.at_css("a").text : loc_li.text.sub(/.*Location:\s*/i, "")
-              
-              # Strip out "[Map Link]" and trailing/leading spaces
               clean_loc = raw_loc.sub(/\[\s*Map Link\s*\]/i, "").strip
-              display_title = clean_loc unless clean_loc.empty?
+              
+              # Only use the location title if it hasn't been used yet
+              if !clean_loc.empty? && !used_titles.include?(clean_loc)
+                display_title = clean_loc
+              end
             end
           end
+
+          # Track the selected title to avoid duplicates in subsequent iterations
+          used_titles << display_title
 
           value = "<a href='#{id_el}'>#{display_title}</a>"
           
