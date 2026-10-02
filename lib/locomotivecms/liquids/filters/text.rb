@@ -1563,7 +1563,7 @@ module LocomotiveCMS
 
           # Convert lightbox links to non-link elements
           html.css('a.lightbox-full[href]').each do |lightbox|
-            lightbox.name = 'div'
+            lightbox.name = 'span'
 
             lightbox['data-lightbox-src'] = lightbox['href']
             lightbox.remove_attribute('href')
