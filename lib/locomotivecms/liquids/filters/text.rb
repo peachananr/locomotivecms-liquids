@@ -895,157 +895,157 @@ module LocomotiveCMS
           
 
           if html.css('.product-summary.itinerary-summary').size > 0          
-  html.css('.product-summary.itinerary-summary').each do |i|
-    rows = []
-    row_count = 0
-    summary_elements = html.xpath('.//@*[starts-with(name(), "data-summary-")]/..').uniq
-    if summary_elements.any?
-      summary_elements.each do |el|
-        el.attributes.each do |name, attr|
-          next unless name.start_with?('data-summary-')
+            html.css('.product-summary.itinerary-summary').each do |i|
+              rows = []
+              row_count = 0
+              summary_elements = html.xpath('.//@*[starts-with(name(), "data-summary-")]/..').uniq
+              if summary_elements.any?
+                summary_elements.each do |el|
+                  el.attributes.each do |name, attr|
+                    next unless name.start_with?('data-summary-')
 
-          # 1. Extract and Unslugify the label
-          raw_label = name.sub('data-summary-', '').gsub('-', ' ')
-          label = raw_label.capitalize
-          th_class = "th-#{raw_label.parameterize}"
-          
-          # 2. Assign Emoji
-          emoji = case raw_label.downcase
-                  when /when to visit/
-                    "🌤️ "
-                  when /getting around/
-                    "🏃‍♂️ "
-                  else
-                    ""
+                    # 1. Extract and Unslugify the label
+                    raw_label = name.sub('data-summary-', '').gsub('-', ' ')
+                    label = raw_label.capitalize
+                    th_class = "th-#{raw_label.parameterize}"
+                    
+                    # 2. Assign Emoji
+                    emoji = case raw_label.downcase
+                            when /when to visit/
+                              "🌤️ "
+                            when /getting around/
+                              "🏃‍♂️ "
+                            else
+                              ""
+                            end
+                    
+                    # 3. Get the value
+                    value_text = attr.value
+                    
+                    # 4. Get the ID
+                    element_id = el['id'] || el.text.to_s.parameterize
+
+                    # 5. Construct the HTML row (ADDED th_class HERE)
+                    rows << "<tr><th class=\"#{th_class}\">#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
                   end
-          
-          # 3. Get the value
-          value_text = attr.value
-          
-          # 4. Get the ID
-          element_id = el['id'] || el.text.to_s.parameterize
+                end
+              end
 
-          # 5. Construct the HTML row (ADDED th_class HERE)
-          rows << "<tr><th class=\"#{th_class}\">#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
-        end
-      end
-    end
-
-    if i.css(".editor-choice").size > 0
-    
-      summary_table = ""
-      fix_required = "false"
-      added_editor_choices = 0
-      
-      # Allow editor-choice to use up to all 4 available slots
-      max_editor_choices = 4
-
-      # Explicit priority list for ordering editor choices
-      priority_order = [
-        /Must Visit/i,
-        /Must See/i,
-        /Must Do/i
-      ]
-
-      # Sort editor choice nodes by priority order
-      sorted_editor_choices = i.css(".editor-choice").to_a.sort_by.with_index do |choice, idx|
-        p_idx = priority_order.index { |pattern| choice.text =~ pattern } || 999
-        [p_idx, idx]
-      end
-
-      used_titles = []
-
-      sorted_editor_choices.each do |i|
-        break if added_editor_choices >= max_editor_choices
-
-        id_el = i.xpath('ancestor::a').first["href"]
-        target_el = html.at_css(id_el)
-        
-        if target_el
-          fix_required = "true"
-          label = i.text 
-          th_class = "th-#{label.parameterize}"
-
-          # Original title fallback
-          fallback_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
-          display_title = fallback_title
-
-          # Check next element for key-info-wrapper
-          next_el = target_el.next_element
-          if next_el && next_el.classes.include?("key-info-wrapper")
-            loc_li = next_el.css(".key-info-box li").find { |li| li.text.include?("Location:") }
-            
-            if loc_li
-              raw_loc = loc_li.at_css("a") ? loc_li.at_css("a").text : loc_li.text.sub(/.*Location:\s*/i, "")
-              clean_loc = raw_loc.sub(/\[\s*Map Link\s*\]/i, "").strip
+              if i.css(".editor-choice").size > 0
               
-              # Only use the location title if it hasn't been used yet
-              if !clean_loc.empty? && !used_titles.include?(clean_loc)
-                display_title = clean_loc
+                summary_table = ""
+                fix_required = "false"
+                added_editor_choices = 0
+                
+                # Allow editor-choice to use up to all 4 available slots
+                max_editor_choices = 4
+
+                # Explicit priority list for ordering editor choices
+                priority_order = [
+                  /Must Visit/i,
+                  /Must See/i,
+                  /Must Do/i
+                ]
+
+                # Sort editor choice nodes by priority order
+                sorted_editor_choices = i.css(".editor-choice").to_a.sort_by.with_index do |choice, idx|
+                  p_idx = priority_order.index { |pattern| choice.text =~ pattern } || 999
+                  [p_idx, idx]
+                end
+
+                used_titles = []
+
+                sorted_editor_choices.each do |i|
+                  break if added_editor_choices >= max_editor_choices
+
+                  id_el = i.xpath('ancestor::a').first["href"]
+                  target_el = html.at_css(id_el)
+                  
+                  if target_el
+                    fix_required = "true"
+                    label = i.text 
+                    th_class = "th-#{label.parameterize}"
+
+                    # Original title fallback
+                    fallback_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+                    display_title = fallback_title
+
+                    # Check next element for key-info-wrapper
+                    next_el = target_el.next_element
+                    if next_el && next_el.classes.include?("key-info-wrapper")
+                      loc_li = next_el.css(".key-info-box li").find { |li| li.text.include?("Location:") }
+                      
+                      if loc_li
+                        raw_loc = loc_li.at_css("a") ? loc_li.at_css("a").text : loc_li.text.sub(/.*Location:\s*/i, "")
+                        clean_loc = raw_loc.sub(/\[\s*Map Link\s*\]/i, "").strip
+                        
+                        # Only use the location title if it hasn't been used yet
+                        if !clean_loc.empty? && !used_titles.include?(clean_loc)
+                          display_title = clean_loc
+                        end
+                      end
+                    end
+
+                    # Track the selected title to avoid duplicates in subsequent iterations
+                    used_titles << display_title
+
+                    value = "<a href='#{id_el}'>#{display_title}</a>"
+                    
+                    # ADDED th_class HERE
+                    summary_table << "<tr><th class=\"#{th_class}\">#{label}:</th><td>#{value}</td></tr>"
+                    row_count += 1
+                    added_editor_choices += 1
+
+                    iduplicate = i.dup
+                    iduplicate["aria-hidden"] = "true"
+
+                    target_el.add_child(" #{iduplicate.to_html}")
+                  end
+                end
+                
+                if fix_required == "true" and i.css(".editor-choice").size > 1
+                  hotel_added = 0
+                  
+                  # Add hotel only if editor-choice items didn't already fill 4 slots
+                  if html.css('.accommodation-button').size == 1 && added_editor_choices < 4
+                    if html.css('.accommodation-block .editor-choice').size > 0
+                      hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
+                      hotel_link = hotel["href"]
+                      hotel_name = hotel.at_css(".ps-name").text
+                    else
+                      hotel = html.css('.accommodation-block .accommodation-button a')[1]
+                      hotel_link = hotel["href"]
+                      hotel_name = hotel.at_css(".ps-name").text
+                    end
+                    
+                    # ADDED th class HERE
+                    summary_table << "<tr><th class=\"th-place-to-stay\">🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
+                    row_count += 1
+                    hotel_added = 1
+                  end
+
+                  # Fill remaining room with data-summary rows up to 4 max
+                  remaining_slots = [4 - added_editor_choices - hotel_added, 0].max
+
+                  if !rows.empty? && remaining_slots > 0
+                    summary_table = "#{summary_table}#{rows.take(remaining_slots).join("\n")}"
+                  end
+
+                  if row_count.odd?
+                    summary_table << "<tr></tr>"
+                  end
+                  
+                  summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}</tbody></table></div>"
+
+                  if html.at_css(".itinerary")
+                    html.at_css(".itinerary").add_next_sibling(summary_table_html)
+                  else
+                    html.at_css(".itinerary-summary-wrapper").add_previous_sibling(summary_table_html)
+                  end
+                end
               end
             end
           end
-
-          # Track the selected title to avoid duplicates in subsequent iterations
-          used_titles << display_title
-
-          value = "<a href='#{id_el}'>#{display_title}</a>"
-          
-          # ADDED th_class HERE
-          summary_table << "<tr><th class=\"#{th_class}\">#{label}:</th><td>#{value}</td></tr>"
-          row_count += 1
-          added_editor_choices += 1
-
-          iduplicate = i.dup
-          iduplicate["aria-hidden"] = "true"
-
-          target_el.add_child(" #{iduplicate.to_html}")
-        end
-      end
-      
-      if fix_required == "true" and i.css(".editor-choice").size > 1
-        hotel_added = 0
-        
-        # Add hotel only if editor-choice items didn't already fill 4 slots
-        if html.css('.accommodation-button').size == 1 && added_editor_choices < 4
-          if html.css('.accommodation-block .editor-choice').size > 0
-            hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
-            hotel_link = hotel["href"]
-            hotel_name = hotel.at_css(".ps-name").text
-          else
-            hotel = html.css('.accommodation-block .accommodation-button a')[1]
-            hotel_link = hotel["href"]
-            hotel_name = hotel.at_css(".ps-name").text
-          end
-          
-          # ADDED th class HERE
-          summary_table << "<tr><th class=\"th-place-to-stay\">🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
-          row_count += 1
-          hotel_added = 1
-        end
-
-        # Fill remaining room with data-summary rows up to 4 max
-        remaining_slots = [4 - added_editor_choices - hotel_added, 0].max
-
-        if !rows.empty? && remaining_slots > 0
-          summary_table = "#{summary_table}#{rows.take(remaining_slots).join("\n")}"
-        end
-
-        if row_count.odd?
-          summary_table << "<tr></tr>"
-        end
-        
-        summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}</tbody></table></div>"
-
-        if html.at_css(".itinerary")
-          html.at_css(".itinerary").add_next_sibling(summary_table_html)
-        else
-          html.at_css(".itinerary-summary-wrapper").add_previous_sibling(summary_table_html)
-        end
-      end
-    end
-  end
-end
           
           if html.css('#insurance').size > 0
             html.at_css("#insurance").remove()
@@ -1503,7 +1503,6 @@ end
             if !i.parent.nil? and i.parent.name == "a"
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
                 i.parent["aria-label"] = "View larger image"                
-                i.parent["data-google-interstitial"] = "false"
               end
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "itinerary"
                 i.parent["aria-label"] = "View itinerary on Google Maps"
@@ -1561,6 +1560,20 @@ end
             end
 
           end
+
+          # Convert lightbox links to non-link elements
+          html.css('a.lightbox-full[href]').each do |lightbox|
+            lightbox.name = 'div'
+
+            lightbox['data-lightbox-src'] = lightbox['href']
+            lightbox.remove_attribute('href')
+            lightbox.remove_attribute('data-google-interstitial')
+
+            lightbox['role'] = 'button'
+            lightbox['tabindex'] = '0'
+            lightbox['aria-label'] ||= 'View larger image'
+          end
+          
           html.css('source[data-srcset]').each do |i|
             # testing lazyload native
             #i["srcset"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
@@ -1604,7 +1617,6 @@ end
             if !i.parent.nil? and i.parent.name == "a"
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
                 i.parent["aria-label"] = "View larger image"
-                i.parent["data-google-interstitial"] = "false"
               end
               if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "itinerary"
                 i.parent["aria-label"] = "View itinerary on Google Maps"
