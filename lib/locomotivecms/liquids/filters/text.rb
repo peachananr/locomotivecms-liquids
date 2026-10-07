@@ -1336,23 +1336,37 @@ module LocomotiveCMS
           #  html.at_css("h2:eq(4), h3:not(.adj-header):eq(4)").add_previous_sibling(newsletter)
           #end
 
-          if html.css('.video-block .mediavine-vid').size == 0
+          # Cache frequently used nodes instead of running the same selectors repeatedly.
+          toc_wrapper = html.at_css('.table-of-contents-wrapper')
+          first_h2 = html.at_css('h2')
+
+          unless html.at_css('.video-block .mediavine-vid')
             video = '<div id="watch-this"></div>'
-            if html.css(".table-of-contents-wrapper").size > 0
-              html.at_css(".table-of-contents-wrapper").add_previous_sibling(video)
-            elsif html.css("h2").size > 0
-              html.at_css("h2").add_previous_sibling(video)
+            if toc_wrapper
+              toc_wrapper.add_previous_sibling(video)
+            elsif first_h2
+              first_h2.add_previous_sibling(video)
             end
           end
 
-         
+          # Wrap everything from the start of <body> through the TOC in one div.
+          # Previously this serialized the whole body, inserted deliberately crossed
+          # tags with gsub, and reparsed the entire document with Nokogiri. Doing the
+          # same structural operation directly avoids a second full HTML parse.
+          if toc_wrapper
+            body = html.at_css('body')
+            nodes_to_wrap = []
 
-          if html.css('.table-of-contents-wrapper').size > 0
-            html.css('.table-of-contents-wrapper').first.inner_html = "#{html.css('.table-of-contents-wrapper').first.inner_html}-xxx"
-            string = html.css('body').first.to_s
-            string.gsub!("<body>", '<body><div>')
-            string.gsub!("-xxx</nav>", "</div></nav>") # change back to </div> if revert from using nav
-            html = Nokogiri.HTML(string)
+            body.children.each do |node|
+              nodes_to_wrap << node
+              break if node == toc_wrapper
+            end
+
+            if nodes_to_wrap.include?(toc_wrapper)
+              wrapper = Nokogiri::XML::Node.new('div', html)
+              nodes_to_wrap.first.add_previous_sibling(wrapper)
+              nodes_to_wrap.each { |node| wrapper.add_child(node) }
+            end
           end
 
           if html.css('h2').size > 0
@@ -1393,7 +1407,7 @@ module LocomotiveCMS
               end
             end
 
-            if html.css('.header-placeholder.hide').size > 0
+            if (header_placeholder = html.at_css('.header-placeholder.hide'))
               h2_counter = 1
             
               html.css('h2').each do |h2|
@@ -1404,11 +1418,11 @@ module LocomotiveCMS
                   end
                 end
               end                        
-              html.at_css('.header-placeholder.hide').remove
+              header_placeholder.remove
             end
           end
-          if html.css('.post-summary').size > 0
-            html.at_css('.post-summary').before('<h3>Quick Summary</h3>')
+          if (post_summary = html.at_css('.post-summary'))
+            post_summary.before('<h3>Quick Summary</h3>')
           end
           if html.css('.post-summary.day-to-day').size > 0
             if html.css('.post-summary.day-to-day td:contains("Day "), .post-summary.day-to-day th:contains("Day ")').size > 0
@@ -1416,8 +1430,9 @@ module LocomotiveCMS
                 label = a.at_css("th:first-child, td:first-child").text.strip
                 name = a.at_css("td:last-child").text.strip
                 
-                if html.css("h3:contains(\"#{name}\")").length > 0 and !html.at_css("h3:contains(\"#{name}\")").text.match(/Day (\d+)/i)
-                  html.at_css("h3:contains(\"#{name}\")").inner_html = "#{label.gsub("☀️ ","").gsub("-", " - ")} #{html.at_css("h3:contains(\"#{name}\")").inner_html}" 
+                matching_h3 = html.at_css("h3:contains(\"#{name}\")")
+                if matching_h3 && !matching_h3.text.match(/Day (\d+)/i)
+                  matching_h3.inner_html = "#{label.gsub("☀️ ","").gsub("-", " - ")} #{matching_h3.inner_html}"
                 end
               end
             end
