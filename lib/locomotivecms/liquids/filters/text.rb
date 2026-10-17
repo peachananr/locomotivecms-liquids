@@ -971,17 +971,21 @@ module LocomotiveCMS
                     display_title = fallback_title
 
                     # Check next element for key-info-wrapper
-                    next_el = target_el.next_element
-                    if next_el && next_el.classes.include?("key-info-wrapper")
-                      loc_li = next_el.css(".key-info-box li").find { |li| li.text.include?("Location:") }
-                      
-                      if loc_li
-                        raw_loc = loc_li.at_css("a") ? loc_li.at_css("a").text : loc_li.text.sub(/.*Location:\s*/i, "")
-                        clean_loc = raw_loc.sub(/\[\s*Map Link\s*\]/i, "").strip
+                    if label.parameterize == "must-do"
+                        display_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+                    else
+                      next_el = target_el.next_element
+                      if next_el && next_el.classes.include?("key-info-wrapper")
+                        loc_li = next_el.css(".key-info-box li").find { |li| li.text.include?("Location:") }
                         
-                        # Only use the location title if it hasn't been used yet
-                        if !clean_loc.empty? && !used_titles.include?(clean_loc)
-                          display_title = clean_loc
+                        if loc_li
+                          raw_loc = loc_li.at_css("a") ? loc_li.at_css("a").text : loc_li.text.sub(/.*Location:\s*/i, "")
+                          clean_loc = raw_loc.sub(/\[\s*Map Link\s*\]/i, "").strip
+                          
+                          # Only use the location title if it hasn't been used yet
+                          if !clean_loc.empty? && !used_titles.include?(clean_loc)
+                            display_title = clean_loc
+                          end
                         end
                       end
                     end
