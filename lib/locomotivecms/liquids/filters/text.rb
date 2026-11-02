@@ -890,726 +890,637 @@ module LocomotiveCMS
 
 
         def remove_placeholder_img(input)
-          require 'nokogiri'
-          html = Nokogiri.HTML(input)
-          
+  require 'nokogiri'
+  html = Nokogiri.HTML(input)
 
-          if html.css('.product-summary.itinerary-summary').size > 0          
-            html.css('.product-summary.itinerary-summary').each do |i|
-              rows = []
-              row_count = 0
-              summary_elements = html.xpath('.//@*[starts-with(name(), "data-summary-")]/..').uniq
-              if summary_elements.any?
-                summary_elements.each do |el|
-                  el.attributes.each do |name, attr|
-                    next unless name.start_with?('data-summary-')
+  if html.css('.product-summary.itinerary-summary').size > 0
+    html.css('.product-summary.itinerary-summary').each do |i|
+      rows = []
+      row_count = 0
+      summary_elements = html.xpath('.//@*[starts-with(name(), "data-summary-")]/..').uniq
 
-                    # 1. Extract and Unslugify the label
-                    raw_label = name.sub('data-summary-', '').gsub('-', ' ')
-                    label = raw_label.capitalize
-                    th_class = "th-#{raw_label.parameterize}"
-                    
-                    # 2. Assign Emoji
-                    emoji = case raw_label.downcase
-                            when /when to visit/
-                              "🌤️ "
-                            when /getting around/
-                              "🏃‍♂️ "
-                            else
-                              ""
-                            end
-                    
-                    # 3. Get the value
-                    value_text = attr.value
-                    
-                    # 4. Get the ID
-                    element_id = el['id'] || el.text.to_s.parameterize
+      if summary_elements.any?
+        summary_elements.each do |el|
+          el.attributes.each do |name, attr|
+            next unless name.start_with?('data-summary-')
 
-                    # 5. Construct the HTML row (ADDED th_class HERE)
-                    rows << "<tr><th class=\"#{th_class}\">#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
-                  end
-                end
-              end
+            raw_label = name.sub('data-summary-', '').gsub('-', ' ')
+            label = raw_label.capitalize
+            th_class = "th-#{raw_label.parameterize}"
 
-              if i.css(".editor-choice").size > 0
-              
-                summary_table = ""
-                fix_required = "false"
-                added_editor_choices = 0
-                
-                # Allow editor-choice to use up to all 4 available slots
-                max_editor_choices = 5
-
-                # Explicit priority list for ordering editor choices
-                priority_order = [
-                  /Must Visit/i,
-                  /Must See/i,
-                  /Must Do/i,
-                  /Hidden Gem/i,
-                ]
-
-                # Sort editor choice nodes by priority order
-                sorted_editor_choices = i.css(".editor-choice").to_a.sort_by.with_index do |choice, idx|
-                  p_idx = priority_order.index { |pattern| choice.text =~ pattern } || 999
-                  [p_idx, idx]
-                end
-
-                used_titles = []
-
-                sorted_editor_choices.each do |i|
-                  break if added_editor_choices >= max_editor_choices
-
-                  id_el = i.xpath('ancestor::a').first["href"]
-                  target_el = html.at_css(id_el)
-                  
-                  if target_el
-                    fix_required = "true"
-                    label = i.text 
-                    th_class = "th-#{label.parameterize}"
-
-                    # Original title fallback
-                    fallback_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
-                    display_title = fallback_title
-
-                    # Check next element for key-info-wrapper
-                    if label.parameterize == "must-do"
-                        display_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+            emoji = case raw_label.downcase
+                    when /when to visit/
+                      "🌤️ "
+                    when /getting around/
+                      "🏃‍♂️ "
                     else
-                      next_el = target_el.next_element
-                      if next_el && next_el.classes.include?("key-info-wrapper")
-                        loc_li = next_el.css(".key-info-box li").find { |li| li.text.include?("Location:") }
-                        
-                        if loc_li
-                          raw_loc = loc_li.at_css("a") ? loc_li.at_css("a").text : loc_li.text.sub(/.*Location:\s*/i, "")
-                          clean_loc = raw_loc.sub(/\[\s*Map Link\s*\]/i, "").strip
-                          
-                          # Only use the location title if it hasn't been used yet
-                          if !clean_loc.empty? && !used_titles.include?(clean_loc)
-                            display_title = clean_loc
-                          end
-                        end
-                      end
+                      ""
                     end
 
-                    # Track the selected title to avoid duplicates in subsequent iterations
-                    used_titles << display_title
+            value_text = attr.value
+            element_id = el['id'] || el.text.to_s.parameterize
 
-                    value = "<a href='#{id_el}'>#{display_title}</a>"
-                    
-                    # ADDED th_class HERE
-                    summary_table << "<tr><th class=\"#{th_class}\">#{label}:</th><td>#{value}</td></tr>"
-                    row_count += 1
-                    added_editor_choices += 1
-
-                    iduplicate = i.dup
-                    iduplicate["aria-hidden"] = "true"
-
-                    target_el.add_child(" #{iduplicate.to_html}")
-                  end
-                end
-                
-                if fix_required == "true" and i.css(".editor-choice").size > 1
-                  hotel_added = 0
-                  
-                  # Add hotel only if editor-choice items didn't already fill 4 slots
-                  if html.css('.accommodation-button').size == 1 && added_editor_choices < 4
-                    if html.css('.accommodation-block .editor-choice').size > 0
-                      hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
-                      hotel_link = hotel["href"]
-                      hotel_name = hotel.at_css(".ps-name").text
-                    else
-                      hotel = html.css('.accommodation-block .accommodation-button a')[1]
-                      hotel_link = hotel["href"]
-                      hotel_name = hotel.at_css(".ps-name").text
-                    end
-                    
-                    # ADDED th class HERE
-                    summary_table << "<tr><th class=\"th-place-to-stay\">🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
-                    row_count += 1
-                    hotel_added = 1
-                  end
-
-                  # Only fill up to 4 total rows when there are fewer than 4 editor choices
-                  if added_editor_choices < 4
-                    remaining_slots = [4 - added_editor_choices - hotel_added, 0].max
-
-                    if rows.any? && remaining_slots > 0
-                      summary_table << rows.take(remaining_slots).join("\n")
-                    end
-                  end
-                  
-                  if row_count.odd?
-                    summary_table << "<tr></tr>"
-                  end
-                  
-                  summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}</tbody></table></div>"
-
-                  if html.at_css(".itinerary")
-                    html.at_css(".itinerary").add_next_sibling(summary_table_html)
-                  else
-                    html.at_css(".itinerary-summary-wrapper").add_previous_sibling(summary_table_html)
-                  end
-                end
-              end
-            end
+            rows << "<tr><th class=\"#{th_class}\">#{emoji}#{label}:</th><td><a href=\"##{element_id}\">#{value_text}</a></td></tr>"
           end
-          
-          if html.css('#insurance').size > 0
-            html.at_css("#insurance").remove()
-            
-            insurance = '<div id="insurance"></div>'
-            
-            
-            
-            if html.css('.itinerary-summary-wrapper').size > 0
-              if html.css(".toc-list").size > 0
-                h2 = html.at_css('.itinerary-summary-wrapper h2')["id"]
-                html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']").remove
-              end
-
-              html.at_css('.itinerary-summary-wrapper').remove 
-            end
-
-            
-            # test removing quick summary end
-
-
-            #remove unused html
-            if html.css(".post-summary-wrapper.hide").size > 0
-              html.css(".post-summary-wrapper.hide").remove
-            end
-            if html.css("article p.temp").size > 0
-              html.css("article p.temp").remove
-            end
-            if html.css(".btn-wrap.hide").size > 0
-              html.css(".btn-wrap.hide").remove
-            end
-            if html.css(".viator-extra.hide").size > 0
-              html.css(".viator-extra.hide").remove
-            end
-            if html.css(".product-summary.accommodation").length > 0
-              html.css(".product-summary.accommodation").each do |i|                
-                if i.css(".editor-choice").length < 1
-                  if i.css(".ps-tripple-row a:nth-child(2)").length > 0
-                    i.at_css(".ps-tripple-row a:nth-child(2) .ps-image").add_child('<span class="editor-choice">👍 Top Pick</span>')
-                  end
-                end
-              end
-            end
-            
-            
-            if html.css('.itinerary-summary-wrapper').size > 0                
-              html.at_css('.itinerary-summary-wrapper').add_child(insurance)            
-            else
-              if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
-                html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
-              elsif !html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
-                html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
-              else
-                if html.css(".table-of-contents-wrapper").size > 0
-                  if !html.at_css(".table-of-contents-wrapper").previous_element.attributes["class"].nil? and html.at_css(".table-of-contents-wrapper").previous_element["class"].include? "readmore-block"
-                    html.at_css(".table-of-contents-wrapper").previous_element.add_previous_sibling(insurance)
-                  else
-                    html.at_css(".table-of-contents-wrapper").add_previous_sibling(insurance)
-                  end
-                elsif html.css("h2").size > 0
-                  if !html.at_css("h2").previous_element.attributes["class"].nil? and html.at_css("h2").previous_element["class"].include? "readmore-block"
-                    html.at_css("h2").previous_element.add_previous_sibling(insurance)
-                  else
-                    html.at_css("h2").add_previous_sibling(insurance)
-                  end
-                end
-              end
-            end
-          end
-          html.css('p:has(a[href*="goo.gl"],a[href*="g.page"],a[href*="google.com/maps"])').each do |i|
-            maps_links = i.css('a[href*="goo.gl"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), a[href*="g.page"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), a[href*="google.com/maps"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block)')
-            if maps_links.size > 0
-              maps_links[0]["class"] = "first-of-type #{maps_links[0]["class"]}"
-            end
-          end
-          
-          # remove packing section
-          if html.css('#packing').size > 0
-            packing_div = html.at_css('#packing')
-
-            if packing_div
-              # 2. Find the header immediately preceding the packing div
-              header_node = packing_div.previous_element
-
-              if header_node && header_node.name.match?(/^h[1-6]$/i)
-                # Grab the ID of the header (e.g., "what-to-pack-for-new-york-city")
-                header_id = header_node['id']
-
-                if header_id
-                  # 3. Find the TOC link that matches this header's ID and remove its parent <li>
-                  toc_link = html.at_css("a[href='##{header_id}']")
-                  
-                  # Ensure we are removing the <li> wrapper
-                  if toc_link && toc_link.parent.name == 'li'
-                    toc_link.parent.remove
-                  end
-                end
-
-                # 4. Remove the header itself
-                header_node.remove
-              end
-
-              # 5. Finally, remove the #packing div
-              packing_div.remove
-            end
-          end
-
-
-          # add aside to further link
-          header = html.at_css('h2[id^="further-reading"]')
-
-          if header
-            # 2. Create a new <aside> element
-            aside = Nokogiri::XML::Node.new('aside', html)
-            
-            # 3. Insert the empty <aside> right before the header in the DOM
-            header.add_previous_sibling(aside)
-
-            # 4. Iterate through the header and its subsequent siblings,
-            # moving them inside the <aside> tag.
-            current_node = header
-            
-            while current_node
-              # Keep track of the next sibling before we move the current one
-              next_node = current_node.next_sibling
-              
-              # Stop grabbing elements if we hit another major heading (h1 or h2)
-              # Assuming that would mark the start of an entirely new section.
-              break if next_node && next_node.name.match?(/^h[1-2]$/i)
-              
-              # Move the current element inside the <aside>
-              aside.add_child(current_node)
-              
-              # Advance to the next element
-              current_node = next_node
-            end
-          end
-
-          # turn toc into nav
-          toc_wrapper = html.at_css('div.table-of-contents-wrapper')
-
-          if toc_wrapper
-            # 2. Create a new <nav> element
-            nav_node = Nokogiri::XML::Node.new('nav', html)
-            
-            # 3. Copy the attributes (like class="table-of-contents-wrapper") 
-            # from the old div to the new nav
-            toc_wrapper.attributes.each do |name, attr|
-              nav_node[name] = attr.value
-            end
-
-            # 4. Move all the children (the inner TOC structure) into the new nav
-            nav_node.children = toc_wrapper.children
-
-            # 5. Replace the old div node with the new nav node
-            toc_wrapper.replace(nav_node)
-          end
-          
-          # minimize further links
-          header = html.at_css('h2[id^="further-reading"]')
-
-          if header
-            # 2. Find the <ul> following this header
-            ul = header.next_element
-            # Skip potential paragraphs or whitespace to find the <ul>
-            while ul && ul.name != 'ul'
-              ul = ul.next_element
-            end
-
-            if ul && ul.name == 'ul'
-              list_items = ul.css('li')
-
-              # 3. Identify where the "footer" links start
-              # We look for the first <li> containing "For more articles about"
-              footer_pattern = /For more articles about|Looking for more travel guides for/i
-
-              footer_index = list_items.find_index do |li| 
-                li.text.strip.match?(footer_pattern)
-              end
-
-              if footer_index
-                # Standard links are everything before the footer
-                standard_links = list_items[0...footer_index]
-                # Footer links are everything from that point to the end
-                footer_links = list_items[footer_index..-1]
-              else
-                # If the phrase isn't found, treat all as standard links
-                standard_links = list_items
-                footer_links = []
-              end
-
-              # 4. If we have more than 5 standard links, we need to prune
-              if standard_links.length > 20
-                # Identify the items to remove (from index 5 up to the footer)
-                to_remove = standard_links[12..-1]
-                
-                to_remove.each(&:remove)
-              end
-            end
-          end
-
-          if html.css('#join-activity').size > 0
-            # 1. Detect if id="join-activity" exists
-            join_activity_div = html.at_css('#join-activity')
-
-            if join_activity_div
-              # 2. Find the ancestor element with the class 'activity-block'
-              activity_block = join_activity_div.ancestors('.activity-block').first
-
-              if activity_block
-                # 3. Find the header inside this block to get the ID for the TOC
-                # This targets the <h2 id="more-matera-activities">
-                header_node = activity_block.at_css('h1, h2, h3, h4, h5, h6')
-                
-                if header_node && header_node['id']
-                  header_id = header_node['id']
-                  
-                  # Find the corresponding TOC link and remove its parent <li>
-                  toc_link = html.at_css("a[href='##{header_id}']")
-                  
-                  if toc_link && toc_link.parent.name == 'li'
-                    toc_link.parent.remove
-                  end
-                else
-                  # Fallback just in case there is no ID on the header: 
-                  # Find and remove any TOC item containing "More [Anything] Activities"
-                  html.css('.toc-text').each do |span|
-                    if span.text.match?(/More .* Activities/i)
-                      span.ancestors('li').first&.remove
-                    end
-                  end
-                end
-                
-                # 4. Remove the entire activity-block (which includes the header and the #join-activity div)
-                activity_block.remove
-              end
-            end
-          end
-          
-          if html.css('.accommodation-block:not(.dont-move)').size == 1
-            el = html.at_css('.accommodation-block:not(.dont-move)')
-            h2 = el.at_css('h2')["id"]
-            if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "itinerary" or html.at_css(".post-slug").text.downcase.include? "experiences-i-think-are-worth-it") and html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(2)").length > 0 and html.css(".product-summary.accommodation").length == 1   
-              html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(2)").add_previous_sibling(el)     
-              h2 = html.at_css('.accommodation-block h2')
-              new_h2 = "<h4 id='#{h2["id"]}'>#{h2.inner_html}</h4>"
-              h2.replace(new_h2)
-                       
-              #el.remove
-            elsif html.css('.activity-block').size == 1 and html.css('.activity-block h2').length > 0
-              block = html.at_css('.activity-block h2')["id"]
-
-              html.at_css('.activity-block').add_next_sibling(el)
-              if html.css(".toc-list").size > 0
-                el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
-                html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent) 
-              end
-              #el.remove
-            elsif html.css('.video-block-wrapper').size == 1
-              block = html.at_css('.video-block-wrapper h2')["id"]
-
-              html.at_css('.video-block-wrapper').add_next_sibling(el)
-              if html.css(".toc-list").size > 0
-                el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
-                html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent)
-              end
-              #el.remove
-            end
-          end
-
-          if html.css('.activity-block').size == 1                 
-            if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "experiences-i-think-are-worth-it" or html.at_css(".post-slug").text.downcase.include? "itinerary")
-
-                
-                
-                if html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(4), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(4)").length > 0
-                  el = html.at_css('.activity-block')
-                  h2 = html.at_css('.activity-block h2')
-                  new_h2 = "<h4 id='#{h2["id"]}'>Tours & Tickets You Might Like</h4>"
-                  h2.replace(new_h2)
-                  html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(4), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(4)").add_previous_sibling(el)
-                end
-              
-            end
-          end
-          #if html.css('h2, h3').size > 4
-          #  newsletter = '<div id="small-newsletter"></div>'
-          #  html.at_css("h2:eq(4), h3:not(.adj-header):eq(4)").add_previous_sibling(newsletter)
-          #end
-
-          # Cache frequently used nodes instead of running the same selectors repeatedly.
-          toc_wrapper = html.at_css('.table-of-contents-wrapper')
-          first_h2 = html.at_css('h2')
-
-          unless html.at_css('.video-block .mediavine-vid')
-            video = '<div id="watch-this"></div>'
-            if toc_wrapper
-              toc_wrapper.add_previous_sibling(video)
-            elsif first_h2
-              first_h2.add_previous_sibling(video)
-            end
-          end
-
-          # Wrap everything from the start of <body> through the TOC in one div.
-          # Previously this serialized the whole body, inserted deliberately crossed
-          # tags with gsub, and reparsed the entire document with Nokogiri. Doing the
-          # same structural operation directly avoids a second full HTML parse.
-          if toc_wrapper
-            body = html.at_css('body')
-            nodes_to_wrap = []
-
-            body.children.each do |node|
-              nodes_to_wrap << node
-              break if node == toc_wrapper
-            end
-
-            if nodes_to_wrap.include?(toc_wrapper)
-              wrapper = Nokogiri::XML::Node.new('div', html)
-              nodes_to_wrap.first.add_previous_sibling(wrapper)
-              nodes_to_wrap.each { |node| wrapper.add_child(node) }
-            end
-          end
-
-          if html.css('h2').size > 0
-            # Adding numbering on h3
-            h2_elements = html.css('h2')
-
-            # Initialize a counter for the h3 elements
-            h3_counter = 1
-
-            # Iterate through the h2 elements
-            h2_elements.each do |h2|
-              # Check if the h2 text starts with a number
-              edit = false
-              if h2.text.strip.match?(/^\d(?!.*itinerary)/i) or h2.text.strip.match?(/^(?![0-9])(?!.*\bmap\b)(?=.*(?:things to do|experiences i think are worth it|what to eat|best places to)).*$/i)
-                edit = true
-              else
-                if h2.text.downcase.include? "things to do" or  h2.text.downcase.include? "experiences i think are worth it"
-                  edit = true
-                end
-              end
-
-              if edit == true
-                # Find adjacent h3 elements until the next h2 is encountered
-                next_element = h2.next_element
-                while next_element && next_element.name != 'h2'
-                  if next_element.name == 'h3'
-                    # Add the number counter to the h3 element's text
-                    if !next_element.text.match?(/^\d+\./)
-                      next_element.inner_html = "#{h3_counter}. #{next_element.inner_html.strip}"
-                      h3_counter += 1
-                    end
-                  end
-                  next_element = next_element.next_element
-                end
-
-                # Reset the counter for the next group of h3 elements
-                h3_counter = 1
-              end
-            end
-
-            if (header_placeholder = html.at_css('.header-placeholder.hide'))
-              h2_counter = 1
-            
-              html.css('h2').each do |h2|
-                unless h2.text.downcase.match?(/activities|further reading|travel video/)
-                  unless h2.text.match?(/^\d+\./)
-                    h2.inner_html = "#{h2_counter}. #{h2.inner_html.strip}"
-                    h2_counter += 1
-                  end
-                end
-              end                        
-              header_placeholder.remove
-            end
-          end
-          if (post_summary = html.at_css('.post-summary'))
-            post_summary.before('<h3>Quick Summary</h3>')
-          end
-          if html.css('.post-summary.day-to-day').size > 0
-            if html.css('.post-summary.day-to-day td:contains("Day "), .post-summary.day-to-day th:contains("Day ")').size > 0
-              html.css('.post-summary.day-to-day tr:not(:empty)').each do |a|
-                label = a.at_css("th:first-child, td:first-child").text.strip
-                name = a.at_css("td:last-child").text.strip
-                
-                matching_h3 = html.at_css("h3:contains(\"#{name}\")")
-                if matching_h3 && !matching_h3.text.match(/Day (\d+)/i)
-                  matching_h3.inner_html = "#{label.gsub("☀️ ","").gsub("-", " - ")} #{matching_h3.inner_html}"
-                end
-              end
-            end
-          end
-          if html.css('div.product-summary:not(.accommodation):not(.itinerary-summary)').size > 0
-            
-            # Find all elements with class="product-summary"
-            product_summaries = html.css('.product-summary:not(.accommodation):not(.itinerary-summary)')
-
-            # Iterate through each .product-summary element
-            product_summaries.each do |product_summary|
-              # Create a new <table> element and copy attributes
-              table = Nokogiri::XML::Node.new('table', html)
-              product_summary.attributes.each { |name, value| table[name] = value.value }
-
-              # Find all <a> elements inside .product-summary
-              links = product_summary.css('a')
-              new_link = Nokogiri::XML::Node.new('a', html)
-              new_link.inner_html = "Check Price"
-
-              # Iterate through each <a> element
-              links.each do |link|
-                # Create a new <tr> element and copy attributes
-                tr = Nokogiri::XML::Node.new('tr', html)
-                tr["class"] = "ps-row"
-                link.attributes.each { |name, value| new_link[name] = value.value }
-                new_link["class"] = "btn btn-primary"
-
-                link.at_css(".btn.btn-primary").replace(new_link)
-                l = "<a href=\"#{new_link["href"]}\" target=\"#{new_link["target"]}\" rel=\"#{new_link["rel"]}\">"
-                link.css(".ps-image, .ps-names").each do |i|
-                  i.inner_html = "#{l}#{i.inner_html}</a>"
-                end
-
-
-                # Find all <div> elements with class="col-md" inside the <a> element
-                col_md_divs = link.css('div.col-md')
-
-                # Iterate through each <div class="col-md"> element
-                col_md_divs.each do |div|
-                  # Create a new <td> element and copy attributes
-                  td = Nokogiri::XML::Node.new('td', html)
-                  div.attributes.each { |name, value| td[name] = value.value }
-
-                  # Move the content of the <div class="col-md"> to the <td>
-                  td.inner_html = div.inner_html
-
-                  # Append the <td> to the <tr>
-                  tr.add_child(td)
-                end
-
-                # Append the <tr> to the <table>
-                table.add_child(tr)
-
-               
-              end
-              # Find all small-link 
-              if table.css('span.small-link').size > 0
-                table.css('span.small-link').each do |i|
-                  begin
-                    
-                    new_element = "<a class=\"small-link\" href=\"#{i["data-href"]}\" target=\"_blank\">#{i.inner_html}</a>"
-                    if i["class"].include? "learn-more"
-                      new_element = "<a class=\"small-link learn-more\" href=\"#{i["data-href"]}\">#{i.inner_html}</a>"
-                    end
-                    i.replace(new_element)
-                  rescue
-                  end
-                end
-              end
-              table.prepend_child("<thead><tr class=\"ps-row\"><th class=\"col-md hidden-xs\">Image</th><th class=\"col-md\">Product</th><th class=\"col-md  hidden-xs\">Features</th><th class=\"col-md  hidden-xs\"></th></tr></thead>")
-
-              # Replace the .product-summary with the new <table>
-              product_summary.replace(table)
-            end
-          end
-          
-
-          html.css('img.lazy:not(.native-load)').each do |i|
-            ## testing lazyload native
-            i["class"] = "#{i["class"]} native-load"
-
-            if !i.parent.nil? and i.parent.name == "a"
-              if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
-                i.parent["aria-label"] = "View larger image"                
-              end
-              if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "itinerary"
-                i.parent["aria-label"] = "View itinerary on Google Maps"
-              end
-              if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "click-to-play"
-                i.parent["aria-label"] = "Play video"
-              end
-              if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "image-block"
-                i.parent["aria-label"] = "Navigate to external site"
-              end
-            end
-
-            padding_top = 0
-            if !i["src"].nil? and i["src"].include? "assets.bucketlistly.blog"
-              unless i["width"].nil? or i["height"].nil? or i["height"] == 0 or i["width"] == 0
-                padding_top = (i["height"].to_f/i["width"].to_f) * 100
-              end
-
-              #no_script_image = "<noscript><img width=\"#{i["width"]}\" height=\"#{i["height"]}\" src=\"#{i["data-original"]}\" alt=\"#{i["alt"]}\"></noscript>"
-              ## testing lazyload native
-              #i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
-              i["src"] = "#{i["data-original"]}"  # testing lazyload native
-              i["loading"] = "lazy"  # testing lazyload native
-              #i.remove_attribute('src')
-
-              ## testing lazyload native
-              #i.remove_attribute('data-size') if !i["data-size"].nil?              
-              #i["data-sizes"] = i["sizes"]
-              #i.remove_attribute('sizes')
-              
-              ## testing lazyload native
-              if !i["data-srcset"].nil?    
-                i["srcset"] = i["data-srcset"]
-                i.remove_attribute('data-srcset')
-              end
-              extra_class = ""
-              if !i["class"].nil? and i["class"].include? "dark"
-                extra_class = "dark"
-              end
-              if i["height"].to_f > i["width"].to_f
-                extra_class = "portrait #{extra_class}"
-              end
-              i.replace "<span class=\"img-wrapper loading #{extra_class}\"><i class=\"img-sizer\" style=\"padding-top: #{padding_top}%;\"></i>#{i.to_s}</span>"
-
-            elsif !i["data-original"].nil? and i["data-original"].include? "assets.bucketlistly.blog"
-              ## testing lazyload native
-              #i["src"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
-              i["src"] = "#{i["data-original"]}"  # testing lazyload native
-              i["loading"] = "lazy"  # testing lazyload native
-              i.parent["class"] = "#{i.parent["class"]} loading"
-            else
-              i["src"] = "#{i["data-original"]}"  # testing lazyload native
-              i["loading"] = "lazy"  # testing lazyload native
-              i.parent["class"] = "#{i.parent["class"]} loading"
-            end
-
-          end
-
-          # Convert lightbox links to non-link elements
-          html.css('a.lightbox-full[href]').each do |lightbox|
-            lightbox.name = 'span'
-
-            lightbox['data-lightbox-src'] = lightbox['href']
-            lightbox.remove_attribute('href')
-            lightbox.remove_attribute('data-google-interstitial')
-
-            lightbox['role'] = 'button'
-            lightbox['tabindex'] = '0'
-            lightbox['aria-label'] ||= 'View larger image'
-          end
-          
-          html.css('source[data-srcset]').each do |i|
-            # testing lazyload native
-            #i["srcset"] = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiPjwvc3ZnPg=="
-            i["srcset"] = "#{i["data-srcset"]}"  # testing lazyload native
-            #i.remove_attribute('data-srcset') 
-          end
-
-          html.css('a[href*="#"]').each do |link|
-            link["data-google-interstitial"] = "false"
-          end
-
-
-          html.css("body").inner_html
         end
+      end
+
+      if i.css(".editor-choice").size > 0
+        summary_table = ""
+        fix_required = "false"
+        added_editor_choices = 0
+
+        # CHANGED: Allow up to 5 Editor's Choice rows.
+        max_editor_choices = 5
+
+        priority_order = [
+          /Must Visit/i,
+          /Must See/i,
+          /Must Do/i,
+          /Hidden Gem/i,
+        ]
+
+        sorted_editor_choices = i.css(".editor-choice").to_a.sort_by.with_index do |choice, idx|
+          p_idx = priority_order.index { |pattern| choice.text =~ pattern } || 999
+          [p_idx, idx]
+        end
+
+        used_titles = []
+
+        sorted_editor_choices.each do |i|
+          break if added_editor_choices >= max_editor_choices
+
+          id_el = i.xpath('ancestor::a').first["href"]
+          target_el = html.at_css(id_el)
+
+          if target_el
+            fix_required = "true"
+            label = i.text
+            th_class = "th-#{label.parameterize}"
+
+            fallback_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+            display_title = fallback_title
+
+            if label.parameterize == "must-do"
+              display_title = i.parent.at_css(".ps-title").text.sub(/\b\d+\.\s*/, '').strip
+            else
+              next_el = target_el.next_element
+
+              if next_el && next_el.classes.include?("key-info-wrapper")
+                loc_li = next_el.css(".key-info-box li").find do |li|
+                  li.text.include?("Location:")
+                end
+
+                if loc_li
+                  raw_loc = if loc_li.at_css("a")
+                              loc_li.at_css("a").text
+                            else
+                              loc_li.text.sub(/.*Location:\s*/i, "")
+                            end
+
+                  clean_loc = raw_loc.sub(/\[\s*Map Link\s*\]/i, "").strip
+
+                  if !clean_loc.empty? && !used_titles.include?(clean_loc)
+                    display_title = clean_loc
+                  end
+                end
+              end
+            end
+
+            used_titles << display_title
+            value = "<a href='#{id_el}'>#{display_title}</a>"
+
+            summary_table << "<tr><th class=\"#{th_class}\">#{label}:</th><td>#{value}</td></tr>"
+            row_count += 1
+            added_editor_choices += 1
+
+            iduplicate = i.dup
+            iduplicate["aria-hidden"] = "true"
+            target_el.add_child(" #{iduplicate.to_html}")
+          end
+        end
+
+        # CHANGED: Generate the summary whenever at least one choice was added.
+        if added_editor_choices > 0
+          hotel_added = 0
+
+          # CHANGED: Hotels and data-summary rows only fill summaries
+          # with fewer than 4 Editor's Choices, up to 4 total rows.
+          if added_editor_choices < 4
+            if html.css('.accommodation-button').size == 1
+              if html.css('.accommodation-block .editor-choice').size > 0
+                hotel = html.css('.accommodation-block .editor-choice').xpath('ancestor::a').first
+              else
+                hotel = html.css('.accommodation-block .accommodation-button a')[1]
+              end
+
+              # CHANGED: Guard against missing hotel markup.
+              hotel_name_node = hotel&.at_css(".ps-name")
+
+              if hotel && hotel["href"] && hotel_name_node
+                hotel_link = hotel["href"]
+                hotel_name = hotel_name_node.text
+
+                summary_table << "<tr><th class=\"th-place-to-stay\">🛌 Place to Stay:</th><td><a href='#{hotel_link}' target='_blank' rel='external noopener'>#{hotel_name}</a></td></tr>"
+                row_count += 1
+                hotel_added = 1
+              end
+            end
+
+            remaining_slots = [4 - added_editor_choices - hotel_added, 0].max
+
+            if rows.any? && remaining_slots > 0
+              selected_rows = rows.take(remaining_slots)
+              summary_table << selected_rows.join("\n")
+              row_count += selected_rows.size
+            end
+          end
+
+          # CHANGED: Removed the empty <tr> previously added for odd row counts.
+
+          summary_table_html = "<div class=\"post-summary-wrapper\"><table aria-label=\"Too Long; Didn't Read Section\" class=\"post-summary things-to-do-summary\"><tbody>#{summary_table}</tbody></table></div>"
+
+          if html.at_css(".itinerary")
+            html.at_css(".itinerary").add_next_sibling(summary_table_html)
+          else
+            html.at_css(".itinerary-summary-wrapper").add_previous_sibling(summary_table_html)
+          end
+        end
+      end
+    end
+  end
+
+  if html.css('#insurance').size > 0
+    html.at_css("#insurance").remove()
+
+    insurance = '<div id="insurance"></div>'
+
+    if html.css('.itinerary-summary-wrapper').size > 0
+      if html.css(".toc-list").size > 0
+        h2 = html.at_css('.itinerary-summary-wrapper h2')["id"]
+        html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']").remove
+      end
+
+      html.at_css('.itinerary-summary-wrapper').remove
+    end
+
+    if html.css(".post-summary-wrapper.hide").size > 0
+      html.css(".post-summary-wrapper.hide").remove
+    end
+
+    if html.css("article p.temp").size > 0
+      html.css("article p.temp").remove
+    end
+
+    if html.css(".btn-wrap.hide").size > 0
+      html.css(".btn-wrap.hide").remove
+    end
+
+    if html.css(".viator-extra.hide").size > 0
+      html.css(".viator-extra.hide").remove
+    end
+
+    if html.css(".product-summary.accommodation").length > 0
+      html.css(".product-summary.accommodation").each do |i|
+        if i.css(".editor-choice").length < 1
+          if i.css(".ps-tripple-row a:nth-child(2)").length > 0
+            i.at_css(".ps-tripple-row a:nth-child(2) .ps-image").add_child(
+              '<span class="editor-choice">👍 Top Pick</span>'
+            )
+          end
+        end
+      end
+    end
+
+    if html.css('.itinerary-summary-wrapper').size > 0
+      html.at_css('.itinerary-summary-wrapper').add_child(insurance)
+    else
+      if !html.css("h3:eq(2) ~ p:not(:empty):not(:has(img)):not(.tips-block)").nil? and !html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
+        html.css("h3:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
+      elsif !html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].nil?
+        html.css("h2:eq(1) ~ p:not(:empty):not(:has(img)):not(.tips-block)")[2].add_next_sibling(insurance)
+      else
+        if html.css(".table-of-contents-wrapper").size > 0
+          if !html.at_css(".table-of-contents-wrapper").previous_element.attributes["class"].nil? and html.at_css(".table-of-contents-wrapper").previous_element["class"].include? "readmore-block"
+            html.at_css(".table-of-contents-wrapper").previous_element.add_previous_sibling(insurance)
+          else
+            html.at_css(".table-of-contents-wrapper").add_previous_sibling(insurance)
+          end
+        elsif html.css("h2").size > 0
+          if !html.at_css("h2").previous_element.attributes["class"].nil? and html.at_css("h2").previous_element["class"].include? "readmore-block"
+            html.at_css("h2").previous_element.add_previous_sibling(insurance)
+          else
+            html.at_css("h2").add_previous_sibling(insurance)
+          end
+        end
+      end
+    end
+  end
+
+  html.css('p:has(a[href*="goo.gl"],a[href*="g.page"],a[href*="google.com/maps"])').each do |i|
+    maps_links = i.css('a[href*="goo.gl"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), a[href*="g.page"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block), a[href*="google.com/maps"]:not(.itinerary):not(.lightbox-full):not(.image-block):not(.itinerary):not(.video-block):not(.iframe-block)')
+
+    if maps_links.size > 0
+      maps_links[0]["class"] = "first-of-type #{maps_links[0]["class"]}"
+    end
+  end
+
+  # Remove packing section.
+  if html.css('#packing').size > 0
+    packing_div = html.at_css('#packing')
+
+    if packing_div
+      header_node = packing_div.previous_element
+
+      if header_node && header_node.name.match?(/^h[1-6]$/i)
+        header_id = header_node['id']
+
+        if header_id
+          toc_link = html.at_css("a[href='##{header_id}']")
+
+          if toc_link && toc_link.parent.name == 'li'
+            toc_link.parent.remove
+          end
+        end
+
+        header_node.remove
+      end
+
+      packing_div.remove
+    end
+  end
+
+  # Add aside to further reading.
+  header = html.at_css('h2[id^="further-reading"]')
+
+  if header
+    aside = Nokogiri::XML::Node.new('aside', html)
+    header.add_previous_sibling(aside)
+    current_node = header
+
+    while current_node
+      next_node = current_node.next_sibling
+      break if next_node && next_node.name.match?(/^h[1-2]$/i)
+
+      aside.add_child(current_node)
+      current_node = next_node
+    end
+  end
+
+  # Turn TOC into nav.
+  toc_wrapper = html.at_css('div.table-of-contents-wrapper')
+
+  if toc_wrapper
+    nav_node = Nokogiri::XML::Node.new('nav', html)
+
+    toc_wrapper.attributes.each do |name, attr|
+      nav_node[name] = attr.value
+    end
+
+    nav_node.children = toc_wrapper.children
+    toc_wrapper.replace(nav_node)
+  end
+
+  # Minimize further reading links.
+  header = html.at_css('h2[id^="further-reading"]')
+
+  if header
+    ul = header.next_element
+
+    while ul && ul.name != 'ul'
+      ul = ul.next_element
+    end
+
+    if ul && ul.name == 'ul'
+      list_items = ul.css('li')
+      footer_pattern = /For more articles about|Looking for more travel guides for/i
+
+      footer_index = list_items.find_index do |li|
+        li.text.strip.match?(footer_pattern)
+      end
+
+      if footer_index
+        standard_links = list_items[0...footer_index]
+        footer_links = list_items[footer_index..-1]
+      else
+        standard_links = list_items
+        footer_links = []
+      end
+
+      if standard_links.length > 20
+        to_remove = standard_links[12..-1]
+        to_remove.each(&:remove)
+      end
+    end
+  end
+
+  if html.css('#join-activity').size > 0
+    join_activity_div = html.at_css('#join-activity')
+
+    if join_activity_div
+      activity_block = join_activity_div.ancestors('.activity-block').first
+
+      if activity_block
+        header_node = activity_block.at_css('h1, h2, h3, h4, h5, h6')
+
+        if header_node && header_node['id']
+          header_id = header_node['id']
+          toc_link = html.at_css("a[href='##{header_id}']")
+
+          if toc_link && toc_link.parent.name == 'li'
+            toc_link.parent.remove
+          end
+        else
+          html.css('.toc-text').each do |span|
+            if span.text.match?(/More .* Activities/i)
+              span.ancestors('li').first&.remove
+            end
+          end
+        end
+
+        activity_block.remove
+      end
+    end
+  end
+
+  if html.css('.accommodation-block:not(.dont-move)').size == 1
+    el = html.at_css('.accommodation-block:not(.dont-move)')
+    h2 = el.at_css('h2')["id"]
+
+    if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "itinerary" or html.at_css(".post-slug").text.downcase.include? "experiences-i-think-are-worth-it") and html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(2)").length > 0 and html.css(".product-summary.accommodation").length == 1
+      html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(2), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(2)").add_previous_sibling(el)
+
+      h2 = html.at_css('.accommodation-block h2')
+      new_h2 = "<h4 id='#{h2["id"]}'>#{h2.inner_html}</h4>"
+      h2.replace(new_h2)
+    elsif html.css('.activity-block').size == 1 and html.css('.activity-block h2').length > 0
+      block = html.at_css('.activity-block h2')["id"]
+
+      html.at_css('.activity-block').add_next_sibling(el)
+
+      if html.css(".toc-list").size > 0
+        el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
+        html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent)
+      end
+    elsif html.css('.video-block-wrapper').size == 1
+      block = html.at_css('.video-block-wrapper h2')["id"]
+
+      html.at_css('.video-block-wrapper').add_next_sibling(el)
+
+      if html.css(".toc-list").size > 0
+        el2 = html.at_css(".toc-list .toc-l1 a[href*='#{h2.downcase}']")
+        html.at_css(".toc-list .toc-l1 a[href*='#{block.downcase}']").parent.add_next_sibling(el2.parent)
+      end
+    end
+  end
+
+  if html.css('.activity-block').size == 1
+    if html.css(".post-slug").length > 0 and (html.at_css(".post-slug").text.downcase.include? "things-to-do" or html.at_css(".post-slug").text.downcase.include? "experiences-i-think-are-worth-it" or html.at_css(".post-slug").text.downcase.include? "itinerary")
+      if html.css("body h2[id*='things-to-do'] ~ h3:nth-of-type(4), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(4)").length > 0
+        el = html.at_css('.activity-block')
+        h2 = html.at_css('.activity-block h2')
+        new_h2 = "<h4 id='#{h2["id"]}'>Tours & Tickets You Might Like</h4>"
+        h2.replace(new_h2)
+
+        html.at_css("body h2[id*='things-to-do'] ~ h3:nth-of-type(4), h2[id*='experiences-i-think-are-worth-it'] ~ h3:nth-of-type(4)").add_previous_sibling(el)
+      end
+    end
+  end
+
+  toc_wrapper = html.at_css('.table-of-contents-wrapper')
+  first_h2 = html.at_css('h2')
+
+  unless html.at_css('.video-block .mediavine-vid')
+    video = '<div id="watch-this"></div>'
+
+    if toc_wrapper
+      toc_wrapper.add_previous_sibling(video)
+    elsif first_h2
+      first_h2.add_previous_sibling(video)
+    end
+  end
+
+  # Wrap everything from the start of body through the TOC.
+  if toc_wrapper
+    body = html.at_css('body')
+    nodes_to_wrap = []
+
+    body.children.each do |node|
+      nodes_to_wrap << node
+      break if node == toc_wrapper
+    end
+
+    if nodes_to_wrap.include?(toc_wrapper)
+      wrapper = Nokogiri::XML::Node.new('div', html)
+      nodes_to_wrap.first.add_previous_sibling(wrapper)
+      nodes_to_wrap.each { |node| wrapper.add_child(node) }
+    end
+  end
+
+  if html.css('h2').size > 0
+    h2_elements = html.css('h2')
+    h3_counter = 1
+
+    h2_elements.each do |h2|
+      edit = false
+
+      if h2.text.strip.match?(/^\d(?!.*itinerary)/i) or h2.text.strip.match?(/^(?![0-9])(?!.*\bmap\b)(?=.*(?:things to do|experiences i think are worth it|what to eat|best places to)).*$/i)
+        edit = true
+      else
+        if h2.text.downcase.include? "things to do" or h2.text.downcase.include? "experiences i think are worth it"
+          edit = true
+        end
+      end
+
+      if edit == true
+        next_element = h2.next_element
+
+        while next_element && next_element.name != 'h2'
+          if next_element.name == 'h3'
+            if !next_element.text.match?(/^\d+\./)
+              next_element.inner_html = "#{h3_counter}. #{next_element.inner_html.strip}"
+              h3_counter += 1
+            end
+          end
+
+          next_element = next_element.next_element
+        end
+
+        h3_counter = 1
+      end
+    end
+
+    if (header_placeholder = html.at_css('.header-placeholder.hide'))
+      h2_counter = 1
+
+      html.css('h2').each do |h2|
+        unless h2.text.downcase.match?(/activities|further reading|travel video/)
+          unless h2.text.match?(/^\d+\./)
+            h2.inner_html = "#{h2_counter}. #{h2.inner_html.strip}"
+            h2_counter += 1
+          end
+        end
+      end
+
+      header_placeholder.remove
+    end
+  end
+
+  if (post_summary = html.at_css('.post-summary'))
+    post_summary.before('<h3>Quick Summary</h3>')
+  end
+
+  if html.css('.post-summary.day-to-day').size > 0
+    if html.css('.post-summary.day-to-day td:contains("Day "), .post-summary.day-to-day th:contains("Day ")').size > 0
+      html.css('.post-summary.day-to-day tr:not(:empty)').each do |a|
+        label = a.at_css("th:first-child, td:first-child").text.strip
+        name = a.at_css("td:last-child").text.strip
+
+        matching_h3 = html.at_css("h3:contains(\"#{name}\")")
+
+        if matching_h3 && !matching_h3.text.match(/Day (\d+)/i)
+          matching_h3.inner_html = "#{label.gsub("☀️ ", "").gsub("-", " - ")} #{matching_h3.inner_html}"
+        end
+      end
+    end
+  end
+
+  if html.css('div.product-summary:not(.accommodation):not(.itinerary-summary)').size > 0
+    product_summaries = html.css('.product-summary:not(.accommodation):not(.itinerary-summary)')
+
+    product_summaries.each do |product_summary|
+      table = Nokogiri::XML::Node.new('table', html)
+      product_summary.attributes.each { |name, value| table[name] = value.value }
+
+      links = product_summary.css('a')
+      new_link = Nokogiri::XML::Node.new('a', html)
+      new_link.inner_html = "Check Price"
+
+      links.each do |link|
+        tr = Nokogiri::XML::Node.new('tr', html)
+        tr["class"] = "ps-row"
+
+        link.attributes.each { |name, value| new_link[name] = value.value }
+        new_link["class"] = "btn btn-primary"
+
+        link.at_css(".btn.btn-primary").replace(new_link)
+
+        l = "<a href=\"#{new_link["href"]}\" target=\"#{new_link["target"]}\" rel=\"#{new_link["rel"]}\">"
+
+        link.css(".ps-image, .ps-names").each do |i|
+          i.inner_html = "#{l}#{i.inner_html}</a>"
+        end
+
+        col_md_divs = link.css('div.col-md')
+
+        col_md_divs.each do |div|
+          td = Nokogiri::XML::Node.new('td', html)
+          div.attributes.each { |name, value| td[name] = value.value }
+          td.inner_html = div.inner_html
+          tr.add_child(td)
+        end
+
+        table.add_child(tr)
+      end
+
+      if table.css('span.small-link').size > 0
+        table.css('span.small-link').each do |i|
+          begin
+            new_element = "<a class=\"small-link\" href=\"#{i["data-href"]}\" target=\"_blank\">#{i.inner_html}</a>"
+
+            if i["class"].include? "learn-more"
+              new_element = "<a class=\"small-link learn-more\" href=\"#{i["data-href"]}\">#{i.inner_html}</a>"
+            end
+
+            i.replace(new_element)
+          rescue
+          end
+        end
+      end
+
+      table.prepend_child("<thead><tr class=\"ps-row\"><th class=\"col-md hidden-xs\">Image</th><th class=\"col-md\">Product</th><th class=\"col-md hidden-xs\">Features</th><th class=\"col-md hidden-xs\"></th></tr></thead>")
+      product_summary.replace(table)
+    end
+  end
+
+  html.css('img.lazy:not(.native-load)').each do |i|
+    i["class"] = "#{i["class"]} native-load"
+
+    if !i.parent.nil? and i.parent.name == "a"
+      if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "lightbox"
+        i.parent["aria-label"] = "View larger image"
+      end
+
+      if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "itinerary"
+        i.parent["aria-label"] = "View itinerary on Google Maps"
+      end
+
+      if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "click-to-play"
+        i.parent["aria-label"] = "Play video"
+      end
+
+      if !i.parent.attributes["class"].nil? and i.parent.attributes["class"].value.include? "image-block"
+        i.parent["aria-label"] = "Navigate to external site"
+      end
+    end
+
+    padding_top = 0
+
+    if !i["src"].nil? and i["src"].include? "assets.bucketlistly.blog"
+      unless i["width"].nil? or i["height"].nil? or i["height"] == 0 or i["width"] == 0
+        padding_top = (i["height"].to_f / i["width"].to_f) * 100
+      end
+
+      i["src"] = "#{i["data-original"]}"
+      i["loading"] = "lazy"
+
+      if !i["data-srcset"].nil?
+        i["srcset"] = i["data-srcset"]
+        i.remove_attribute('data-srcset')
+      end
+
+      extra_class = ""
+
+      if !i["class"].nil? and i["class"].include? "dark"
+        extra_class = "dark"
+      end
+
+      if i["height"].to_f > i["width"].to_f
+        extra_class = "portrait #{extra_class}"
+      end
+
+      i.replace "<span class=\"img-wrapper loading #{extra_class}\"><i class=\"img-sizer\" style=\"padding-top: #{padding_top}%;\"></i>#{i.to_s}</span>"
+    elsif !i["data-original"].nil? and i["data-original"].include? "assets.bucketlistly.blog"
+      i["src"] = "#{i["data-original"]}"
+      i["loading"] = "lazy"
+      i.parent["class"] = "#{i.parent["class"]} loading"
+    else
+      i["src"] = "#{i["data-original"]}"
+      i["loading"] = "lazy"
+      i.parent["class"] = "#{i.parent["class"]} loading"
+    end
+  end
+
+  html.css('a.lightbox-full[href]').each do |lightbox|
+    lightbox.name = 'span'
+    lightbox['data-lightbox-src'] = lightbox['href']
+    lightbox.remove_attribute('href')
+    lightbox.remove_attribute('data-google-interstitial')
+    lightbox['role'] = 'button'
+    lightbox['tabindex'] = '0'
+    lightbox['aria-label'] ||= 'View larger image'
+  end
+
+  html.css('source[data-srcset]').each do |i|
+    i["srcset"] = "#{i["data-srcset"]}"
+  end
+
+  html.css('a[href*="#"]').each do |link|
+    link["data-google-interstitial"] = "false"
+  end
+
+  html.css("body").inner_html
+end
 
         def convert_to_article(input)
           require 'nokogiri'
