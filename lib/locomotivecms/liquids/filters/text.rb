@@ -938,7 +938,7 @@ module LocomotiveCMS
                 added_editor_choices = 0
                 
                 # Allow editor-choice to use up to all 4 available slots
-                max_editor_choices = 4
+                max_editor_choices = 5
 
                 # Explicit priority list for ordering editor choices
                 priority_order = [
