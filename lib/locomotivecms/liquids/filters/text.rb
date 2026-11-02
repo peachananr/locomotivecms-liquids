@@ -1029,7 +1029,7 @@ module LocomotiveCMS
                   end
 
                   # Fill remaining room with data-summary rows up to 4 max
-                  remaining_slots = [4 - added_editor_choices - hotel_added, 0].max
+                  remaining_slots = [5 - added_editor_choices - hotel_added, 0].max
 
                   if !rows.empty? && remaining_slots > 0
                     summary_table = "#{summary_table}#{rows.take(remaining_slots).join("\n")}"
